@@ -130,6 +130,7 @@
 				}
 				closedir($f);
 			}
+			// จัดลำดับโมดูลตามเมนู
 			foreach ($menus AS $i => $item) {
 				if ($item['level'] == 0) {
 					$mainmenu[$item['parent']]['toplevel'][$i] = $item;

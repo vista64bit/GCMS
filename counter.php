@@ -61,6 +61,8 @@
 			$counter_add = true;
 			// clear useronline
 			$db->query("TRUNCATE `".DB_USERONLINE."`");
+			// clear visited_today
+			$db->query("UPDATE `".DB_INDEX."` SET `visited_today`=0");
 		} else {
 			$counter_add = false;
 		}
@@ -73,7 +75,7 @@
 			// สร้างไฟล์ log ใหม่
 			$f = @fopen($counter_log, 'wb');
 		}
-		$data = $counter_ssid.chr(1).$counter_ip.chr(1).gcms::getVars($_SERVER, 'HTTP_REFERER', '').chr(1).$_SERVER['HTTP_USER_AGENT']."\n";
+		$data = $counter_ssid.chr(1).$counter_ip.chr(1).gcms::getVars($_SERVER, 'HTTP_REFERER', '').chr(1).$_SERVER['HTTP_USER_AGENT'].chr(1).date('H:i:s', $mmktime)."\n";
 		@fwrite($f, $data);
 		@fclose($f);
 		if (!$counter_visited) {

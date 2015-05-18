@@ -19,14 +19,16 @@
 			$_SESSION['document_root'] = trim($_POST['document_root']);
 			$ftp = new ftp($_SESSION['ftp_host'], $_SESSION['ftp_username'], $_SESSION['ftp_password'], $_SESSION['ftp_root'], $_SESSION['document_root'], $_SESSION['ftp_port']);
 		}
-		if ($ftp->connect()) {
-			if ($ftp->is_dir($_SESSION['ftp_root'])) {
-				echo '<li class=correct><strong>FTP</strong> <i>เชื่อมต่อสำเร็จ</i></li>';
+		if (!empty($_SESSION['ftp_username']) && !empty($_SESSION['ftp_password'])) {
+			if ($ftp->connect()) {
+				if ($ftp->is_dir($_SESSION['ftp_root'])) {
+					echo '<li class=correct><strong>FTP</strong> <i>เชื่อมต่อสำเร็จ</i></li>';
+				} else {
+					echo '<li class=incorrect><strong>FTP Root</strong> <em>ไม่ถูกต้อง</em> กรุณาตรวจสอบจากโฮสต์ของคุณ</li>';
+				}
 			} else {
-				echo '<li class=incorrect><strong>FTP Root</strong> <em>ไม่ถูกต้อง</em> กรุณาตรวจสอบจากโฮสต์ของคุณ</li>';
+				echo '<li class=incorrect><strong>FTP</strong> <em>ไม่สามารถใช้งานได้</em></li>';
 			}
-		} else {
-			echo '<li class=incorrect><strong>FTP</strong> <em>ไม่สามารถใช้งานได้</em></li>';
 		}
 		if (is_dir(DATA_PATH)) {
 			echo '<li>ตรวจสอบโฟลเดอร์ <strong>'.DATA_FOLDER.'</strong></li>';

@@ -123,14 +123,14 @@
 		// หน้ายอดนิยม
 		$thead = array();
 		$visited = array();
-		$sql = "SELECT D.`topic`,I.`visited`";
+		$sql = "SELECT D.`topic`,I.`visited_today`";
 		$sql .= " FROM `".DB_INDEX."` AS I";
 		$sql .= " INNER JOIN `".DB_MODULES."` AS M ON M.`id`=I.`module_id` AND M.`owner`='document'";
 		$sql .= " INNER JOIN `".DB_INDEX_DETAIL."` AS D ON D.`id`=I.`id` AND D.`module_id`=I.`module_id` AND D.`language` IN ('".LANGUAGE."','')";
-		$sql .= " ORDER BY I.`visited` DESC LIMIT 12";
+		$sql .= " ORDER BY I.`visited_today` DESC,I.`visited` DESC LIMIT 12";
 		foreach ($db->customQuery($sql) AS $item) {
 			$thead[] = '<td>'.$item['topic'].'</td>';
-			$visited[] = '<td>'.$item['visited'].'</td>';
+			$visited[] = '<td>'.$item['visited_today'].'</td>';
 		}
 		$content[] = '<section class=section>';
 		$content[] = '<header><h1 class=icon-pie>{LNG_POPULAR_PAGE} ({LNG_DOCUMENT})</h1></header>';

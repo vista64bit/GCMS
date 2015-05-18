@@ -7,8 +7,24 @@
 	}
 	$rows = (int)$rows;
 	$cols = (int)$cols;
-	if (preg_match('/(http:\/\/gallery\.g\-th\.com|'.preg_quote($_SERVER['HTTP_HOST']).')(.*?)/i', $url)) {
-		$url .= '?rnd&count='.($rows * $cols).'&tags='.rawurlencode($tags).'&album='.(int)$album.'&user='.(int)$user.'&w='.$imageWidth;
+	$qs = array('rnd');
+	$qs[] = 'count='.($rows * $cols);
+	if (!empty($tags)) {
+		$qs[] = 'tags='.rawurlencode($tags);
+	}
+	if (!empty($album_id)) {
+		$qs[] = 'album='.(int)$album;
+	}
+	if (!empty($user)) {
+		$qs[] = 'user='.(int)$user;
+	}
+	if (!empty($imageWidth)) {
+		$qs[] = 'w='.(int)$imageWidth;
+	}
+	if (strpos($url, '?') === false) {
+		$url .= '?'.implode('&', $qs);
+	} else {
+		$url .= '&'.implode('&', $qs);
 	}
 	if (function_exists('curl_init') && $ch = @curl_init()) {
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -37,7 +53,7 @@
 			$data .= '<td style="width:'.$w.'%">';
 			$data .= '<a href="'.$rss[$i]['link']['data'].'" title="'.htmlspecialchars($rss[$i]['title']['data']).'" target=_blank';
 			$data .= ' style="background-image:url(';
-			$data .= $rss[$i]['media:thumbnail']['url'] == '' ? $rss[$i]['enclosure']['url'] : $rss[$i]['media:thumbnail']['url'];
+			$data .= empty($rss[$i]['media:thumbnail']['url']) ? $rss[$i]['enclosure']['url'] : $rss[$i]['media:thumbnail']['url'];
 			$data .= ')">&nbsp;</a></td>';
 			$listcount--;
 		}

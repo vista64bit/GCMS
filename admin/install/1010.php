@@ -34,10 +34,14 @@
 			flush();
 		}
 		if (!$db->fieldExists(DB_INDEX, 'show_news')) {
-			$db->query("ALTER TABLE `".DB_INDEX."` ADD `show_news` ENUM('1','0') NOT NULL DEFAULT '1' AFTER `can_reply`");
-			$db->query("UPDATE `".DB_INDEX."` SET `show_news`='1'");
-			echo '<li class=correct>Update database <strong>'.DB_INDEX.'</strong> <i>complete...</i></li>';
+			$db->query("ALTER TABLE `".DB_INDEX."` ADD `show_news` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL AFTER `can_reply`");
+		} else {
+			$db->query("ALTER TABLE `".DB_INDEX."` CHANGE `show_news` `show_news` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL");
 		}
+		$db->query("UPDATE `".DB_INDEX."` SET `show_news`='news=1'");
+		$db->query("ALTER TABLE `".DB_INDEX."` ADD `visited_today` INT(11) UNSIGNED NOT NULL AFTER `visited`");
+		$db->query("ALTER TABLE `".DB_INDEX."` CHANGE `visited` `visited` INT(11) UNSIGNED NOT NULL");
+		echo '<li class=correct>Update database <strong>'.DB_INDEX.'</strong> <i>complete...</i></li>';
 		if (!$db->fieldExists(DB_CATEGORY, 'published')) {
 			$db->query("ALTER TABLE `".DB_CATEGORY."` ADD `published` ENUM('1','0') NOT NULL DEFAULT '1'");
 			$db->query("UPDATE `".DB_CATEGORY."` SET `published`='1'");

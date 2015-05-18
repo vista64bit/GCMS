@@ -2903,7 +2903,7 @@ Object.extend(String.prototype, {
 });
 var GDrag = GClass.create();
 GDrag.prototype = {
-	initialize: function(src, options) {
+	initialize: function(src, move, options) {
 		this.options = {
 			beginDrag: emptyFunction,
 			moveDrag: emptyFunction,
@@ -2913,6 +2913,7 @@ GDrag.prototype = {
 			this.options[property] = options[property];
 		}
 		this.src = $G(src);
+		this.move = $G(move);
 		var self = this;
 		function _mousemove(e) {
 			self.mousePos = GEvent.pointer(e);
@@ -3025,17 +3026,16 @@ GDragMove.prototype = {
 			moveDrag: _moveDrag,
 			endDrag: _endDrag
 		};
-		new GDrag(this.dragObj, o);
+		new GDrag(this.dragObj, this.dragObj, o);
 	}
 };
 var GSortTable = GClass.create();
 GSortTable.prototype = {
 	initialize: function(id, options) {
 		this.options = {
-			sortClass: 'sort',
-			tag: 'tr',
-			endDrag: function() {
-			}
+			sortClass: 'icon-move',
+			itemClass: 'sort',
+			endDrag: emptyFunction
 		};
 		for (var property in options) {
 			this.options[property] = options[property];
@@ -3045,7 +3045,6 @@ GSortTable.prototype = {
 			dropitems = new Array(),
 			hoverItem = null,
 			position = 0;
-
 		function checkMouseOver(item, mousePos) {
 			var elemPos = item.viewportOffset();
 			var elemSize = item.getDimensions();
@@ -3065,9 +3064,9 @@ GSortTable.prototype = {
 					if (this != hoverItem) {
 						self.changed = true;
 						if (temp.mousePos.y > position) {
-							temp.src.parentNode.insertBefore(temp.src, this.nextSibling);
+							temp.move.parentNode.insertBefore(temp.move, this.nextSibling);
 						} else {
-							temp.src.parentNode.insertBefore(temp.src, this);
+							temp.move.parentNode.insertBefore(temp.move, this);
 						}
 						hoverItem = this;
 						return true;
@@ -3081,14 +3080,26 @@ GSortTable.prototype = {
 				self.options.endDrag.call(this);
 			}
 		}
+		function _find(tr) {
+			if (tr.hasClass(self.options.sortClass)) {
+				return tr;
+			} else {
+				var els = $E(tr).getElementsByTagName('*');
+				for (var i = 0; i < els.length; i++) {
+					if ($G(els[i]).hasClass(self.options.sortClass)) {
+						return els[i];
+					};
+				}
+			}
+		}
 		var o = {
 			beginDrag: doBeginDrag,
 			moveDrag: doMoveDrag,
 			endDrag: doEndDrag
 		};
-		forEach($E(id).getElementsByTagName(self.options.tag), function() {
-			if ($G(this).hasClass(self.options.sortClass)) {
-				new GDrag(this, o);
+		forEach($E(id).getElementsByTagName('*'), function() {
+			if ($G(this).hasClass(self.options.itemClass)) {
+				new GDrag(_find(this), this, o);
 				dropitems.push(this);
 			}
 		});

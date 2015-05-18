@@ -50,7 +50,8 @@
 			$valid_date = $mmktime - $match[5];
 			// template
 			$skin = gcms::loadtemplate($index['module'], 'document', 'widgetitem');
-			$patt = array('/{BG}/', '/{URL}/', '/{TOPIC}/', '/{DETAIL}/', '/{CATEGORY}/', '/{DATE}/', '/{UID}/', '/{SENDER}/', '/{STATUS}/', '/{COMMENTS}/', '/{VISITED}/', '/{THUMB}/', '/{ICON}/');
+			$patt = array('/{BG}/', '/{URL}/', '/{TOPIC}/', '/{DETAIL}/', '/{CATEGORY}/', '/{DATE}/', '/{UID}/',
+				'/{SENDER}/', '/{STATUS}/', '/{COMMENTS}/', '/{VISITED}/', '/{THUMB}/', '/{ICON}/');
 			$widget = array();
 			$bg = 'bg2';
 			foreach ($datas AS $i => $item) {

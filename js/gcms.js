@@ -201,7 +201,8 @@ var getURL = function (url) {
 	var urls = url.split('?');
 	var new_q = new Array();
 	if (urls[1] && loader_patt0.exec(urls[1])) {
-		return urls[1];
+		new_q.push(urls[1]);
+		return new_q;
 	} else if (hs = loader_patt1.exec(urls[0])) {
 		new_q.push('module=' + hs[1] + '-' + hs[4] + '&cat=' + hs[2] + '&id=' + hs[3]);
 	} else if (hs = loader_patt2.exec(urls[0])) {

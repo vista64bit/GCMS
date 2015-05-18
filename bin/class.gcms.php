@@ -1630,7 +1630,7 @@
 				}
 			}
 			$ret[$mmktime] = $mmktime;
-			return rawurlencode($url.'?'.implode('&', $ret));
+			return rawurlencode($url.(strpos($url, '?') === false ? '?' : '&').implode('&', $ret));
 		}
 		/**
 		 * filterVars($type, $key)

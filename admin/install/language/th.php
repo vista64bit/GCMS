@@ -458,7 +458,7 @@
 	$lng['LNG_PLEASE_SELECT'] = 'กรุณาเลือก';
 	$lng['LNG_PNAME'] = 'คำนำหน้าชื่อ';
 	$lng['LNG_POINT'] = 'คะแนน';
-	$lng['LNG_POPULAR_PAGE'] = 'บทความยอดนิยม';
+	$lng['LNG_POPULAR_PAGE'] = 'บทความยอดนิยมประจำวัน';
 	$lng['LNG_PORT'] = 'พอร์ต';
 	$lng['LNG_POST'] = 'โพสต์';
 	$lng['LNG_POSTED'] = 'เมื่อ';

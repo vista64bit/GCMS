@@ -128,9 +128,7 @@
 			// บันทึก useronline
 			include ROOT_PATH.'useronline.php';
 			// อัปเดท pagesview
-			$counter_day = date('Y-m-d', $mmktime);
-			$sql = "UPDATE `".DB_COUNTER."` SET `pages_view`=`pages_view`+1,`time`='$mmktime' WHERE `date`='$counter_day' LIMIT 1";
-			$db->query($sql);
+			$db->query("UPDATE `".DB_COUNTER."` SET `pages_view`=`pages_view`+1,`time`='$mmktime' WHERE `date`='".date('Y-m-d', $mmktime)."' LIMIT 1");
 			// คืนค่า เวลาที่ใช้ไป
 			$ret['db_elapsed'] = $db->timer_stop();
 			$ret['db_quries'] = $db->query_count();

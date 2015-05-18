@@ -509,7 +509,7 @@
 		public function sql_date2date($date, $short = true, $time = true) {
 			global $lng;
 			preg_match('/([0-9]+){0,4}-([0-9]+){0,2}-([0-9]+){0,2}(\s([0-9]+){0,2}:([0-9]+){0,2}:([0-9]+){0,2})?/', $date, $match);
-			if ((int)$match[1] == 0) {
+			if (empty($match[1])) {
 				return '';
 			} else {
 				$month = $short ? $lng['MONTH_SHORT'] : $lng['MONTH_LONG'];

@@ -7,8 +7,8 @@
 		$cat = gcms::getVars($_REQUEST, 'cat', 0);
 		$search = preg_replace('/[+\s]+/u', ' ', gcms::getVars($_REQUEST, 'q', ''));
 		// query ข้อมูล
-		$sql = "SELECT I.`id`,I.`module_id`,I.`category_id`,D.`topic`,I.`picture`,D.`description`,D.`detail`,I.`create_date`,I.`last_update`,I.`visited`,I.`comments`";
-		$sql .= ",I.`alias`,D.`keywords`,D.`relate`,I.`can_reply`,I.`published`,M.`module`,M.`config`,0 AS `vote`,0 AS `vote_count`";
+		$sql = "SELECT I.`id`,I.`module_id`,I.`category_id`,D.`topic`,I.`picture`,D.`description`,D.`detail`,I.`create_date`,I.`last_update`,I.`visited`,I.`visited_today`";
+		$sql .= ",I.`comments`,I.`alias`,D.`keywords`,D.`relate`,I.`can_reply`,I.`published`,M.`module`,M.`config`,0 AS `vote`,0 AS `vote_count`";
 		$sql .= ",C.`topic` AS `category`,C.`detail` AS `cat_tooltip`,U.`status`,U.`id` AS `member_id`,U.`displayname`,U.`email`";
 		$sql .= " FROM `".DB_INDEX."` AS I";
 		$sql .= " INNER JOIN `".DB_MODULES."` AS M ON M.`id`=I.`module_id` AND M.`owner`='document'";
@@ -51,7 +51,8 @@
 				// อัปเดทการเปิดดู
 				if (!isset($_REQUEST['visited'])) {
 					$index['visited']++;
-					$db->edit(DB_INDEX, $index['id'], array('visited' => $index['visited']));
+					$index['visited_today']++;
+					$db->edit(DB_INDEX, $index['id'], array('visited' => $index['visited'], 'visited_today' => $index['visited_today']));
 				}
 				// บันทึก cache หลังจากอัปเดทการเปิดดูแล้ว
 				$cache->save($sql, $index);

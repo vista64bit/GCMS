@@ -169,9 +169,9 @@
 						gcms::saveLanguage();
 						// back
 						if (isset($_POST['next'])) {
-							$ret['location'] = rawurlencode('index.php?'.$_POST['next']);
+							$ret['location'] = gcms::retURL(WEB_URL.'/admin/index.php?'.$_POST['next'], array());
 						} else {
-							$ret['location'] = rawurlencode('index.php?module=language&js='.$save['js']);
+							$ret['location'] = gcms::retURL(WEB_URL.'/admin/index.php', array('module' => 'language', 'js' => $save['js']));
 						}
 					}
 				}

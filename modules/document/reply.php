@@ -193,7 +193,7 @@
 			unset($_SESSION[$_POST['reply_antispamid']]);
 			// คืนค่า url ของ คำถาม
 			$location = WEB_URL."/index.php?module=$index[module]&id=$index[id]&visited=$mmktime";
-			$location .= $config['use_ajax'] == 1 ? "&scrollto=R_$id" : "#R_$id";
+			$location .= $config['use_ajax'] == 1 ? "&to=R_$id" : "#R_$id";
 			$ret['location'] = rawurlencode($location);
 		}
 		// คืนค่าเป็น JSON

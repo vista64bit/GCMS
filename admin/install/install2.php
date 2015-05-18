@@ -16,11 +16,15 @@
 		// ตรวจสอบไฟ์ลและโฟลเดอร์
 		echo '<h2>ตรวจสอบองค์ประกอบต่างๆ ที่จำเป็นสำหรับการติดตั้ง</h2>';
 		echo '<ol>';
-		if ($ftp->connect()) {
-			if ($ftp->is_dir($_SESSION['ftp_root'])) {
-				echo '<li class=correct><strong>FTP</strong> <i>เชื่อมต่อสำเร็จ</i></li>';
+		if (!empty($_SESSION['ftp_username']) && !empty($_SESSION['ftp_password'])) {
+			if ($ftp->connect()) {
+				if ($ftp->is_dir($_SESSION['ftp_root'])) {
+					echo '<li class=correct><strong>FTP</strong> <i>เชื่อมต่อสำเร็จ</i></li>';
+				} else {
+					echo '<li class=incorrect><strong>FTP Root</strong> <em>ไม่ถูกต้อง</em> กรุณาตรวจสอบจากโฮสต์ของคุณ</li>';
+				}
 			} else {
-				echo '<li class=incorrect><strong>FTP Root</strong> <em>ไม่ถูกต้อง</em> กรุณาตรวจสอบจากโฮสต์ของคุณ</li>';
+				echo '<li class=incorrect><strong>FTP</strong> <em>ไม่สามารถใช้งานได้</em> แต่สามารถติดตั้งต่อไปได้</li>';
 			}
 		} else {
 			echo '<li class=incorrect><strong>FTP</strong> <em>ไม่สามารถใช้งานได้</em> แต่สามารถติดตั้งต่อไปได้</li>';

@@ -116,6 +116,7 @@
 			$content[] = '<input type=submit class="button large save" value="{LNG_SAVE}">';
 			$content[] = '<input type=hidden id=save_id name=save_id value='.(int)$language['id'].'>';
 			$content[] = '<input type=hidden name=languageedit value=1>';
+			$content[] = gcms::get2Input($_GET);
 			$content[] = '</fieldset>';
 			$content[] = '</form>';
 			$content[] = '</section>';
