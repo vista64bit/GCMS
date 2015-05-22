@@ -1,18 +1,39 @@
 <?php
-	// bin/class.gcms.php
+	/**
+	 * bin/class.gcms.php
+	 * สงวนลิขสิทธ์ ห้ามซื้อขาย ให้นำไปใช้ได้ฟรีเท่านั้น
+	 *
+	 * @copyright http://www.goragod.com
+	 * @author กรกฎ วิริยะ
+	 * @version 21-05-58
+	 */
 	mb_internal_encoding('utf-8');
 	date_default_timezone_set('Asia/Bangkok');
-	// เวลาปัจจุบัน
+	/**
+	 * @var int $mmktime เวลาปัจจุบันในรูป mktime
+	 * @var int $myear ปี คศ. ปัจจุบัน
+	 * @var int $mmonth เดือนนี้
+	 * @var int $mtoday วันนี้
+	 */
 	$mmktime = mktime(date("H") + $config['hour']);
 	$myear = (int)date('Y', $mmktime);
 	$mmonth = (int)date('m', $mmktime);
 	$mtoday = (int)date('d', $mmktime);
-	// gcms class
+	/**
+	 * GCMS Frameworks Class
+	 */
 	class gcms {
-		// แปลงเวลา (mktime) เป็นวันที่ตามรูปแบบที่กำหนด
-		public static function mktime2date($mmktime, $format = false) {
+		/**
+		 * ฟังก์ชั่น แปลงเวลา (mktime) เป็นวันที่ตามรูปแบบที่กำหนด
+		 *
+		 * @global array $lng ตัวแปรภาษา
+		 * @param int $mmktime เวลาในรูป mktime
+		 * @param string $format (optional) รูปแบบของวันที่ที่ต้องการ (default DATE_FORMAT)
+		 * @return string วันที่และเวลาตามรูปแบบที่กำหนดโดย $format
+		 */
+		public static function mktime2date($mmktime, $format = '') {
 			global $lng;
-			if (preg_match_all('/(.)/u', $format == false ? $lng['DATE_FORMAT'] : $format, $match)) {
+			if (preg_match_all('/(.)/u', $format == '' ? $lng['DATE_FORMAT'] : $format, $match)) {
 				$ret = '';
 				foreach ($match[0] AS $item) {
 					switch ($item) {
@@ -40,7 +61,13 @@
 				return $format == false ? $lng['DATE_FORMAT'] : $format;
 			}
 		}
-		// ฟังก์ชั่น สุ่มตัวอักษร
+		/**
+		 * ฟังก์ชั่น สุ่มตัวอักษร
+		 *
+		 * @param int $count จำนวนหลักที่ต้องการ
+		 * @param string $chars (optional) ตัวอักษรที่ใช้ในการสุ่ม default abcdefghjkmnpqrstuvwxyz
+		 * @return string คืนค่าข้อความ
+		 */
 		public static function rndname($count, $chars = 'abcdefghjkmnpqrstuvwxyz') {
 			srand((double)microtime() * 10000000);
 			$ret = "";
@@ -51,14 +78,12 @@
 			return $ret;
 		}
 		/**
-		 * cutstring($str, $len)
-		 * ฟังก์ชั่น ตัดสตริงค์ตามความยาวที่กำหนด (utf8)
-		 * $str (string) ข้อความที่ต้องการตัด
-		 * $len (int) ความยาวที่ต้องการ หากข้อความที่นำมาตัดยาวกว่าที่กำหนด
-		 * จะตัดข้อความที่เกินออก และเติม .. ข้างท้าย
-		 * (จำนวนตัวอักษรรวมจุด จะเท่ากับ ความยาวที่กำหนด)
+		 * ฟังก์ชั่น ตัดสตริงค์ตามความยาวที่กำหนด
+		 * หากข้อความที่นำมาตัดยาวกว่าที่กำหนด จะตัดข้อความที่เกินออก และเติม .. ข้างท้าย
 		 *
-		 * @return string
+		 * @param string $str ข้อความที่ต้องการตัด
+		 * @param int $len ความยาวของข้อความที่ต้องการ  (จำนวนตัวอักษรรวมจุด)
+		 * @return string คืนค่าข้อความ
 		 */
 		public static function cutstring($str, $len) {
 			$len = (int)$len;
@@ -69,13 +94,11 @@
 			}
 		}
 		/**
-		 * getMimeTypies($typies)
-		 * อ่าน mimetype จาก file type แบบ ออนไลน์
-		 * $typies (array) ชนิดของไฟล์ที่ยอมรับ เช่น jpg gif png
+		 * ฟังก์ชั่น อ่าน mimetype จาก file type แบบ ออนไลน์
 		 *
-		 * คืนค่า แอเรย์ ของ mimetype ที่พบ เช่น $s['php'] = 'text/html';
-		 *
-		 * @return array
+		 * @global array $config ตัวแปรเก็บการตั้งค่าของ GCMS
+		 * @param array $typies ชนิดของไฟล์ที่ต้องการอ่าน mimetype เช่น jpg gif png
+		 * @return array คืนค่า mimetype ที่พบ เช่น 'php'=>'text/html'
 		 */
 		public static function getMimeTypies($typies) {
 			global $config;
@@ -124,14 +147,11 @@
 			return $s;
 		}
 		/**
-		 * checkMIMEType($typies, $filetype)
-		 * ตรวจสอบ mimetype ที่ต้องการ
-		 * $typies (array) ชนิดของไฟล์ที่ยอมรับ เช่น jpg gif png
-		 * $mime (string) ชนิดของไฟล์ที่ต้องการตรวจสอบ เช่น image/png ซึ่งปกติจะได้จากการอัปโหลด
+		 * ฟังก์ชั่น ตรวจสอบ mimetype ที่ต้องการ
 		 *
-		 * คืนค่า true ถ้าพบ
-		 *
-		 * @return boolean
+		 * @param array $typies ชนิดของไฟล์ที่ยอมรับ เช่น jpg gif png
+		 * @param string $mime ชนิดของไฟล์ที่ต้องการตรวจสอบ เช่น image/png ซึ่งปกติจะได้จากการอัปโหลด เช่น $file[mime]
+		 * @return boolean  คืนค่า true ถ้าพบ $mime ใน $typies
 		 */
 		public static function checkMIMEType($typies, $mime) {
 			global $config;
@@ -143,13 +163,10 @@
 			return false;
 		}
 		/**
-		 * getEccept($typies)
-		 * คืนค่า mimetype ของไฟล์ สำหรับส่งให้ input ชนิด file
-		 * $typies (array) ชนิดของไฟล์ เช่น jpg gif png
+		 * ฟังก์ชั่น อ่าน mimetype ของไฟล์ สำหรับส่งให้ input ชนิด file
 		 *
-		 * คืนค่า mimetype ของไฟล์ คั่นแต่ละรายการด้วย , เช่น image/jpeg,image/png,image/gif
-		 *
-		 * @return string
+		 * @param array $typies ชนิดของไฟล์ เช่น jpg gif png
+		 * @return string คืนค่า mimetype ของไฟล์ คั่นแต่ละรายการด้วย , เช่น image/jpeg,image/png,image/gif
 		 */
 		public static function getEccept($typies) {
 			global $config;
@@ -161,7 +178,13 @@
 			}
 			return implode(',', $accept);
 		}
-		// ตรวจสอบไฟล์อัปโหลด
+		/**
+		 * ฟังก์ชั่น ตรวจสอบไฟล์อัปโหลดว่าเป็นรูปภาพหรือไม่
+		 *
+		 * @param array $typies ชนิดของไฟล์รูปภาพ ได้แก่ jpg gif png
+		 * @param array $files ตัวแปรที่ได้จาก $_FILES
+		 * @return array|boolean คืนค่าแอเรย์ [width, height, mime] ของรูปภาพ หรือ  false ถ้าไม่ใช่รูปภาพ
+		 */
 		public static function isValidImage($typies, $files) {
 			// ext
 			$imageinfo = explode('.', $files['name']);
@@ -181,7 +204,12 @@
 				}
 			}
 		}
-		// ฟังก์ชั่นอ่านข้อมูลรูปภาพ
+		/**
+		 * ฟังก์ชั่น อ่านข้อมูลรูปภาพ
+		 *
+		 * @param string $img path ของไฟล์รูปภาพ
+		 * @return array [width, height, mime] ของรูปภาพ
+		 */
 		public static function imageInfo($img) {
 			// Exif
 			$info = getImageSize($img);
@@ -190,7 +218,19 @@
 			$imageinfo['mime'] = $info['mime'];
 			return $imageinfo;
 		}
-		// ฟังก์ชั่น ตัดรูปภาพ ตามขนาดที่กำหนด
+		/**
+		 * ฟังก์ชั่น ตัดรูปภาพ ตามขนาดที่กำหนด
+		 * รูปภาพปลายทางจะมีขนาดเท่าที่กำหนด หากรูปภาพต้นฉบับมีขนาดหรืออัตราส่วนไม่พอดีกับขนาดของภาพปลายทาง
+		 * รูปภาพจะถูกตัดขอบออกหรือจะถูกขยาย เพื่อให้พอดีกับรูปภาพปลายทางที่ต้องการ
+		 *
+		 * @param string $source path และชื่อไฟล์ของไฟล์รูปภาพต้นฉบับ
+		 * @param string $target path และชื่อไฟล์ของไฟล์รูปภาพปลายทาง
+		 * @param array $info [width, height, mime] ของรูปภาพ
+		 * @param int $thumbwidth ความกว้างของรูปภาพที่ต้องการ
+		 * @param int $thumbheight ความสูงของรูปภาพที่ต้องการ
+		 * @param string $watermark (optional) ข้อความลายน้ำ
+		 * @return boolean สำเร็จคืนค่า true
+		 */
 		public static function cropImage($source, $target, $info, $thumbwidth, $thumbheight, $watermark = '') {
 			switch ($info['mime']) {
 				case 'image/gif':
@@ -249,7 +289,21 @@
 			imageDestroy($t_im);
 			return $ret;
 		}
-		// ฟังก์ชั่นปรับขนาดของภาพ รักษาอัตราส่วนของภาพตามความกว้างที่ต้องการ
+		/**
+		 * ฟังก์ชั่นปรับขนาดของภาพ โดยรักษาอัตราส่วนของภาพตามความกว้างที่ต้องการ
+		 * หากรูปภาพมีขนาดเล็กกว่าที่กำหนด จะเป็นการ copy file
+		 * หากรูปภาพมาความสูง หรือความกว้างมากกว่า $width
+		 * จะถูกปรับขนาดให้มีขนาดไม่เกิน $width (ทั้งความสูงและความกว้าง)
+		 * และเปลี่ยนชนิดของภาพเป็น jpg
+		 *
+		 * @param string $source path และชื่อไฟล์ของไฟล์รูปภาพต้นฉบับ
+		 * @param string $target path ของไฟล์รูปภาพปลายทาง
+		 * @param string $name ชื่อไฟล์ของรูปภาพปลายทาง
+		 * @param array $info [width, height, mime] ของรูปภาพ
+		 * @param int $width ขนาดสูงสุดของรูปภาพที่ต้องการ
+		 * @param string $watermark (optional) ข้อความลายน้ำ
+		 * @return array|boolean คืนค่าแอเรย์ [name, width, height, mime] ของรูปภาพปลายทาง หรือ false ถ้าไม่สามารถดำเนินการได้
+		 */
 		public static function resizeImage($source, $target, $name, $info, $width, $watermark = '') {
 			if ($info['width'] > $width || $info['height'] > $width) {
 				if ($info['width'] <= $info['height']) {
@@ -301,7 +355,12 @@
 			}
 			return false;
 		}
-		// โหลดภาพ jpg และหมุนภาพอัตโนมัติ
+		/**
+		 * ฟังก์ชั่น โหลดภาพ jpg และหมุนภาพอัตโนมัติจากข้อมูลของ Exif
+		 *
+		 * @param resource $source resource ของรูปภาพต้นฉบับ
+		 * @return resource คืนค่า resource ของรูปภาพหลังจากหมุนแล้ว ถ้าไม่สนับสนุนคืนค่า resource เดิม
+		 */
 		public static function orientImage($source) {
 			$imgsrc = imageCreateFromJPEG($source);
 			if (function_exists('exif_read_data')) {
@@ -336,7 +395,12 @@
 			}
 			return $imgsrc;
 		}
-		// กลับรูปภาพ
+		/**
+		 * ฟังก์ชั่น พลิกรูปภาพ (ซ้าย-ขวา คล้ายกระจกเงา)
+		 *
+		 * @param resource $imgsrc resource ของรูปภาพต้นฉบับ
+		 * @return resource คืนค่า resource ของรูปภาพหลังจากพลิกรูปภาพแล้ว ไม่สำเร็จคืนค่า resource ของรูปภาพต้นฉบับ
+		 */
 		public static function flipImage($imgsrc) {
 			$width = imagesx($imgsrc);
 			$height = imagesy($imgsrc);
@@ -350,7 +414,17 @@
 			}
 			return $imgsrc;
 		}
-		// ลายน้ำ
+		/**
+		 * ฟังก์ชั่น วาดลายน้ำที่เป็นตัวอักษรลงบนรูปภาพ
+		 *
+		 * @param resource $imgsrc resource ของรูปภาพต้นฉบับ
+		 * @param string $text ข้อความที่จะใช้เป็นลายน้ำ
+		 * @param string $pos (optional) ตำแหน่งของลายน้ำเช่น center top bottom right left (default 'top left')
+		 * @param string $color (optional) สีของตัวอักษร เป็น hex เท่านั้น ไม่ต้องมี # (default CCCCCC)
+		 * @param int $font_size (optional) ขนาดตัวอักษรของลายน้ำเป็นพิกเซล (default 20px)
+		 * @param int $opacity (optional) กำหนดค่าตัวอักษรโปร่งใส 0-50 (default 50)
+		 * @return resource ของรูปภาพต้นฉบับ
+		 */
 		public static function watermarkText($imgsrc, $text, $pos = '', $color = 'CCCCCC', $font_size = 20, $opacity = 50) {
 			$font = ROOT_PATH.'skin/fonts/leelawad.ttf';
 			$offset = 5;
@@ -373,7 +447,13 @@
 			imagettftext($imgsrc, $font_size, 0, $x, $y, $alpha_color, $font, $text);
 			return $imgsrc;
 		}
-		// ฟังก์ชั่น แปลงข้อความภาษาไทยเป็น ข้อความ HTML เช่น ก แปลงเป้น &#3585;
+		/**
+		 * ฟังก์ชั่น แปลงข้อความภาษาไทยเป็น HTML เช่น ก แปลงเป้น &#3585;
+		 *
+		 * @param string $utf8 ข้อความต้นฉบับ
+		 * @param boolean $encodeTags true แปลงข้อความภาษาอังกฤษด้วย
+		 * @return string คืนค่าข้อความ
+		 */
 		public static function text2HTML($utf8, $encodeTags) {
 			$result = '';
 			for ($i = 0; $i < strlen($utf8); $i++) {
@@ -381,7 +461,7 @@
 				$ascii = ord($char);
 				if ($ascii < 128) {
 					// one-byte character
-					$result .= ($encodeTags) ? htmlentities($char) : $char;
+					$result .= $encodeTags ? htmlentities($char) : $char;
 				} else if ($ascii < 192) {
 					// non-utf8 character or not a start byte
 				} else if ($ascii < 224) {
@@ -407,7 +487,18 @@
 			}
 			return $result;
 		}
-		// ฟังก์ชั่นส่งเมล์จาก template
+		/**
+		 * ฟังก์ชั่นส่งเมล์จากแม่แบบจดหมาย
+		 *
+		 * @global resource $db database resource
+		 * @global array $config ตัวแปรเก็บการตั้งค่าของ GCMS
+		 * @global int $mmktime เวลาปัจจุบัน (mktime)
+		 * @param int $id ID ของจดหมายที่ต้องการส่ง
+		 * @param string $module ชื่อโมดูลของจดหมายที่ต้องการส่ง
+		 * @param array $datas ข้อมูลที่จะถูกแทนที่ลงในจดหมาย ในรูป 'ตัวแปร'=>'ข้อความ'
+		 * @param string $to ที่อยู่อีเมล์ผู้รับ  คั่นแต่ละรายชื่อด้วย ,
+		 * @return string สำเร็จคืนค่าว่าง ไม่สำเร็จ คืนค่าข้อความผิดพลาด
+		 */
 		public static function sendMail($id, $module, $datas, $to) {
 			global $db, $config, $mmktime;
 			$sql = "SELECT * FROM `".DB_EMAIL_TEMPLATE."`";
@@ -423,7 +514,7 @@
 				$replace['/%WEBTITLE%/'] = strip_tags($config['web_title']);
 				$replace['/%WEBURL%/'] = WEB_URL;
 				$replace['/%EMAIL%/'] = $to;
-				$replace['/%ADMINEMAIL%/'] = $email['from_email'] == '' ? $config['noreply_email'] : $email['from_email'];
+				$replace['/%ADMINEMAIL%/'] = empty($email['from_email']) ? $config['noreply_email'] : $email['from_email'];
 				$replace['/%TIME%/'] = gcms::mktime2date($mmktime);
 				$replace = array_merge($replace, $datas);
 				$patt = array_keys($replace);
@@ -431,17 +522,26 @@
 				$msg = preg_replace($patt, $replace, $email['detail']);
 				$subject = preg_replace($patt, $replace, $email['subject']);
 				// ส่งอีเมล์
-				return gcms::customMail($to.($email['copy_to'] != '' ? ",$email[copy_to]" : ''), $email['from_email'], $subject, $msg);
+				return gcms::customMail($to.(!empty($email['copy_to']) ? ",$email[copy_to]" : ''), $email['from_email'], $subject, $msg);
 			}
 		}
-		// ฟังก์ชั่นส่งเมล์ (custom)
+		/**
+		 * ฟังก์ชั่นส่งเมล์แบบกำหนดรายละเอียดเอง
+		 *
+		 * @global array $config ตัวแปรเก็บการตั้งค่าของ GCMS
+		 * @param string $mailto ที่อยู่อีเมล์ผู้รับ  คั่นแต่ละรายชื่อด้วย ,
+		 * @param string $replyto ที่อยู่อีเมล์สำหรับการตอบกลับจดหมาย ถ้าระบุเป็นค่าว่างจะใช้ที่อยู่อีเมล์จาก noreply_email
+		 * @param string $subject หัวข้อจดหมาย
+		 * @param string $msg รายละเอียดของจดหมาย (รองรับ HTML)
+		 * @return string สำเร็จคืนค่าว่าง ไม่สำเร็จ คืนค่าข้อความผิดพลาด
+		 */
 		public static function customMail($mailto, $replyto, $subject, $msg) {
 			global $config;
 			$charset = empty($config['email_charset']) ? 'utf-8' : $config['email_charset'];
 			if ($replyto == '') {
 				$replyto = array($config['noreply_email'], strip_tags($config['web_title']));
 			} elseif (preg_match('/^(.*)<(.*?)>$/', $replyto, $match)) {
-				$replyto = array($match[1], ($match[2] == '' ? $match[1] : $match[2]));
+				$replyto = array($match[1], (empty($match[2]) ? $match[1] : $match[2]));
 			} else {
 				$replyto = array($replyto, $replyto);
 			}
@@ -518,7 +618,12 @@
 				}
 			}
 		}
-		// เข้ารหัส
+		/**
+		 * ฟังก์ชั่น เข้ารหัสข้อความ
+		 *
+		 * @param string $string ข้อความที่ต้องการเข้ารหัส
+		 * @return string ข้อความที่เข้ารหัสแล้ว
+		 */
 		public static function encode($string) {
 			$en_key = (string)EN_KEY;
 			$j = 0;
@@ -532,7 +637,12 @@
 			}
 			return base64_encode($string);
 		}
-		// ถอดรหัส
+		/**
+		 * ฟังก์ชั่น ถอดรหัสข้อความ
+		 *
+		 * @param string $string ข้อความที่เข้ารหัสจาก gcms::encode()
+		 * @return string ข้อความที่ถอดรหัสแล้ว
+		 */
 		public static function decode($string) {
 			$en_key = (string)EN_KEY;
 			$encode = base64_decode($string);
@@ -547,7 +657,11 @@
 			}
 			return $encode;
 		}
-		// อ่าน ip ของเครื่องที่เรียก
+		/**
+		 * ฟังก์ชั่น อ่าน ip ของ client
+		 *
+		 * @return string IP ที่อ่านได้
+		 */
 		public static function getip() {
 			if (isset($_SERVER)) {
 				if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
@@ -568,14 +682,25 @@
 			}
 			return $realip;
 		}
-		// แสดง ip แบบซ่อนหลักหลัง
+		/**
+		 * ฟังก์ชั่น แสดง ip แบบซ่อนหลักหลัง
+		 *
+		 * @param string $ip ที่อยู่ IP ที่ต้องการแปลง (IPV4)
+		 * @return string ที่อยู่ IP ที่แปลงแล้ว
+		 */
 		public static function showip($ip) {
 			preg_match('/([0-9]+\.[0-9]+\.)([0-9\.]+)/', $ip, $ips);
 			return $ips[1].preg_replace('/[0-9]/', 'x', $ips[2]);
 		}
-		// ฟังก์ชั่น preg_replace ของ gcms
+		/**
+		 * ฟังก์ชั่น preg_replace ของ gcms
+		 *
+		 * @param array $patt คีย์ใน template
+		 * @param array $replace ข้อความที่จะถูกแทนที่ลงในคีย์
+		 * @param string $skin template
+		 * @return string คืนค่า HTML template
+		 */
 		public static function pregReplace($patt, $replace, $skin) {
-			global $lng;
 			if (OLD_PHP) {
 				return preg_replace($patt, $replace, $skin);
 			} else {
@@ -595,7 +720,16 @@
 				return $skin;
 			}
 		}
-		// HTML highlighter
+		/**
+		 * ฟังก์ชั่น HTML highlighter
+		 * ทำ highlight ข้อความส่วนที่เป็นโค้ด
+		 * จัดการแปลง BBCode
+		 * แปลงข้อความ http เป็นลิงค์
+		 *
+		 * @param string $text ข้อความ
+		 * @param boolean $canview true จะแสดงข้อความเตือน 'ยังไม่ได้เข้าระบบ' หากไม่ได้เข้าระบบ สำหรับส่วนที่อยู่ในกรอบ code
+		 * @return string คืนค่าข้อความ
+		 */
 		public static function htmlhighlighter($text, $canview) {
 			$patt[] = '/\[(\/)?(i|dfn|b|strong|u|em|ins|del|sub|sup|small|big|ul|ol|li)\]/isu';
 			$replace[] = '<\\1\\2>';
@@ -633,7 +767,13 @@
 			$replace[] = '<div class="youtube"><iframe src="//www.youtube.com/embed/\\1?wmode=transparent"></iframe></div>';
 			return preg_replace($patt, $replace, $text);
 		}
-		// สำหรับตัด tag ออกจากเนื้อหา
+		/**
+		 * ฟังก์ชั่น แปลง html เป็น text
+		 * สำหรับตัด tag หรือเอา BBCode ออกจากเนื้อหาที่เป็น HTML ให้เหลือแต่ข้อความล้วน
+		 *
+		 * @param string $text ข้อความ
+		 * @return string คืนค่าข้อความ
+		 */
 		public static function html2txt($text) {
 			$patt = array();
 			$replace = array();
@@ -661,24 +801,29 @@
 			$replace[] = ' ';
 			return trim(preg_replace($patt, $replace, $text));
 		}
-		// ฟังก์ชั่นแทนที่คำหยาบ
-		public static function CheckRude($temp) {
+		/**
+		 * ฟังก์ชั่นแทนที่คำหยาบ
+		 *
+		 * @global array $config ตัวแปรเก็บการตั้งค่าของ GCMS
+		 * @param string $text ข้อความ
+		 * @return string คืนค่าข้อความที่ แปลงคำหยาบให้เป็น <em>xxx</em>
+		 */
+		public static function CheckRude($text) {
 			global $config;
 			if (is_array($config['wordrude'])) {
-				return preg_replace("/(".implode('|', $config['wordrude']).")/usi", '<em>'.$config['wordrude_replace'].'</em>', $temp);
+				return preg_replace("/(".implode('|', $config['wordrude']).")/usi", '<em>'.$config['wordrude_replace'].'</em>', $text);
 			} else {
-				return $temp;
+				return $text;
 			}
 		}
-		// ฟังก์ชั่นแสดงเนื้อหา
 		/**
-		 * showDetail($detail, $canview, $rude = true)
 		 * ฟังก์ชั่นแสดงเนื้อหา
-		 * $detail (string) email address
-		 * $canview (boolean) true=ซ่อนข้อความภายใต้ tag code หากไม่ใช่สมาชิก
-		 * $rude (boolean) true(default)=ตัดคำหยาบ
 		 *
-		 * @return (string)
+		 * @param string $detail ข้อความ
+		 * @param boolean $canview true จะแสดงข้อความเตือน 'ยังไม่ได้เข้าระบบ' หากไม่ได้เข้าระบบ สำหรับส่วนที่อยู่ในกรอบ code
+		 * @param [boolean] $rude (optional) true=ตรวจสอบคำหยาบด้วย (default true)
+		 * @param [boolean] $txt (optional) true=เปลี่ยน tab เป็นช่องว่าง 4 ตัวอักษร (default false)
+		 * @return string คืนค่าข้อความ
 		 */
 		public static function showDetail($detail, $canview, $rude = true, $txt = false) {
 			if ($txt) {
@@ -691,16 +836,15 @@
 			}
 		}
 		/**
-		 * CheckLogin($email, $password)
-		 * ตรวจสอบการ login
-		 * $email (string) email address
-		 * $password (string)
+		 * ฟังก์ชั่น ตรวจสอบการ login
 		 *
-		 * @return (int) 0 ไม่พบอีเมล์
-		 * @return (int) 1 ยังไม่ได้ activate
-		 * @return (int) 2 ติดแบน
-		 * @return (int) 3 รหัสผ่านผิด
-		 * @return (int) 4 login ต่าง ip กัน
+		 * @global array $config ตัวแปรเก็บการตั้งค่าของ GCMS
+		 * @global resource $db database resource
+		 * @global int $mmktime เวลาปัจจุบัน
+		 * @global int $mtoday วันที่วันนี้
+		 * @param string $email อีเมล์ที่ต้องการตรวจสอบ
+		 * @param string $password รหัสผ่านที่ต้องการตรวจสอบ
+		 * @return array|int ข้อมูลของสมาชิก หาก emailและ password ถูกต้อง หรือ 0 ไม่พบอีเมล์, 1 ยังไม่ได้ activate, 2 ติดแบน, 3 รหัสผ่านผิด, 4 login ต่าง ip กัน
 		 */
 		public static function CheckLogin($email, $password) {
 			global $config, $db, $mmktime, $mtoday;
@@ -779,15 +923,29 @@
 				}
 			}
 		}
-		// ตรวจสอบการ login
+		/**
+		 * ฟังก์ชั่น ตรวจสอบการ login
+		 *
+		 * @return boolean คืนค่า true ถ้า Login อยู่
+		 */
 		public static function isMember() {
 			return isset($_SESSION['login']);
 		}
-		// ตรวจสอบสถานะแอดมิน (สูงสุด)
+		/**
+		 * ฟังก์ชั่น ตรวจสอบสถานะแอดมิน (สูงสุด)
+		 *
+		 * @return boolean คืนค่า true ถ้าเป็นแอดมินระดับสูงสุด
+		 */
 		public static function isAdmin() {
 			return isset($_SESSION['login']) && $_SESSION['login']['status'] == 1;
 		}
-		// ตรวจสอบแอดมินและสถานะที่กำหนด
+		/**
+		 * ฟังก์ชั่น ตรวจสอบสถานะที่กำหนด
+		 *
+		 * @param array $cfg ตัวแปรแอเรย์ที่มีคีย์ที่ต้องการตรวจสอบเช่น $config
+		 * @param string $key คีย์ของ $cfg ที่ต้องการตรวจสอบ
+		 * @return boolean คืนค่า true ถ้าสมาชิกที่ login มีสถานะที่กำหนดอยู่ใน $cfg[$key]
+		 */
 		public static function canConfig($cfg, $key) {
 			if (isset($_SESSION['login']['status'])) {
 				$status = $_SESSION['login']['status'];
@@ -804,7 +962,18 @@
 				return false;
 			}
 		}
-		// ฟังชั่นคืนค่ารูปแบบ url ที่ใช้ได้บนเว็บไซต์
+		/**
+		 * ฟังชั่นคืนค่ารูปแบบ url ที่ใช้ได้บนเว็บไซต์
+		 *
+		 * @global array $config ตัวแปรเก็บการตั้งค่าของ GCMS
+		 * @param string $module ชื่อโมดูล
+		 * @param string $document alias ของบทความ (โมดูล document เท่านั้น) (default ค่าว่าง)
+		 * @param int $catid id ของหมวดหมู่ (default 0)
+		 * @param int $id id ของข้อมูล (default 0)
+		 * @param string $query query string อื่นๆ (default ค่าว่าง)
+		 * @param [boolean] $encode true=เข้ารหัสด้วย rawurlencode ด้วย (default true)
+		 * @return string คืนค่า full URL
+		 */
 		public static function getURL($module, $document = '', $catid = 0, $id = 0, $query = '', $encode = true) {
 			$urls = array();
 			$patt = array();
@@ -841,7 +1010,20 @@
 			}
 			return WEB_URL.'/'.$link;
 		}
-		// โหลด widget
+		/**
+		 * ฟังก์ชั่น โหลด widget
+		 *
+		 * @global array $config ตัวแปรเก็บการตั้งค่าของ GCMS
+		 * @global array $lng ตัวแปรภาษา
+		 * @global resource $db database resource
+		 * @global resource $cache cache resource
+		 * @global int $mmktime เวลาปัจจุบัน (mktime)
+		 * @global array $install_modules แอเรย์รายการโมดูลที่ติดตั้งแล้ว
+		 * @global array $install_owners แอเรย์รายการโฟลเดอร์ใน modules
+		 * @global array $module_list แอเรย์รายชื่อโมดูลที่ติดตั้งแล้ว
+		 * @param array $matches ตัวแปร array ที่ได้จากการอ่าน widget จาก template
+		 * @return string คืนค่าโค้ด HTML ของ widget
+		 */
 		public static function getWidgets($matches) {
 			global $config, $lng, $db, $cache, $mmktime, $install_modules, $install_owners, $module_list;
 			$owner = strtolower($matches[1]);
@@ -860,12 +1042,23 @@
 			}
 			return '';
 		}
-		// อ่านภาษา
+		/**
+		 * ฟังก์ชั่น อ่านภาษา
+		 *
+		 * @global array $lng ตัวแปรภาษา
+		 * @param array $matches  ตัวแปร array ที่ได้จากการอ่านจาก template
+		 * @return string คืนค่าข้อความ $lng[$matches[1]]
+		 */
 		public static function getLng($matches) {
 			global $lng;
 			return empty($lng[$matches[1]]) ? '' : $lng[$matches[1]];
 		}
-		// array เป็น json
+		/**
+		 * ฟังก์ชั่น แปลง array เป็น json
+		 *
+		 * @param array $array แอเรย์ของข้อมูล
+		 * @return string คืนค่าข้อความที่เป็น JSON หรือ คืนค่าว่างหาก $array ว่างเปล่า
+		 */
 		public static function array2json($array) {
 			if (is_array($array) && count($array) > 0) {
 				$ret = array();
@@ -878,24 +1071,20 @@
 			}
 		}
 		/**
-		 * sql_trim_str_decode($text)
-		 * แปลงข้อความสำหรับการ quote
-		 * $text (string) ข้อความที่ต้องการ
-		 * คืนค่าข้อความ
+		 *  ฟังก์ชั่น แปลงข้อความสำหรับการ quote
 		 *
-		 * @return (string)
+		 * @param string $text ข้อความ
+		 * @return string คืนค่าข้อความ
 		 */
 		public static function sql_trim_str_decode($text) {
 			return str_replace('&#92;', '\\', htmlspecialchars_decode($text));
 		}
 		/**
-		 * txtQuote($text)
-		 * แปลงข้อความสำหรับการ quote
-		 * $text (string) ข้อความที่ต้องการ
-		 * $u (boolean) default false, true ถอดรหัสอักขระพิเศษด้วย
-		 * คืนค่าข้อความ
+		 * ฟังก์ชั่น แปลงข้อความสำหรับการ quote
 		 *
-		 * @return (string)
+		 * @param string $text ข้อความ
+		 * @param [boolean] $u true=ถอดรหัสอักขระพิเศษด้วย (default false)
+		 * @return string คืนค่าข้อความ
 		 */
 		public static function txtQuote($text, $u = false) {
 			$text = preg_replace('/<br(\s\/)?>/isu', '', $text);
@@ -905,12 +1094,10 @@
 			return $text;
 		}
 		/**
-		 * txtClean($text)
-		 * ตัดข้อความที่ไม่พึงประสงค์ก่อนบันทึกลง db ที่มาจาก textarea
-		 * $text (string) ข้อความที่ submit
-		 * คืนค่าข้อความ
+		 * ฟังก์ชั่น ตัดข้อความที่ไม่พึงประสงค์ก่อนบันทึกลง db ที่มาจาก textarea
 		 *
-		 * @return (string)
+		 * @param string $text ข้อความ
+		 * @return string คืนค่าข้อความ
 		 */
 		public static function txtClean($text) {
 			$patt = array();
@@ -925,12 +1112,10 @@
 			return defined('DATABASE_DRIVER') ? stripslashes($text) : $text;
 		}
 		/**
-		 * ckClean($text)
-		 * ตัดข้อความที่ไม่พึงประสงค์ก่อนที่มาจาก ckeditor
-		 * $text (string) ข้อความที่ submit
-		 * คืนค่าข้อความ
+		 * ฟังก์ชั่น ตัดข้อความที่ไม่พึงประสงค์ก่อนที่มาจาก ckeditor
 		 *
-		 * @return (string)
+		 * @param string $text ข้อความ
+		 * @return string คืนค่าข้อความ
 		 */
 		public static function ckClean($text) {
 			$patt = array();
@@ -949,12 +1134,11 @@
 			return defined('DATABASE_DRIVER') ? stripslashes($text) : $text;
 		}
 		/**
-		 * ckDetail($text)
-		 * ตัดข้อความที่ไม่พึงประสงค์ก่อนบันทึกลง db ที่มาจาก ckeditor
-		 * $text (string) ข้อความที่ submit
-		 * คืนค่าข้อความ
+		 * ฟังก์ชั่น ตัดข้อความที่ไม่พึงประสงค์ก่อนบันทึกลง db ที่มาจาก ckeditor
 		 *
-		 * @return (string)
+		 * @global resource $db database resource
+		 * @param string $text ข้อความ
+		 * @return string คืนค่าข้อความ
 		 */
 		public static function ckDetail($text) {
 			global $db;
@@ -969,13 +1153,11 @@
 			return $db->sql_clean(preg_replace($patt, $replace, $text));
 		}
 		/**
-		 * detail2TXT($array, $key)
-		 * เข้ารหัส อักขระพิเศษ และ {} ก่อนจะส่งให้กับ CKEditor
-		 * $array (mixed) array หรือ string
-		 * $key (string) $key ของ $array
-		 * คืนค่าข้อความ
+		 * ฟังก์ชั่น เข้ารหัส อักขระพิเศษ และ {} ก่อนจะส่งให้กับ CKEditor
 		 *
-		 * @return (string)
+		 * @param mixed $array array หรือ string
+		 * @param string $key (optional) key ของ $array  เช่น $array[$key]
+		 * @return string คืนค่าข้อความ
 		 */
 		public static function detail2TXT($array, $key = null) {
 			if ($key === null) {
@@ -987,7 +1169,11 @@
 			}
 			return $value == '' ? '' : str_replace(array('{', '}'), array('&#x007B;', '&#x007D;'), htmlspecialchars($value));
 		}
-		// ตรวจสอบ referer
+		/**
+		 * ฟังก์ชั่น ตรวจสอบ referer
+		 *
+		 * @return boolean คืนค่า true ถ้า referer มาจากเว็บไซต์นี้
+		 */
 		public static function isReferer() {
 			$server = empty($_SERVER["HTTP_HOST"]) ? $_SERVER["SERVER_NAME"] : $_SERVER["HTTP_HOST"];
 			$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
@@ -999,7 +1185,13 @@
 				return false;
 			}
 		}
-		// อ่าน config จากข้อมูล
+		/**
+		 * ฟังก์ชั่น อ่าน config จากข้อมูล
+		 *
+		 * @param string $data ข้อมูลที่ต้องการอ่าน รูปแบบ key=value คั่นแต่ละรายการด้วย \n
+		 * @param pointer $config ตัวแปรแอเรย์ที่ต้องการรับค่าหลังจากอ่านข้อมูลแล้ว
+		 * @param boolean $replace false=เก็บข้อมูลก่อนหน้าไว้ หากมีข้อมูลอยู่ก่อนแล้ว,true=แทนที่ด้วยข้อมูลใหม่ (default=true)
+		 */
 		public static function r2config($data, &$config, $replace = true) {
 			foreach (explode("\n", $data) As $item) {
 				if ($item != '') {
@@ -1011,8 +1203,14 @@
 				}
 			}
 		}
-		// เรียงลำดับ array ตามชื่อฟิลด์
-		public static function sortby(&$array, $subkey = 'id', $sort_ascending = false) {
+		/**
+		 * ฟังก์ชั่น เรียงลำดับ array ตามชื่อฟิลด์
+		 *
+		 * @param pointer $array แอเรย์ที่ต้องการเรียงลำดับ
+		 * @param string $subkey (optional) คืย์ของ $array ที่ต้องการในการเรียง (default id)
+		 * @param boolean $sort_desc true=เรียงจากมากไปหาน้อย, false=เรียงจากน้อยไปหามาก (default false)
+		 */
+		public static function sortby(&$array, $subkey = 'id', $sort_desc = false) {
 			if (count($array)) {
 				$temp_array[key($array)] = array_shift($array);
 			}
@@ -1030,45 +1228,72 @@
 					$temp_array = array_merge($temp_array, array($key => $val));
 				}
 			}
-			if ($sort_ascending) {
+			if ($sort_desc) {
 				$array = array_reverse($temp_array);
 			} else {
 				$array = $temp_array;
 			}
 		}
 		/**
-		 * testDir($dir)
-		 * ตรวจสอบไดเร็คทอรี่ว่าเขียนได้หรือไม่
-		 * $dir (string) โฟลเดอร์+path ที่ต้องการทดสอบ
-		 * คืนค่า true ถ้าเขียนได้
+		 * ฟังก์ชั่น ตรวจสอบไดเร็คทอรี่ว่าเขียนได้หรือไม่
 		 *
-		 * @return (boolean) true ถ้าเขียนได้
+		 * @global resource $ftp FTP resource
+		 * @param string $dir โฟลเดอร์+path ที่ต้องการทดสอบ
+		 * @return boolean คืนค่า true ถ้าเขียนได้
 		 */
 		public static function testDir($dir) {
 			global $ftp;
 			return $ftp->mkdir($dir);
 		}
-		// ลบ ไฟล์ และ directory
+		/**
+		 * ฟังก์ชั่น ลบ directory (และไฟล์หรือไดเรคทอรี่ในนั้นทั้งหมด)
+		 *
+		 * @global resource $ftp FTP resource
+		 * @param string $dir full path ไดเร็คทอรี่ที่ต้องการลบ
+		 * @return boolean คืนค่า true ถ้าสำเร็จ
+		 */
 		public static function rm_dir($dir) {
 			global $ftp;
 			return $ftp->rmdir($dir);
 		}
-		// แปลงอักขระ HTML กลับเป็นตัวอักษร สำหรับใส่ใน textarea
+		/**
+		 *  ฟังก์ชั่น แปลงอักขระ HTML กลับเป็นตัวอักษร สำหรับใส่ใน textarea
+		 *
+		 * @param string $value ข้อความ
+		 * @return string คืนค่าข้อความ
+		 */
 		public static function unhtmlentities($value) {
 			$patt = array('/&amp;/', '/&#39;/', '/&quot;/', '/&nbsp;/');
 			$replace = array('&', "'", '"', ' ');
 			return preg_replace($patt, $replace, $value);
 		}
-		// โหลด template ของโมดูลที่เลือก
+		/**
+		 * ฟังก์ชั่น โหลด template ของโมดูลที่เลือก
+		 *
+		 * @param string $module ชื่อโมดูล
+		 * @param string $owner ชื่อโฟลเดอร์ ตามใน modules/
+		 * @param string $file ชื่อไฟล์ ไม่ต้องระบุนามสกุล html
+		 * @return string คืนค่า template จาก $module ถ้าไม่มีจะโหลดจาก $owner ถ้าไม่พบคืนค่าว่าง
+		 */
 		public static function loadtemplate($module, $owner, $file) {
 			$template = is_file(ROOT_PATH.SKIN."$module/$file.html") ? $module : $owner;
 			return gcms::loadfile(ROOT_PATH.SKIN.str_replace('//', '/', "$template/$file.html"));
 		}
-		// โหลดไฟล์ ตัด \t และ \r ออก
+		/**
+		 * ฟังก์ชั่น โหลดไฟล์ ตัด \t และ \r ออก
+		 *
+		 * @param string $file ชื่อไฟล์รวม path
+		 * @return string คืนค่าข้อมูลในไฟล์ ถ้าไม่พบคืนค่าว่าง
+		 */
 		public static function loadfile($file) {
 			return is_file($file) ? preg_replace('/[\t\r]/', '', file_get_contents($file)) : '';
 		}
-		// อ่าน info ของ theme
+		/**
+		 * ฟังก์ชั่น อ่าน info ของ theme
+		 *
+		 * @param string $theme ชื่อไฟล์ css ของ theme รวม full path
+		 * @return array คืนค่า แอเรย์ข้อมูลส่วน header ของ css
+		 */
 		public static function parse_theme($theme) {
 			$result = array();
 			if (is_file($theme) && preg_match('/^[\s]{0,}\/\*(.*?)\*\//is', file_get_contents($theme), $match)) {
@@ -1080,7 +1305,13 @@
 			}
 			return $result;
 		}
-		// highlight ข้อความค้นหา
+		/**
+		 * ฟังก์ชั่น highlight ข้อความค้นหา
+		 *
+		 * @param string $text ข้อความ
+		 * @param string $search ข้อความค้นหา แยกแต่ละคำด้วย ,
+		 * @return string คืนค่าข้อความ
+		 */
 		public static function HighlightSearch($text, $search) {
 			foreach (explode(' ', $search) AS $i => $q) {
 				if ($q != '') {
@@ -1089,7 +1320,13 @@
 			}
 			return $text;
 		}
-		// ทำ highlight ข้อความ
+		/**
+		 * ฟังก์ชั่น ทำ highlight ข้อความ
+		 *
+		 * @param string $text ข้อความ
+		 * @param string $needle ข้อความที่ต้องการทำ highlight
+		 * @return string คืนค่าข้อความ ข้อความที่ highlight จะอยู่ภายใต้ tag mark
+		 */
 		public static function doHighlight($text, $needle) {
 			$newtext = '';
 			$i = -1;
@@ -1113,12 +1350,26 @@
 			}
 			return $newtext;
 		}
-		// ค้นหาข้อความย้อนหลัง
+		/**
+		 * ฟังก์ชั่น ค้นหาข้อความย้อนหลัง
+		 *
+		 * @param string $text ข้อความ
+		 * @param string $needle ข้อความค้นหา
+		 * @param int $offset ตำแหน่งเริ่มต้นที่ต้องการค้นหา
+		 * @return int คืนค่าตำแหน่งของตัวอักษรที่พบ ตัวแรกคือ 0 หากไม่พบคืนค่า -1
+		 */
 		public static function lastIndexOf($text, $needle, $offset) {
 			$pos = mb_strripos(mb_substr($text, 0, $offset), $needle);
 			return $pos == false ? -1 : $pos;
 		}
-		// อ่านสถานะของสมาชิกเป็นข้อความ
+		/**
+		 * ฟังก์ชั่น อ่านสถานะของสมาชิกเป็นข้อความ
+		 *
+		 * @global array $lng ตัวแปรภาษา
+		 * @global array $config ตัวแปรเก็บการตั้งค่าของ GCMS
+		 * @param mixed $status สถานะของสมาชิกที่ต้องการ
+		 * @return string คืนค่าข้อความ
+		 */
 		public static function id2status($status) {
 			global $lng, $config;
 			$status = is_array($status) ? $status : explode(',', $status);
@@ -1133,12 +1384,11 @@
 			return implode(',', $ds);
 		}
 		/**
-		 * saveConfig($file, $config)
-		 * บันทึกไฟล์ config
-		 * $file (string) path ของไฟล์ตั้งแต่ root
-		 * $config (array) แอเรย์ของ config
+		 * ฟังก์ชั่น บันทึกไฟล์ config
 		 *
-		 * @return (boolean) true หากสำเร็จ
+		 * @param string $file path ของไฟล์ตั้งแต่ root
+		 * @param array $config ตัวแปรเก็บการตั้งค่าที่ต้องการบันทึก
+		 * @return boolean คืนค่า true หากสำเร็จ
 		 */
 		public static function saveConfig($file, $config) {
 			if (!is_array($config) || sizeof($config) == 0) {
@@ -1174,7 +1424,13 @@
 				}
 			}
 		}
-		// แปลงขนาดของไฟล์เป็น kb mb
+		/**
+		 * ฟังก์ชั่น แปลงขนาดของไฟล์จาก byte เป็น kb mb
+		 *
+		 * @param int $bytes ขนาดของไฟล์ เป็น byte
+		 * @param int $precision (optional) จำนวนหลักหลังจุดทศนิยม (default 2)
+		 * @return string คืนค่าขนาดของไฟล์เป็น KB MB
+		 */
 		public static function formatFileSize($bytes, $precision = 2) {
 			$units = array('Bytes', 'KB', 'MB', 'GB', 'TB');
 			if ($bytes <= 0) {
@@ -1187,17 +1443,39 @@
 				return round($bytes, $precision).' '.$units[$pow];
 			}
 		}
-		// increment
+		/**
+		 * ฟังก์ชั่น increment
+		 *
+		 * @param int $number ค่าเริ่มต้น
+		 * @param int $value (optional) ตัวเลขที่บวกเพิ่ม (default 1)
+		 * @return int คืนค่า $number+$value
+		 */
 		public static function inc(&$number, $value = 1) {
 			$number += $value;
 			return $number;
 		}
-		// decrement
+		/**
+		 * ฟังก์ชั่น decrement
+		 *
+		 * @param int $number
+		 * @param int $value (optional) ตัวเลขที่ลดลง (default 1)
+		 * @return int คืนค่า $number-$value
+		 */
 		public static function dec(&$number, $value = 1) {
 			$number -= $value;
 			return $number;
 		}
-		// install database
+		/**
+		 * ฟังก์ชั่น install database
+		 *
+		 * @global resource $db database resource
+		 * @global array $content ตัวแปรเก็บข้อมูลแสดงผล
+		 * @global array $defines ตัวแปรสำหรับ define()
+		 * @global array $config ตัวแปรเก็บการตั้งค่าของ GCMS
+		 * @global string $q
+		 * @param string $sql ไฟล์ sql ที่ต้องการติดตั้ง (full path)
+		 * @param string $owner (optional) โฟลเดอร์ของโมดูลที่ติดตั้ง
+		 */
 		public static function install($sql, $owner = '') {
 			global $db, $content, $defines, $config, $q;
 			// โหลดฐานข้อมูลของโมดูล
@@ -1242,16 +1520,15 @@
 			}
 		}
 		/**
-		 * installModule($owner, $module, $title, $menupos, $menu)
-		 * คิดตั้ง โมดูลและ เมนู
+		 * ฟังก์ชั่น คิดตั้ง โมดูลและ เมนู
 		 *
-		 * @param string $owner ชื่อโฟลเดอร์ของเมนู
+		 * @global resource $db database resource
+		 * @param string $owner โฟลเดอร์ของโมดูล
 		 * @param string $module ชื่อโมดูล
-		 * @param string $title [optinal] title
-		 * @param string $menupos [optinal] ตำแหน่งของเมนู (MAINMENU,SIDEMENU,BOTTOMMENU)
-		 * @param string $menu [optinal] ชื่อเมนู
-		 *
-		 * @return int ID ของโมดูลที่ติดตั้ง
+		 * @param string $title (optional) ข้อความไตเติลบาร์ของโมดูล
+		 * @param string $menupos (optional) ตำแหน่งของเมนู (MAINMENU,SIDEMENU,BOTTOMMENU)
+		 * @param string $menu (optional) ข้อความเมนู
+		 * @return int คืนค่า  ID ของโมดูลที่ติดตั้ง
 		 */
 		public static function installModule($owner, $module, $title = '', $menupos = '', $menu = '') {
 			global $db;
@@ -1270,7 +1547,13 @@
 				return $search['id'];
 			}
 		}
-		// แปลงเป็นรายการเมนู
+		/**
+		 * ฟังก์ชั่น แปลงเป็นรายการเมนู
+		 *
+		 * @param array $item แอเรย์ข้อมูลเมนู
+		 * @param boolean $arrow (optional) true=แสดงลูกศรสำหรับเมนูที่มีเมนูย่อย (default false)
+		 * @return string คืนค่า HTML ของเมนู
+		 */
 		public static function getMenu($item, $arrow = false) {
 			$c = array();
 			if ($item['alias'] != '') {
@@ -1315,7 +1598,13 @@
 				return '<li'.$c.'><a'.$a.'><span>'.($item['menu_text'] == '' ? '&nbsp;' : htmlspecialchars_decode($item['menu_text'])).'</span></a>';
 			}
 		}
-		// URL สำหรับ admin
+		/**
+		 * ฟังก์ชั่น สร้าง URL สำหรับ admin
+		 *
+		 * @global array $url_query แอเรย์เก็บค่าที่ส่งมา
+		 * @param array $f ตัวแปรที่ส่งมาจาก preg_replace
+		 * @return string คืนค่า URL สำหรับหน้าแอดมิน
+		 */
 		public static function adminURL($f) {
 			global $url_query;
 			$qs = array();
@@ -1331,11 +1620,23 @@
 			}
 			return str_replace('&amp;id=0', '', 'index.php'.(sizeof($qs) > 0 ? '?'.implode('&amp;', $qs) : ''));
 		}
-		// แปลงตัวเลขเป็นจำนวนเงิน
+		/**
+		 * ฟังก์ชั่น แปลงตัวเลขเป็นจำนวนเงิน
+		 *
+		 * @param double $amount จำนวนเงิน
+		 * @param string $thousands_sep (optional) เครื่องหมายหลักพัน (default ,)
+		 * @return string คืนค่าข้อความจำนวนเงิน
+		 */
 		public static function int2Curr($amount, $thousands_sep = ',') {
 			return number_format((double)$amount, 2, '.', $thousands_sep);
 		}
-		// คำนวนความแตกต่างของวัน (อายุ)
+		/**
+		 * ฟังก์ชั่น คำนวนความแตกต่างของวัน (อายุ)
+		 *
+		 * @param int $start_date วันที่เริ่มต้นหรือวันเกิด (mktime)
+		 * @param int $end_date วันที่สิ้นสุดหรือวันนี้ (mktime)
+		 * @return array คืนค่า ปี เดือน วัน [year, month, day] ที่แตกต่าง
+		 */
 		public static function dateDiff($start_date, $end_date) {
 			$Year1 = (int)date("Y", $start_date);
 			$Month1 = (int)date("m", $start_date);
@@ -1373,23 +1674,32 @@
 			$ret['day'] = $Day2 - $Day1;
 			return $ret;
 		}
-		// ตรวจสอบความถูกต้องของอีเมล์
-		// คืนค่่า true ถ้าถูกต้อง
+		/**
+		 * ฟังก์ชั่นตรวจสอบความถูกต้องของอีเมล์
+		 *
+		 * @param string $email ข้อความที่ต้องการตรวจสอบ
+		 * @return boolean คืนค่า true ถ้า $email ถูกต้อง
+		 */
 		public static function validMail($email) {
 			return preg_match('/^[_\.0-9a-zA-Z-]+@([0-9a-zA-Z][0-9a-zA-Z-]+\.)+[a-zA-Z]{2,6}$/i', $email);
 		}
-		// ตรวจสอบว่าเป็นค่าว่างหรือไม่ ถ้าไม่ว่างเอาใส่ array
+		/**
+		 * ฟังก์ชั่นตรวจสอบว่าเป็นค่าว่างหรือไม่ ถ้าไม่ว่างเอาใส่ array
+		 *
+		 * @param string $detail ข้อความที่ต้องการตรวจสอบ
+		 * @param pointer $result แอเรย์ของข้อมูล หาก $detail ไม่เป็นค่าว่างจะเอาใส่ลงใน $result
+		 */
 		public static function checkempty($detail, &$result) {
 			if (trim($detail) != '') {
 				$result[] = $detail;
 			}
 		}
 		/**
-		 * saveLanguage($database)
-		 * บันทึกไฟล์ภาษา
-		 * $database (optional string) ชื่อ database ค่า default คือ DB_LANGUAGE
+		 * ฟังก์ชั่นบันทึกไฟล์ภาษา
 		 *
-		 * @return (array) รายการภาษาทั้งหมดที่ติดตั้ง
+		 * @global resource $db database resource
+		 * @param string $database ชื่อ database ค่า default คือ DB_LANGUAGE
+		 * @return array คืนค่าแอเรย์ของรายการภาษาที่พบเช่น [th, en]
 		 */
 		public static function saveLanguage($database = DB_LANGUAGE) {
 			global $db;
@@ -1461,11 +1771,11 @@
 			return $languages;
 		}
 		/**
-		 * getTags($text)
-		 * ตรวจสอบข้อความ tags หรือ keywords ช่องว่างไม่เกิน 1 ช่อง,ไม่ขึ้นบรรทัดใหม่,คั่นแต่ละรายการด้วย ,
-		 * $text ข้อความที่ถูกส่งมาจาก textarea
+		 *  ฟังก์ชั่นตรวจสอบข้อความใช้เป็น tags หรือ keywords
+		 *  ลบช่องว่างไม่เกิน 1 ช่อง,ไม่ขึ้นบรรทัดใหม่,คั่นแต่ละรายการด้วย ,
 		 *
-		 * @return (string)
+		 * @param string $text ข้อความที่ถูกส่งมาจาก textarea
+		 * @return string คืนค่าข้อความ
 		 */
 		public static function getTags($text) {
 			$text = trim(strip_tags($text));
@@ -1483,21 +1793,19 @@
 			}
 		}
 		/**
-		 * aliasName($text)
-		 * ตรวจสอบข้อความ ใช้เป็น alias name ตัวพิมพืเล็ก แทนช่องว่างด้วย _
-		 * $text (string)
+		 * ฟังก์ชั่นตรวจสอบข้อความ ใช้เป็น alias name ตัวพิมพ์เล็ก แทนช่องว่างด้วย _
 		 *
-		 * @return (string)
+		 * @param string $text ข้อความ
+		 * @return string คืนค่าข้อความ
 		 */
 		public static function aliasName($text) {
 			return preg_replace(array('/[_\(\)\-\+\#\r\n\s\"\'<>\.\/\\\?&\{\}]{1,}/isu', '/^(_)?(.*?)(_)?$/'), array('_', '\\2'), strtolower(trim(strip_tags($text))));
 		}
 		/**
-		 * checkIDCard($id)
-		 * ตรวจสอบความถูกต้องของรหัสบัตรประชาชน
-		 * $id (string) ตัวเลข 13 หลัก
+		 * ฟังก์ชั่นสำหรับตรวจสอบความถูกต้องของรหัสบัตรประชาชน
 		 *
-		 * @return (boolean) true ถูกต้อง, false ไม่ถูกต้อง
+		 * @param string $id ตัวเลข 13 หลัก
+		 * @return boolean คืนค่า true=ถูกต้อง และ false=ไม่ถูกต้อง
 		 */
 		public static function checkIDCard($id) {
 			if (preg_match('/^[0-9]{13,13}$/', $id)) {
@@ -1511,12 +1819,11 @@
 			return false;
 		}
 		/**
-		 * ser2Array($datas, $key)
-		 * unserialize
-		 * $datas (mixed) ข้อความ serialize
-		 * $key (string) optional ถั้า $datas เป็น array ต้องระบุ $key ด้วย
+		 * ฟังก์ชั่น unserialize
 		 *
-		 * @return (array)
+		 * @param mixed $datas ข้อความ serialize
+		 * @param string $key (optional) ถ้า $datas เป็น array ต้องระบุ $key ด้วย
+		 * @return array คืนค่าแอเรย์ที่ได้จากการทำ serialize
 		 */
 		public static function ser2Array($datas, $key = '') {
 			if (is_array($datas)) {
@@ -1534,11 +1841,10 @@
 			return is_array($result) ? $result : array();
 		}
 		/**
-		 * array2Ser($array)
-		 * ตรวจสอบและทำ serialize สำหรับภาษา โดยรายการที่มีเพียงภาษาเดียว จะกำหนดให้ไม่มีภาษา
-		 * $array (array)
+		 * ฟังก์ชั่น ตรวจสอบและทำ serialize สำหรับภาษา โดยรายการที่มีเพียงภาษาเดียว จะกำหนดให้ไม่มีภาษา
 		 *
-		 * @return (string) ที่ทำ serialize แล้ว
+		 * @param array $array ข้อมูลที่ต้องการจะทำ serialize
+		 * @return string คืนค่าข้อความที่ทำ serialize แล้ว
 		 */
 		public static function array2Ser($array) {
 			$new_array = array();
@@ -1555,12 +1861,11 @@
 			return serialize($new_array);
 		}
 		/**
-		 * ser2Str($datas, $key)
-		 * อ่านหมวดหมู่ในรูป serialize ตามภาษาที่เลือก
-		 * $datas (mixed) ข้อความ serialize
-		 * $key (string) optional ถั้า $datas เป็น array ต้องระบุ $key ด้วย
+		 * ฟังก์ชั่น อ่านหมวดหมู่ในรูป serialize ตามภาษาที่เลือก
 		 *
-		 * @return (string)
+		 * @param mixed $datas ข้อความ serialize
+		 * @param string $key (optional) ถ้า $datas เป็น array ต้องระบุ $key ด้วย
+		 * @return string คืนค่าข้อความ
 		 */
 		public static function ser2Str($datas, $key = '') {
 			if (is_array($datas)) {
@@ -1580,37 +1885,35 @@
 			}
 		}
 		/**
-		 * oneLine($text)
-		 * กำจัดตัวอักษรขึ้นบรรทัดใหม่และช่องว่าง
-		 * $text (string)
+		 * ฟังก์ชั่น ลบช่องว่าง และ ตัวอักษรขึ้นบรรทัดใหม่ ที่ติดกันเกินกว่า ๅ ตัว
 		 *
-		 * @return (string)
+		 * @param string $text  ข้อความ
+		 * @return string คืนค่าข้อความ
 		 */
 		public static function oneLine($text) {
 			return trim(preg_replace('/[\r\n\t\s]+/', ' ', $text));
 		}
 		/**
-		 * breadcrumb($c, $url, $tooltip, $menu, $skin)
-		 * สร้าง breadcumb
-		 * $c (string) class สำหรับลิงค์นี้
-		 * $url (string) ลิงค์
-		 * $tooltip (string) ทูลทิป
-		 * $menu (string) ข้อความแสดงใน breadcumb
-		 * $skin (string) template ของ breadcumb
+		 * ฟังก์ชั่นสร้าง breadcumb
 		 *
-		 * @return (string)
+		 * @param string $c class สำหรับลิงค์นี้
+		 * @param string $url ลิงค์
+		 * @param string $tooltip ทูลทิป
+		 * @param string $menu ข้อความแสดงใน breadcumb
+		 * @param string $skin template ของ breadcumb
+		 * @return string คืนค่า breadcumb
 		 */
 		public static function breadcrumb($c, $url, $tooltip, $menu, $skin) {
 			$patt = array('/{CLASS}/', '/{URL}/', '/{TOOLTIP}/', '/{MENU}/');
 			return preg_replace($patt, array($c, $url, $tooltip, htmlspecialchars_decode($menu)), $skin);
 		}
 		/**
-		 * retURL($url, $q)
-		 * สร้าง URL สำหรับส่งกลับที่มาจากการโพสต์
-		 * $url (string) ลิงค์
-		 * $q (array) query string
+		 * ฟังก์ชั่น สร้าง URL สำหรับส่งกลับที่มาจากการโพสต์
 		 *
-		 * @return (string) เข้ารหัสแล้ว
+		 * @global int $mmktime เวลาปัจจุบัน (mktime)
+		 * @param string $url ลิงค์
+		 * @param array $q query string
+		 * @return string คืนค่า URL ที่เข้ารหัสแล้ว
 		 */
 		public static function retURL($url, $q) {
 			global $mmktime;
@@ -1633,12 +1936,11 @@
 			return rawurlencode($url.(strpos($url, '?') === false ? '?' : '&').implode('&', $ret));
 		}
 		/**
-		 * filterVars($type, $key)
-		 * อ่านค่าจากตัวแปร
-		 * $type (string) GET POST REQUEST SESSION COOKIE SERVER
-		 * $key (string) key ของตัวแปร $type
+		 * ฟังก์ชั่นอ่านค่าจากตัวแปร คืนค่า null หากไม่พบ
 		 *
-		 * @return (mixed) ผลลัพท์ที่อ่านได้ คืนค่า null ถ้าไม่พบ
+		 * @param string $type GET POST REQUEST SESSION COOKIE SERVER
+		 * @param string $key key ของตัวแปร $type
+		 * @return mixed คืนค่า $type[$key] หรือ null หากไม่พบ
 		 */
 		private static function filterVars($type, $key) {
 			switch ($type) {
@@ -1677,14 +1979,12 @@
 			}
 		}
 		/**
-		 * getVars($typies, $keys, $default)
-		 * รับค่าจากการโพสต์
-		 * $typies (mixed) array หรือ GET POST REQUEST SESSION COOKIE SERVER คั่นรายการด้วย,
-		 * ถ้าระบุเป็น array จะตรวจสอบค่าตามลำดับ ถ้ามีค่าไหนก่อนจะใช้ค่านั้น
-		 * $keys (string) ชื่อตัวแปรที่ต้องการอ่าน
-		 * $default (mixed) ค่า default หากไม่พบตัวแปรทีต้องการ
+		 * ฟังก์ชั่นสำหรับรับค่าจากการโพสต์ แทนการใช้ $_GET[key] หรือ $_POST[key]
 		 *
-		 * @return (mixed) ผลลัพท์ตามชนิดของ $default
+		 * @param mixed $typies array หรือข้อความ GET POST REQUEST SESSION COOKIE SERVER คั่นรายการด้วย ,
+		 * @param string $keys key  ของ $typies หรือชื่อ key ที่ต้องการอ่านค่าจากกำหนดใน $typies
+		 * @param mixed $default ค่าเริ่มต้นที่ต้องการหากไม่พบตัวแปร $typies[$keys]
+		 * @return mixed คืนค่าที่อ่านได้จาก $typies[$keys] โดยมีการแปลงชนิดของตัวแปรตามที่กำหนดโดย $default
 		 */
 		public static function getVars($typies, $keys, $default) {
 			if (is_array($typies)) {
@@ -1710,12 +2010,11 @@
 			}
 		}
 		/**
-		 * get2Input($q, $ex)
-		 * สร้าง input สำหรับส่งกลับที่มาจากการโพสต์
-		 * $q (array) มาจาก $_GET หรือ $_POST
-		 * $ex (string) ตัวแปรที่ไม่ต้องการให้ส่งค่าไปด้วย คั่นแต่ละรายการด้วย,
+		 * ฟังก์ชั่นสำหรับสร้าง input สำหรับการส่งกลับที่มาจากการโพสต์ เพื่อใส่ลงในฟอร์ม
 		 *
-		 * @return (string) เข้ารหัสแล้ว
+		 * @param array $q มาจาก $_GET หรือ $_POST
+		 * @param string $ex ตัวแปรที่ไม่ต้องการให้ส่งค่าไปด้วย คั่นแต่ละรายการด้วย,
+		 * @return string คืนค่า input สำหรับใส่ลงในฟอร์มได้ทันที
 		 */
 		public static function get2Input($q, $ex = '') {
 			$exs = explode(',', $ex);

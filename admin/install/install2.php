@@ -5,14 +5,13 @@
 		$ftp_host = trim(gcms::getVars($_POST, 'ftp_host', ''));
 		$_SESSION['ftp_username'] = trim(gcms::getVars($_POST, 'ftp_username', ''));
 		$_SESSION['ftp_password'] = trim(gcms::getVars($_POST, 'ftp_password', ''));
-		$_SESSION['document_root'] = trim(gcms::getVars($_POST, 'document_root', ''));
 		$ftp_port = gcms::getVars($_POST, 'ftp_port', 0);
 		$ftp_root = trim(gcms::getVars($_POST, 'ftp_root', ''));
 		$_SESSION['ftp_host'] = $ftp_host == '' ? $_SERVER['REMOTE_ADDR'] : $ftp_host;
 		$_SESSION['ftp_port'] = $ftp_port == 0 ? 21 : $ftp_port;
 		$_SESSION['ftp_root'] = $ftp_root == '' ? 'public_html' : $ftp_root;
 		// connect ftp
-		$ftp = new ftp($_SESSION['ftp_host'], $_SESSION['ftp_username'], $_SESSION['ftp_password'], $_SESSION['ftp_root'], $_SESSION['document_root'], $_SESSION['ftp_port']);
+		$ftp = new ftp($_SESSION['ftp_host'], $_SESSION['ftp_username'], $_SESSION['ftp_password'], $_SESSION['ftp_root'], $_SESSION['ftp_port']);
 		// ตรวจสอบไฟ์ลและโฟลเดอร์
 		echo '<h2>ตรวจสอบองค์ประกอบต่างๆ ที่จำเป็นสำหรับการติดตั้ง</h2>';
 		echo '<ol>';

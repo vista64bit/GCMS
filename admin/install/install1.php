@@ -17,8 +17,6 @@
 		echo '<p class="row comment">ไดเรคทอรี่เริ่มต้นของของโฮสต์เช่น public_html หรือ www</p>';
 		echo '<p class=row><label for=ftp_port>พอร์ต</label><input type=text size=70 id=ftp_port name=ftp_port value="'.(!empty($_SESSION['ftp_port']) ? $_SESSION['ftp_port'] : $config['ftp_port']).'"></p>';
 		echo '<p class="row comment">FTP พอร์ต (ค่าปกติคือ 20)</p>';
-		echo '<p class=row><label for=document_root>Document Root</label><input type=text size=70 id=document_root name=document_root value="'.(!empty($_SESSION['document_root']) ? $_SESSION['document_root'] : $document_root).'"></p>';
-		echo '<p class="row comment">ไดเรคทอรี่เริ่มต้นของเซิร์ฟเวอร์</p>';
 		echo '<input type=hidden name=step value=2>';
 		echo '<p><input class=button type=submit value="ดำเนินการต่อ."></p>';
 		echo '</form>';

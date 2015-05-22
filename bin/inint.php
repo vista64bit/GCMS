@@ -1,5 +1,13 @@
 <?php
-	// bin/inint.php
+	/**
+	 * bin/inint.php
+	 * จัดการ session ของ GCMS
+	 * สงวนลิขสิทธ์ ห้ามซื้อขาย ให้นำไปใช้ได้ฟรีเท่านั้น
+	 *
+	 * @copyright http://www.goragod.com
+	 * @author กรกฎ วิริยะ
+	 * @version 21-05-58
+	 */
 	// session, cookie
 	session_start();
 	if (!ob_get_status()) {

@@ -1,38 +1,43 @@
 <?php
 	/**
-	 * class mysql สำหรับ GCMS
+	 * bin/class.mysql.php
 	 * สงวนลิขสิทธ์ ห้ามซื้อขาย ให้นำไปใช้ได้ฟรีเท่านั้น
-	 * @package class.mysql.php
-	 * @author กรกฎ วิริยะ (http://www.goragod.com)
+	 *
+	 * @copyright http://www.goragod.com
+	 * @author กรกฎ วิริยะ
+	 * @version 21-05-58
+	 */
+	/**
+	 * MySQL Class
 	 */
 	class sql {
-		protected $vesion = "27-1-58";
+		/**
+		 * ตัวแปรเก็บจำนวน query
+		 *
+		 * @var int
+		 */
 		protected $time = 0;
 		/**
 		 * MySQL instance
 		 *
-		 * @var mysql
+		 * @var resource
 		 */
 		protected $connection = false;
 		/**
-		 * set debug (1 = debug ใช้งานขณะ ทดสอบเท่านั้น, 0 = no debug)
+		 * 1=develop mode (ใช้ตอนทดสอบเพื่อแสดง error), 0=production mode
 		 *
-		 * @var string
+		 * @var int
 		 */
 		var $debug = 0;
 		/**
-		 * __construct($server, $username, $password, $dbname, $new = true)
 		 * inintial database class
-		 * สำเร็จคืนค่า true
-		 * ไม่สำเร็จคืนค่า false
 		 *
 		 * @param string $server Database server
 		 * @param string $username Database username
 		 * @param string $password Database password
 		 * @param string $dbname Database name
-		 * @param boolean[optional] $new true (default) for new connection
-		 *
-		 * @return boolean
+		 * @param boolean $new (optional) true=new connection (default true)
+		 * @return boolean สำเร็จคืนค่า true
 		 */
 		public function __construct($server, $username, $password, $dbname, $new = true) {
 			$conn = @mysql_connect($server, $username, $password, $new);
@@ -49,49 +54,18 @@
 			}
 		}
 		/**
-		 * __destruct()
-		 * จบ class
-		 *
-		 */
-		public function __destruct() {
-			$this->connection = null;
-		}
-		/**
-		 * connection()
 		 * อ่านค่า resource connection
 		 *
-		 * @return int
+		 * @return resource คืนค่า resource ของ DB
 		 */
 		public function connection() {
 			return $this->connection;
 		}
 		/**
-		 * close()
-		 * ยกเลิก mysql
-		 * สำเร็จคืนค่า true
-		 * ไม่สำเร็จคืนค่า false
+		 * ฟังก์ชั่น ตรวจสอบว่ามีตาราง $table อยู่หรือไม่
 		 *
-		 * @return boolean
-		 */
-		public function close() {
-			return @mysql_close($this->connection) === false ? false : true;
-		}
-		/**
-		 * Version()
-		 * อ่านเวอร์ชั่นของ class
-		 *
-		 * @return string
-		 */
-		public function Version() {
-			return $this->vesion;
-		}
-		/**
-		 * tableExists($table)
-		 * ตรวจสอบว่ามีตาราง $table อยู่หรือไม่
-		 * คืนค่า true ถ้ามี
-		 * ไม่มีคืนค่า false
-		 *
-		 * @return boolean
+		 * @param string $table ชื่อตาราง
+		 * @return boolean คืนค่า true หากมีตารางนี้อยู่ ไม่พบคืนค่า false
 		 */
 		public function tableExists($table) {
 			$result = @mysql_query("SELECT 1 FROM `$table`", $this->connection);
@@ -103,12 +77,11 @@
 			}
 		}
 		/**
-		 * fieldExists($table, $field)
-		 * ตรวจสอบฟิลด์ในตาราง
-		 * คืนค่า true หากมีฟิลด์นี้อยู่
-		 * ไม่พบคืนค่า false
+		 * ฟังก์ชั่น ตรวจสอบฟิลด์ในตาราง
 		 *
-		 * @return boolean
+		 * @param string $table ชื่อตาราง
+		 * @param string $field ชื่อฟิลด์
+		 * @return boolean คืนค่า true หากมีฟิลด์นี้อยู่ ไม่พบคืนค่า false
 		 */
 		public function fieldExists($table, $field) {
 			$result = @mysql_query("SHOW COLUMNS FROM `$table`", $this->connection);
@@ -126,17 +99,12 @@
 			return false;
 		}
 		/**
-		 * basicSearch($table, $fields, $values)
 		 * ค้นหา $values ที่ $fields บนตาราง $table
-		 * ไม่พบคืนค่า false
-		 * พบคืนค่ารายการที่พบเพียงรายการเดียว
 		 *
 		 * @param string $table ชื่อตาราง
-		 * @param array or string $fields ชื่อฟิลด์
-		 * @param array or string $values ข้อความค้นหาในฟิลด์ที่กำหนด ประเภทเดียวกันกับ $fields
-		 *
-		 * @return array
-		 * @return boolean
+		 * @param array|string $fields ชื่อฟิลด์
+		 * @param array|string $values ข้อความค้นหาในฟิลด์ที่กำหนด ประเภทเดียวกันกับ $fields
+		 * @return array|boolean พบคืนค่ารายการที่พบเพียงรายการเดียว มีข้อผิดพลาดคืนค่า false
 		 */
 		public function basicSearch($table, $fields, $values) {
 			if (is_array($fields)) {
@@ -171,16 +139,11 @@
 			}
 		}
 		/**
-		 * getRec($table, $id)
 		 * อ่านค่า record ที่ id=$id
-		 * ไม่พบคืนค่า false
-		 * พบคืนค่ารายการที่พบเพียงรายการเดียว
 		 *
 		 * @param string $table ชื่อตาราง
 		 * @param int $id id ที่ต้องการอ่าน
-		 *
-		 * @return array
-		 * @return boolean
+		 * @return array|boolean พบคืนค่ารายการที่พบเพียงรายการเดียว ไม่พบคืนค่า false
 		 */
 		public function getRec($table, $id) {
 			$sql = "SELECT * FROM `$table` WHERE `id`=".(int)$id." LIMIT 1";
@@ -200,16 +163,11 @@
 			}
 		}
 		/**
-		 * add($table, $recArr)
 		 * เพิ่มข้อมูลลงบน $table
-		 * สำเร็จ คืนค่า id ที่เพิ่ม
-		 * ไม่สำเร็จ คืนค่า false
 		 *
 		 * @param string $table ชื่อตาราง
 		 * @param array $recArr ข้อมูลที่ต้องการบันทึก
-		 *
-		 * @return int
-		 * @return boolean
+		 * @return int|boolean สำเร็จ คืนค่า id ที่เพิ่ม ผิดพลาด คืนค่า false
 		 */
 		public function add($table, $recArr) {
 			$keys = array();
@@ -231,14 +189,12 @@
 			}
 		}
 		/**
-		 * edit($table, $id, $recArr)
 		 * แก้ไขข้อมูล
 		 *
-		 * @param $table string ชื่อตาราง
-		 * @param $idArr int=id ที่ต้องการแก้ไข, array=ค้นหารายการที่ต้องการ
-		 * @param $recArr array ข้อมูลที่ต้องการบันทึก
-		 *
-		 * @return boolean true success else false
+		 * @param string $table ชื่อตาราง
+		 * @param array|string $idArr id ที่ต้องการแก้ไข หรือข้อความค้นหารูปแอเรย์ [filed=>value]
+		 * @param array $recArr ข้อมูลที่ต้องการบันทึก
+		 * @return boolean สำเร็จ คืนค่า true
 		 */
 		public function edit($table, $idArr, $recArr) {
 			if (is_array($idArr)) {
@@ -270,15 +226,11 @@
 			}
 		}
 		/**
-		 * delete($table, $id)
 		 * ลบ เร็คคอร์ดรายการที่ $id
-		 * สำเร็จ คืนค่าว่าง
-		 * ไม่สำเร็จคืนค่าข้อความผิดพลาด
 		 *
 		 * @param string $table ชื่อตาราง
 		 * @param int $id id ที่ต้องการลบ
-		 *
-		 * @return string
+		 * @return string  สำเร็จ คืนค่าว่าง ไม่สำเร็จคืนค่าข้อความผิดพลาด
 		 */
 		public function delete($table, $id) {
 			$sql = "DELETE FROM `$table` WHERE `id`=".(int)$id." LIMIT 1;";
@@ -287,14 +239,10 @@
 			return ($query == false) ? mysql_error($this->connection) : '';
 		}
 		/**
-		 * query($sql)
 		 * query ข้อมูล แบบไม่ต้องการผลตอบกลับ
-		 * สำเร็จ คืนค่า true
-		 * ไม่สำเร็จ คืนค่า false
 		 *
 		 * @param string $sql query string
-		 *
-		 * @return boolean
+		 * @return boolean สำเร็จ คืนค่า true
 		 */
 		public function query($sql) {
 			$query = @mysql_query($sql, $this->connection);
@@ -307,14 +255,10 @@
 			}
 		}
 		/**
-		 * customQuery($sql)
 		 * query ข้อมูล ด้วย sql ที่กำหนดเอง
-		 * คืนค่าผลการทำงานเป็น record ของข้อมูลทั้งหมดที่ตรงตามเงื่อนไข
-		 * ไม่พบข้อมูลคืนค่าเป็น array ว่างๆ
 		 *
 		 * @param string $sql query string
-		 *
-		 * @return array
+		 * @return array คืนค่าผลการทำงานเป็น record ของข้อมูลทั้งหมดที่ตรงตามเงื่อนไข ไม่พบข้อมูลคืนค่าเป็น array ว่างๆ
 		 */
 		public function customQuery($sql) {
 			$recArr = array();
@@ -331,12 +275,10 @@
 			return $recArr;
 		}
 		/**
-		 * lastId($table)
 		 * อ่าน id ล่าสุดของตาราง
 		 *
 		 * @param string $table ชื่อตาราง
-		 *
-		 * @return int
+		 * @return int คืนค่า id ล่าสุดของตาราง
 		 */
 		function lastId($table) {
 			$sql = "SHOW TABLE STATUS LIKE '$table'";
@@ -351,62 +293,45 @@
 			}
 		}
 		/**
-		 * unlock()
 		 * ยกเลิกการล๊อคตารางทั้งหมดที่ล๊อคอยู่
-		 * สำเร็จ คืนค่า true
-		 * ไม่สำเร็จ คืนค่า false
 		 *
-		 * @return boolean
+		 * @return boolean สำเร็จ คืนค่า true
 		 */
 		function unlock() {
 			return $this->query('UNLOCK TABLES');
 		}
 		/**
-		 * lock($table)
 		 * ล๊อคตาราง
-		 * สำเร็จ คืนค่า true
-		 * ไม่สำเร็จ คืนค่า false
 		 *
 		 * @param string $table ชื่อตาราง
-		 *
-		 * @return boolean
+		 * @return boolean สำเร็จ คืนค่า true
 		 */
 		function lock($table) {
 			return $this->query("LOCK TABLES $table");
 		}
 		/**
-		 * setReadLock($table)
 		 * ล๊อคตารางสำหรับอ่าน
-		 * สำเร็จ คืนค่า true
-		 * ไม่สำเร็จ คืนค่า false
 		 *
 		 * @param string $table ชื่อตาราง
-		 *
-		 * @return boolean
+		 * @return boolean คืนค่า true ถ้าสำเร็จ
 		 */
 		function setReadLock($table) {
 			return $this->lock("`$table` READ");
 		}
 		/**
-		 * setWriteLock($table)
 		 * ล๊อคตารางสำหรับเขียน
-		 * สำเร็จ คืนค่า true
-		 * ไม่สำเร็จ คืนค่า false
 		 *
 		 * @param string $table ชื่อตาราง
-		 *
-		 * @return boolean
+		 * @return boolean คืนค่า true ถ้าสำเร็จ
 		 */
 		function setWriteLock($table) {
 			return $this->lock("`$table` WRITE");
 		}
 		/**
-		 * sql_clean($value)
 		 * ตรวจสอบและลบข้อความที่ไม่ต้องการของ mysql
 		 *
 		 * @param string $value ข้อความ
-		 *
-		 * @return string
+		 * @return string คืนค่าข้อความ
 		 */
 		public function sql_clean($value) {
 			if ((function_exists("get_magic_quotes_gpc") && get_magic_quotes_gpc()) || ini_get('magic_quotes_sybase')) {
@@ -421,24 +346,20 @@
 			return $value;
 		}
 		/**
-		 * sql_quote($value)
 		 * เติม string ด้วย /
 		 *
 		 * @param string $value ข้อความ
-		 *
-		 * @return string
+		 * @return string คืนค่าข้อความ
 		 */
 		public function sql_quote($value) {
 			return str_replace('\\\\', '&#92;', $this->sql_clean($value));
 		}
 		/**
-		 * sql_trim($array, $key)
 		 * ลบช่องว่างหัวท้ายออกจากข้อความ และ เติม string ด้วย /
 		 *
-		 * @param mixed $array
-		 * @param string $key key ของ $array
-		 *
-		 * @return string
+		 * @param mixed $array ตัวแปรเก็บข้อความ
+		 * @param string $key key ของ $array เช่น $array[$key]
+		 * @return string คืนค่าข้อความ
 		 */
 		public function sql_trim($array, $key = '') {
 			if (is_array($array)) {
@@ -452,13 +373,11 @@
 			}
 		}
 		/**
-		 * sql_trim_str($array, $key)
 		 * ลบช่องว่างหัวท้ายออกจากข้อความ และ เติม string ด้วย / และ แปลงอักขระ HTML
 		 *
-		 * @param mixed $array
-		 * @param string $key key ของ $array
-		 *
-		 * @return string
+		 * @param mixed $array ตัวแปรเก็บข้อความ
+		 * @param string $key key ของ $array เช่น $array[$key]
+		 * @return string คืนค่าข้อความ
 		 */
 		public function sql_trim_str($array, $key = '') {
 			if (is_array($array)) {
@@ -472,78 +391,65 @@
 			}
 		}
 		/**
-		 * sql_mktimetodate($mktime)
 		 * แปลงวันที่ ในรูป mktime เป้นวันที่ของ mysql ในรูป Y-m-d
 		 *
 		 * @param int $mktime วันที่ในรูป mktime
-		 *
-		 * @return string
+		 * @return string คืนค่าวันที่รูป Y-m-d
 		 */
 		public function sql_mktimetodate($mktime) {
 			return date("Y-m-d", $mktime);
 		}
 		/**
-		 * sql_mktimetodatetime($mktime)
 		 * แปลงวันที่ ในรูป mktime เป้นวันที่และเวลาของ mysql เช่น Y-m-d H:i:s
 		 *
 		 * @param int $mktime วันที่ในรูป mktime
-		 *
-		 * @return string
+		 * @return string คืนค่า วันที่และเวลาของ mysql เช่น Y-m-d H:i:s
 		 */
 		public function sql_mktimetodatetime($mktime) {
 			return date("Y-m-d H:i:s", $mktime);
 		}
 		/**
-		 * sql_date2date($date, $short = true)
-		 * แปลงวันที่ในรูป Y-m-d เป็นวันที่แบบสั้นและเวลา เช่น 1 มค. 2555 12:00:00
-		 * @param string $date วันที่ในรูป Y-m-d h:i:s
-		 * @param boolean $short true (default) เดือนแบบสั้น, false เดือนแบบยาว
-		 * @param boolean $time true (default) คืนค่า เวลาด้วย (ถ้ามี)
+		 * แปลงวันที่ในรูป Y-m-d เป็นวันที่และเวลา เช่น 1 มค. 2555 12:00:00
 		 *
-		 * @return string
+		 * @global array $lng ตัวแปรภาษา
+		 * @param string $date วันที่ในรูป Y-m-d หรือ Y-m-d h:i:s
+		 * @param boolean $short (optional) true=เดือนแบบสั้น, false=เดือนแบบยาว (default true)
+		 * @param boolean $time (optional) true=คืนค่าเวลาด้วยถ้ามี, false=ไม่ต้องคืนค่าเวลา (default true)
+		 * @return string คืนค่า วันที่และเวลา
 		 */
 		public function sql_date2date($date, $short = true, $time = true) {
 			global $lng;
 			preg_match('/([0-9]+){0,4}-([0-9]+){0,2}-([0-9]+){0,2}(\s([0-9]+){0,2}:([0-9]+){0,2}:([0-9]+){0,2})?/', $date, $match);
-			if ((int)$match[1] == 0) {
+			if (empty($match[1])) {
 				return '';
 			} else {
 				$month = $short ? $lng['MONTH_SHORT'] : $lng['MONTH_LONG'];
-				return $match[3].' '.$month[(int)$match[2] - 1].' '.((int)$match[1] + $lng['YEAR_OFFSET']).($time ? $match[4] : '');
+				return $match[3].' '.$month[(int)$match[2] - 1].' '.((int)$match[1] + $lng['YEAR_OFFSET']).($time && isset($match[4]) ? $match[4] : '');
 			}
 		}
 		/**
-		 * sql_datetime2mktime($date)
-		 * แปลงวันที่และเวลาของ sql เป็น mktime
-		 * คืนค่าเวลาในรูป mktime
+		 * ฟังก์ชั่น แปลงวันที่และเวลาของ sql เป็น mktime
 		 *
 		 * @param string $date วันที่ในรูป Y-m-d H:i:s
-		 *
-		 * @return int
+		 * @return int คืนค่าเวลาในรูป mktime
 		 */
 		function sql_datetime2mktime($date) {
 			preg_match('/([0-9]+){0,4}-([0-9]+){0,2}-([0-9]+){0,2}\s([0-9]+){0,2}:([0-9]+){0,2}:([0-9]+){0,2}/', $date, $match);
 			return mktime($match[4], $match[5], $match[6], $match[2], $match[3], $match[1]);
 		}
 		/**
-		 * timer_start()
-		 * เริ่มต้นจับเวลาการประมวลผล
-		 *
-		 * @return boolean
+		 * ฟังก์ชั่น เริ่มต้นจับเวลาการประมวลผล
 		 */
 		public function timer_start() {
 			$mtime = microtime();
 			$mtime = explode(' ', $mtime);
 			$this->time_start = $mtime[1] + $mtime[0];
 			$this->time = 0;
-			return true;
 		}
 		/**
-		 * timer_stop()
-		 * จบการจับเวลา
-		 * คืนค่าเวลาที่ใช้ไป (msec)
+		 * ฟังก์ชั่น จบการจับเวลา
 		 *
-		 * @return int
+		 * @return int คืนค่าเวลาที่ใช้ไป (msec)
 		 */
 		public function timer_stop() {
 			$mtime = microtime();
@@ -553,8 +459,7 @@
 			return round($time_total, 10);
 		}
 		/**
-		 * query_count()
-		 * จำนวน query ทั้งหมดที่ทำงาน
+		 * ฟังก์ชั่น อ่านจำนวน query ทั้งหมดที่ทำงาน
 		 *
 		 * @return int
 		 */
@@ -562,12 +467,25 @@
 			return $this->time;
 		}
 		/**
-		 * debug($text)
-		 * @param string $sql ข้อความที่จะแสดง (error)
+		 * ฟังก์ชั่น แสดงผล error เมื่ออยู่ใน develop mode
+		 *
+		 * @param string $text ข้อความที่จะแสดง (error)
 		 */
 		private function debug($text) {
 			if ($this->debug == 1) {
 				echo preg_replace(array('/\r/', '/\n/', '/\t/'), array('', ' ', ' '), $text);
 			}
+		}
+		/**
+		 * ยกเลิก mysql
+		 */
+		public function close() {
+			@mysql_close($this->connection) === false ? false : true;
+		}
+		/**
+		 * ฟังก์ชั่น จบ class
+		 */
+		public function __destruct() {
+			$this->connection = null;
 		}
 	}

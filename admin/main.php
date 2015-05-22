@@ -136,7 +136,7 @@
 		if (sizeof($admin_menus['modules']) == 0) {
 			unset($admin_menus['sections']['modules']);
 		}
-		if (sizeof($admin_menus['widgets']) == 0) {
+		if (isset($admin_menus['widgets']) && sizeof($admin_menus['widgets']) == 0) {
 			unset($admin_menus['sections']['widgets']);
 		}
 		if (sizeof($admin_menus['tools']['install']) == 0) {
@@ -180,7 +180,7 @@
 			}
 		} elseif (preg_match('/^('.implode('|', $setup_widgets).')(-(.*))?$/ui', $module, $modules)) {
 			// เรียก widget
-			if (is_file(ROOT_PATH."widgets/$modules[1]/admin_$modules[3].php")) {
+			if (isset($modules[3]) && is_file(ROOT_PATH."widgets/$modules[1]/admin_$modules[3].php")) {
 				// โมดูลที่เรียก
 				require_once ROOT_PATH."widgets/$modules[1]/admin_$modules[3].php";
 			} else {

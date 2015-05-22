@@ -1,6 +1,13 @@
 <?php
-	// bin/load.php
-	// path
+	/**
+	 * bin/load.php
+	 * เตรียมตัวแปรต่างๆสำหรับการโหลด GCMS
+	 * สงวนลิขสิทธ์ ห้ามซื้อขาย ให้นำไปใช้ได้ฟรีเท่านั้น
+	 *
+	 * @copyright http://www.goragod.com
+	 * @author กรกฎ วิริยะ
+	 * @version 21-05-58
+	 */
 	$root_path = str_replace('/bin/load.php', '', str_replace('\\', '/', __FILE__));
 	$document_root = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']);
 	if ($document_root == '') {
@@ -19,8 +26,9 @@
 	}
 	$baseurl = $_SERVER['HTTP_HOST'];
 	$baseurl = $baseurl == '' ? $_SERVER['SERVER_NAME'] : $baseurl;
-	// root ของ server
-	// เช่น D:/htdocs/gcms/
+	/**
+	 *  @var string ROOT_PATH root ของ server เช่น D:/htdocs/gcms/
+	 */
 	define('ROOT_PATH', "$root_path/");
 	// root ของ document
 	// เช่น cms/
@@ -119,7 +127,7 @@
 	// cache class
 	include ROOT_PATH.'bin/class.cache.php';
 	// เรียกใช้งาน ftp
-	$ftp = new ftp($config['ftp_host'], $config['ftp_username'], $config['ftp_password'], $config['ftp_root'], $document_root, $config['ftp_port']);
+	$ftp = new ftp($config['ftp_host'], $config['ftp_username'], $config['ftp_password'], $config['ftp_root'], $config['ftp_port']);
 	if (!empty($config['db_username']) || !empty($config['db_name'])) {
 		// เรียกใช้งานฐานข้อมูล
 		$db = new sql($config['db_server'], $config['db_username'], $config['db_password'], $config['db_name']);

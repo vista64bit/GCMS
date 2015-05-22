@@ -16,8 +16,7 @@
 			$_SESSION['ftp_root'] = trim($_POST['ftp_root']);
 			$ftp_port = trim(gcms::getVars($_POST, 'ftp_port', ''));
 			$_SESSION['ftp_port'] = $ftp_port = '' ? 21 : $ftp_port;
-			$_SESSION['document_root'] = trim($_POST['document_root']);
-			$ftp = new ftp($_SESSION['ftp_host'], $_SESSION['ftp_username'], $_SESSION['ftp_password'], $_SESSION['ftp_root'], $_SESSION['document_root'], $_SESSION['ftp_port']);
+			$ftp = new ftp($_SESSION['ftp_host'], $_SESSION['ftp_username'], $_SESSION['ftp_password'], $_SESSION['ftp_root'], $_SESSION['ftp_port']);
 		}
 		if (!empty($_SESSION['ftp_username']) && !empty($_SESSION['ftp_password'])) {
 			if ($ftp->connect()) {

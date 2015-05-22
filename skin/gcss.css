@@ -1579,6 +1579,7 @@ html[dir="rtl"] .topmenu > ul ul ul {
 .tab > ul > li,
 .btntab > ul > li {
 	float: left;
+	border-color: inherit;
 }
 html[dir="rtl"] .tab > ul > li,
 html[dir="rtl"] .btntab > ul > li {
@@ -3520,9 +3521,11 @@ ol.multi_step li.current:before {
 	body.responsive .topmenu.responsive {
 		display: table;
 	}
+	body.responsive .sidemenu.responsive > ul ul a,
 	body.responsive .topmenu.responsive > ul ul a {
 		width: auto;
 	}
+	body.responsive .sidemenu.responsive > ul ul,
 	body.responsive .topmenu.responsive > ul ul {
 		position: static;
 		margin: 0;
@@ -3615,6 +3618,7 @@ ol.multi_step li.current:before {
 		-moz-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
 		box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
 	}
+	body.responsive .sidemenu.responsive a.menu-arrow:after,
 	body.responsive .topmenu.responsive a.menu-arrow:after {
 		right: 10px;
 		border-style: solid solid none solid;
@@ -3623,6 +3627,7 @@ ol.multi_step li.current:before {
 		border-left-color: transparent;
 		border-right-color: transparent;
 	}
+	html[dir="rtl"] body.responsive .sidemenu.responsive a.menu-arrow:after,
 	html[dir="rtl"] body.responsive .topmenu.responsive a.menu-arrow:after {
 		left: 10px;
 		right: auto;
