@@ -226,7 +226,8 @@
 		$patt = array('/{CONTENT}/', '/{MENUS}/', '/{LANGUAGES}/', '/{MSG}/', '/{MESSAGE}/', '/{STYLESHEET}/',
 			'/{JAVASCRIPT}/', '/{SCRIPT}/', '/{CSS}/', '/{TITLE}/', '/{WEBTITLE}/', '/{LOGINNAME}/', '/{LOGINID}/',
 			'/{(LNG_[A-Z0-9_]+)}/e', '/{VERSION}/', '/{LANGUAGE}/', '/{SKIN}/', '/{WEBURL}/', '/{EMAIL}/', '/{PASSWORD}/',
-			'/{DATAURL}/', '/{URLQUERY(\?([a-zA-Z0-9=&\-_@\.]+))?}/e', '/{SRC}/', '/{REMEMBER}/', '/{LOGINEMAIL}/', '/{LOGINPASSWORD}/');
+			'/{DATAURL}/', '/{URLQUERY(\?([a-zA-Z0-9=&\-_@\.]+))?}/e', '/{SRC}/', '/{REMEMBER}/', '/{LOGINEMAIL}/',
+			'/{LOGINPASSWORD}/');
 		$replace[] = implode("\n", $content);
 		$replace[] = implode('', $menus);
 		$replace[] = implode('', $languages);

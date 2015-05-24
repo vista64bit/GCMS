@@ -64,10 +64,6 @@
 					$image_logo = '<img src="'.$image_src.'" alt="{WEBTITLE}">';
 				}
 			}
-			// image_src
-			if ($image_src == '' && is_file(DATA_PATH.'image/facebook_photo.jpg')) {
-				$image_src = DATA_URL.'image/facebook_photo.jpg';
-			}
 			// canonical
 			$canonical = WEB_URL.'/index.php';
 			// โมดูลที่เรียกมา
@@ -198,8 +194,6 @@
 			$keywords = $config['web_description'];
 			// แสดงผล template หลัก
 			$main_patt = array();
-			// ฟอร์ม login
-			$main_patt['/{LOGIN}/'] = $mainlogin;
 			if (!empty($config['google_site_verification'])) {
 				$meta['google-site-verification'] = '<meta name=google-site-verification content="'.$config['google_site_verification'].'">';
 			}
@@ -218,6 +212,8 @@
 			}
 			// เนื้อหา
 			$main_patt['/{CONTENT}/'] = $content;
+			// ฟอร์ม login
+			$main_patt['/{LOGIN}/'] = $mainlogin;
 			// เมนู
 			foreach ($mainmenu AS $parent => $items) {
 				if ($parent != '') {
@@ -283,9 +279,14 @@
 			$meta['description'] = '<meta name=description content="'.$description.'">';
 			$meta['keywords'] = '<meta name=keywords content="'.$keywords.'">';
 			$meta['canonical'] = '<link rel=canonical href="'.$canonical.'">';
+			// image_src
 			if (!empty($image_src)) {
 				$meta['image_src'] = '<link rel=image_src href="'.$image_src.'">';
 				$meta['og:image'] = '<meta property="og:image" content="'.$image_src.'">';
+			}
+			if (is_file(DATA_PATH.'image/facebook_photo.jpg')) {
+				$image_src = DATA_URL.'image/facebook_photo.jpg';
+				$meta['facebook_photo'] = '<meta property="og:image" content="'.$image_src.'">';
 			}
 			if (!empty($config['facebook']['appId'])) {
 				$meta['og:app_id'] = '<meta property="fb:app_id" content="'.$config['facebook']['appId'].'">';

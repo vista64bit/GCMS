@@ -15,6 +15,6 @@
 			// path ของ CKEDITOR
 			$script[] = "window.CKEDITOR_BASEPATH='".WEB_URL."/ckeditor/';";
 			// ckeditor
-			$meta['CKEDITOR'] = '<script src='.WEB_URL.'/ckeditor/ckeditor.js></script>';
+			$meta['CKEDITOR'] = '<script src="'.WEB_URL.'/ckeditor/ckeditor.js"></script>';
 		}
 	}

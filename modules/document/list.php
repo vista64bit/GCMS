@@ -17,7 +17,7 @@
 		$breadcrumb = gcms::loadtemplate('document', '', 'breadcrumb');
 		$breadcrumbs = array();
 		// หน้าหลัก
-		$breadcrumbs['HOME'] = gcms::breadcrumb('icon-home', WEB_URL.'/index.php', $install_modules[$module_list[0]]['menu_tooltip'], $install_modules[$module_list[0]]['menu_text'], $breadcrumb);
+		$breadcrumbs['HOME'] = gcms::breadcrumb('icon-home', $canonical, $install_modules[$module_list[0]]['menu_tooltip'], $install_modules[$module_list[0]]['menu_text'], $breadcrumb);
 		if (isset($ds) || !empty($tag)) {
 			// tag หรือ calendar
 			if (!isset($default)) {

@@ -54,7 +54,7 @@
 		 * @param string $username  FTP Username
 		 * @param string $password  FTP Password
 		 * @param string $ftproot  root ของ FTP
-		 * @param [int] $port  Option FTP Port (default 21)
+		 * @param int $port (optional) FTP Port (default 21)
 		 */
 		public function __construct($host, $username, $password, $ftproot, $port = 21) {
 			$this->host = $host;
@@ -155,7 +155,7 @@
 		 *
 		 * @param string $remote_file ที่อยู่ไฟล์ต้นทางบน FTP
 		 * @param string $local_file ที่อยู่ไฟล์ปลายทาง
-		 * @param [int] $mode Optional transfer mode เช่น FTP_ASCII หรือ FTP_BINARY (default)
+		 * @param int $mode (optional) transfer mode เช่น FTP_ASCII หรือ FTP_BINARY (default)
 		 * @return boolean สำเร็จ คืนค่า true
 		 */
 		public function download($remote_file, $local_file, $mode = FTP_BINARY) {
@@ -169,7 +169,7 @@
 		 *
 		 * @param string $remote_file ที่อยู่ไฟล์ปลายทาง
 		 * @param string $local_file  ที่อยู่ไฟล์ต้นทาง
-		 * @param [int] $mode Optional transfer mode เช่น FTP_ASCII หรือ FTP_BINARY (default)
+		 * @param int $mode (optional) transfer mode เช่น FTP_ASCII หรือ FTP_BINARY (default)
 		 * @return boolean สำเร็จ คืนค่า true
 		 */
 		public function put($remote_file, $local_file, $mode = FTP_BINARY) {

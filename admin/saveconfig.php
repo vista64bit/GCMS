@@ -199,7 +199,7 @@
 			$keys = array('google_site_verification', 'google_profile', 'msvalidate', 'ftp_root');
 			foreach ($keys AS $key) {
 				if (isset($_POST[$key])) {
-					$config[$key] = $db->sql_trim_str($_POST[$key]);
+					$config[$key] = $db->sql_trim_str($_POST, $key);
 				}
 			}
 			// logo

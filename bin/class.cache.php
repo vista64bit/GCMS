@@ -36,7 +36,7 @@
 		 *
 		 * @global resource $ftp FTP resource
 		 * @param string $dir
-		 * @param [int] $expire  Optional อายุของ cache เป็นวินาที (default 10 วินาที)
+		 * @param int $expire  (optional) อายุของ cache เป็นวินาที (default 10 วินาที)
 		 */
 		public function __construct($dir, $expire = 10) {
 			global $ftp;

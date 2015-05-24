@@ -136,8 +136,6 @@
 				} else {
 					$canonical = gcms::getURL($index['module'], '', 0, $index['id']);
 				}
-				// รูปภาพของบทความ
-				$image_src = is_file(DATA_PATH."document/$index[picture]") ? DATA_URL."document/$index[picture]" : WEB_URL."/$index[default_icon]";
 				// แก้ไขบทความ เจ้าของหรือ mod
 				$canEdit = is_file(ROOT_PATH.'modules/document/write.php') && ($moderator || ($isMember && $login['id'] == $index['member_id']));
 				// แทนที่ลงใน template ของโมดูล
@@ -159,7 +157,14 @@
 				$replace[] = LANGUAGE;
 				$replace[] = (int)$index['member_id'];
 				$replace[] = empty($index['displayname']) ? $index['email'] : $index['displayname'];
-				$replace[] = $image_src;
+				if (is_file(DATA_PATH."document/$index[picture]")) {
+					// รูปภาพของบทความ
+					$image_src = DATA_URL."document/$index[picture]";
+					$replace[] = '<figure><img src="'.$image_src.'" alt="'.$index['topic'].'"></figure>';
+				} else {
+					$image_src = WEB_URL."/$index[default_icon]";
+					$replace[] = '';
+				}
 				$replace[] = $index['status'];
 				$replace[] = gcms::mktime2date($index['create_date']);
 				$replace[] = date(DATE_ISO8601, $index['create_date']);
