@@ -33,5 +33,7 @@ GCMS เหมาะสมสำหรับการทำเว็บไซต
 * ใส่ document ให้ไฟล์เว็บเพื่อเตรียมตัวทำคู่มือจริงๆจังๆซะที
 * ปรับปรุงหน้า dashbord
 * ปรับปรุง counter และ useronline
-* เพิ่ม Widget Relate (ถ้าจะใช้ Widget นี้ต้องอัปเดท Theme ด้วย)
+* เพิ่ม Widget Relate (ถ้าจะใช้ Widget นี้ต้องอัปเดท Theme ด้วย
+* อัปเดท Facebook Login เนื่องจาก Facebook เปลี่ยนไปใช้ API เวอร์ชั่น 2.3
+* ยกเลิก Facebook Like Box เปลี่ยนเป็น Facebook Page
 * อัปเดทโมดูล Video เนื่องจาก Youtube เปลี่ยนไปใช้ API เวอร์ชั่น 3
