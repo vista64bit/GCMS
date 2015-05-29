@@ -1,7 +1,7 @@
 <?php
 	if (defined('ROOT_PATH')) {
 		// current version
-		$version = '10.1.0';
+		$version = '10.1.1';
 		$step = isset($_REQUEST['step']) ? (int)$_REQUEST['step'] : 0;
 		if ($step == 1 && isset($_POST['typ'])) {
 			$_SESSION['typ'] = $_POST['typ'];

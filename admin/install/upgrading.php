@@ -35,5 +35,8 @@
 		} elseif (version_compare($current_version, '10.1.0') == -1) {
 			// upgrade to 10.1.0
 			include (ROOT_PATH.'admin/install/1010.php');
+		} elseif (version_compare($current_version, '10.1.1') == -1) {
+			// upgrade to 10.1.1
+			include (ROOT_PATH.'admin/install/1011.php');
 		}
 	}

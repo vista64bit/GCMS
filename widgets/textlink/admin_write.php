@@ -83,6 +83,7 @@
 			$content[] = '<option value="'.$key.'"'.$sel.'>'.$value.'</option>';
 		}
 		$content[] = '</select></span>';
+		$content[] = '<div class=comment>{LNG_MENU_TARGET_COMMENT}</div>';
 		$content[] = '</div>';
 		// logo
 		$content[] = '<div class=item>';
