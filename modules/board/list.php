@@ -52,7 +52,7 @@
 			$breadcrumb = gcms::loadtemplate($index['module'], '', 'breadcrumb');
 			$breadcrumbs = array();
 			// หน้าหลัก
-			$breadcrumbs['HOME'] = gcms::breadcrumb('icon-home', WEB_URL.'/index.php', $install_modules[$module_list[0]]['menu_tooltip'], $install_modules[$module_list[0]]['menu_text'], $breadcrumb);
+			$breadcrumbs['HOME'] = gcms::breadcrumb('icon-home', $canonical, $install_modules[$module_list[0]]['menu_tooltip'], $install_modules[$module_list[0]]['menu_text'], $breadcrumb);
 			// โมดูล
 			if ($index['module'] != $module_list[0]) {
 				if (isset($install_modules[$index['module']]['menu_text'])) {

@@ -38,7 +38,8 @@
 			if (!empty($match[9]) && preg_match('/^[a-z0-9]+$/', $match[9])) {
 				$sql .= " AND Q.`show_news` LIKE '%".$match[9]."=1%'";
 			}
-			$sql .= " AND Q.`published`='1' AND Q.`index`='0' ORDER BY ".$sorts[$match[6]]." LIMIT $match[4]";
+			$sql .= " AND Q.`published`='1' AND Q.`published_date`<='".date('Y-m-d', $mmktime)."' AND Q.`index`='0'";
+			$sql .= " ORDER BY ".$sorts[$match[6]]." LIMIT $match[4]";
 			$datas = $cache->get($sql);
 			if (!$datas) {
 				$datas = $db->customQuery($sql);

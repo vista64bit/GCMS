@@ -21,8 +21,16 @@
 			$content[] = '<header><h1 class=icon-config>'.$title.'</h1></header>';
 			// form
 			$content[] = '<form id=setup_frm class=setup_frm method=post action=index.php autocomplete=off>';
+			$content[] = '<fieldset>';
+			$content[] = '<legend><span>{LNG_MAIN_CONFIG}</span></legend>';
+			$content[] = '<div class=item>';
+			$content[] = '<label for=google_api_key>{LNG_GOOGLE_API_KEY}</label>';
+			$content[] = '<span class="g-input icon-google"><input id=google_api_key name=google_api_key type=text value="'.gcms::getVars($config, 'google_api_key', '').'"></span>';
+			$content[] = '<div class=comment>{LNG_GOOGLE_API_KEY_COMMENT}</div>';
+			$content[] = '</div>';
+			$content[] = '</fieldset>';
 			// การแสดงผล
-			$content[] = '<fieldset class=paper>';
+			$content[] = '<fieldset>';
 			$content[] = '<legend><span>{LNG_DISPLAY}</span></legend>';
 			// video_cols,video_rows
 			$content[] = '<div class=item>';

@@ -294,9 +294,7 @@
 			}
 			$meta['og:url'] = '<meta property="og:url" content="'.$canonical.'">';
 			$meta['og:title'] = '<meta property="og:title" content="'.$title.'">';
-			//$meta['og:description'] = '<meta name="og:description" content="'.$description.'">';
 			$meta['og:site_name'] = '<meta property="og:site_name" content="'.strip_tags($config['web_title']).'">';
-			//$meta['og:keywords'] = '<meta name="og:keywords" content="'.$keywords.'">';
 			$meta['og:type'] = '<meta property="og:type" content="article">';
 			$main_patt['/{URL}/'] = $canonical;
 			$main_patt['/{XURL}/'] = rawurlencode($canonical);

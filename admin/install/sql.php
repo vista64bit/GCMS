@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}_country` (`id` int(11) unsigned NOT NULL au
 DROP TABLE IF EXISTS `{prefix}_emailtemplate`;
 CREATE TABLE IF NOT EXISTS `{prefix}_emailtemplate` (`id` int(10) unsigned NOT NULL auto_increment,`module` varchar(20) collate utf8_unicode_ci NOT NULL,`email_id` int(10) unsigned NOT NULL,`language` varchar(2) collate utf8_unicode_ci NOT NULL,`from_email` text collate utf8_unicode_ci NOT NULL,`copy_to` text collate utf8_unicode_ci NOT NULL,`name` text collate utf8_unicode_ci NOT NULL,`subject` text collate utf8_unicode_ci NOT NULL,`detail` text collate utf8_unicode_ci NOT NULL,`last_update` int(11) unsigned NOT NULL,`last_send` datetime NOT NULL,PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 DROP TABLE IF EXISTS `{prefix}_index`;
-CREATE TABLE IF NOT EXISTS `{prefix}_index` (`id` int(11) unsigned NOT NULL auto_increment,`index` tinyint(1) unsigned NOT NULL DEFAULT '0',`module_id` int(11) unsigned NOT NULL,`category_id` int(11) unsigned NOT NULL,`language` varchar(2) collate utf8_unicode_ci NOT NULL,`sender` varchar(50) collate utf8_unicode_ci NOT NULL,`member_id` int(11) unsigned NOT NULL,`email` varchar(255) collate utf8_unicode_ci NOT NULL,`ip` varchar(50) collate utf8_unicode_ci NOT NULL,`create_date` int(11) unsigned NOT NULL,`last_update` int(11) unsigned NOT NULL,`visited` int(11) unsigned NOT NULL,`visited_today` int(11) unsigned NOT NULL,`comments` smallint(3) unsigned NOT NULL,`comment_id` int(11) unsigned NOT NULL,`commentator` varchar(50) collate utf8_unicode_ci NOT NULL,`commentator_id` int(11) NOT NULL,`comment_date` int(11) NOT NULL,`picture` text collate utf8_unicode_ci NOT NULL,`pictureW` int(11) NOT NULL,`pictureH` int(11) NOT NULL,`hassubpic` smallint(3) NOT NULL,`can_reply` tinyint(1) NOT NULL DEFAULT '0',`show_news` text collate utf8_unicode_ci NOT NULL,`published` tinyint(1) NOT NULL DEFAULT '1',`pin` tinyint(1) NOT NULL DEFAULT '0',`locked` tinyint(1) NOT NULL DEFAULT '0',`related` varchar(149) collate utf8_unicode_ci NOT NULL,`published_date` date NOT NULL,`alias` varchar(64) collate utf8_unicode_ci NOT NULL,PRIMARY KEY (`id`,`module_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+CREATE TABLE IF NOT EXISTS `{prefix}_index` (`id` int(11) unsigned NOT NULL auto_increment,`index` tinyint(1) unsigned NOT NULL DEFAULT '0',`module_id` int(11) unsigned NOT NULL,`category_id` int(11) unsigned NOT NULL,`language` varchar(2) collate utf8_unicode_ci NOT NULL,`sender` varchar(50) collate utf8_unicode_ci NOT NULL,`member_id` int(11) unsigned NOT NULL,`email` varchar(255) collate utf8_unicode_ci NOT NULL,`ip` varchar(50) collate utf8_unicode_ci NOT NULL,`create_date` int(11) unsigned NOT NULL,`last_update` int(11) unsigned NOT NULL,`visited` int(11) unsigned NOT NULL,`visited_today` int(11) unsigned NOT NULL,`comments` smallint(3) unsigned NOT NULL,`comment_id` int(11) unsigned NOT NULL,`commentator` varchar(50) collate utf8_unicode_ci NOT NULL,`commentator_id` int(11) NOT NULL,`comment_date` int(11) NOT NULL,`picture` text collate utf8_unicode_ci NOT NULL,`pictureW` int(11) NOT NULL,`pictureH` int(11) NOT NULL,`hassubpic` smallint(3) NOT NULL,`can_reply` tinyint(1) NOT NULL DEFAULT '0',`show_news` text collate utf8_unicode_ci NOT NULL,`published` tinyint(1) NOT NULL DEFAULT '1',`pin` tinyint(1) NOT NULL DEFAULT '0',`locked` tinyint(1) NOT NULL DEFAULT '0',`published_date` date NOT NULL,`alias` varchar(64) collate utf8_unicode_ci NOT NULL,PRIMARY KEY (`id`,`module_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 DROP TABLE IF EXISTS `{prefix}_index_detail`;
 CREATE TABLE IF NOT EXISTS `{prefix}_index_detail` (`id` int(11) unsigned NOT NULL,`module_id` int(11) unsigned NOT NULL,`language` varchar(2) collate utf8_unicode_ci NOT NULL,`topic` varchar(255) collate utf8_unicode_ci NOT NULL,`description` varchar(255) collate utf8_unicode_ci NOT NULL,`detail` text collate utf8_unicode_ci NOT NULL,`keywords` varchar(255) collate utf8_unicode_ci NOT NULL,`relate` varchar(255) collate utf8_unicode_ci NOT NULL,PRIMARY KEY (`id`,`module_id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 DROP TABLE IF EXISTS `{prefix}_language`;
@@ -403,6 +403,7 @@ INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LN
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_ALL_LANGUAGES_COMMENT','text','index','0','เลือกภาษาของรายการนี้, รายการนี้จะแสดงผลเฉพาะในภาษาที่เลือกเท่านั้น (เลือก ทุกภาษา หากต้องการให้แสดงผลในทุกภาษา)');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_ANTISPAM','text','index','0','Anti Spam');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_ANTISPAM_COMMENT','text','index','0','กรุณากรอกตัวอักษรที่เห็นลงในช่อง');
+INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_API_KEY','text','index','0','API Key');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_APPLY','text','index','0','เปลี่ยนแปลง');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_ARTICLE_DATE','text','index','0','วันที่ของเรื่อง');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_ARTICLE_DATE_COMMENT','text','index','0','วันที่ของเรื่องที่เขียน');
@@ -519,7 +520,6 @@ INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LN
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_DATABASE_UPLOAD','text','index','0','อัปโหลดไฟล์และนำเข้า');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_DATAS','text','index','0','ข้อมูล');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_DATE','text','index','0','วันที่');
-INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_DATELESS','text','index','0','ไม่มีวันหมดอายุ');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_DAYS','text','index','0','วัน');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_DEFAULT_ICON_COMMENT','text','index','0','อัปโหลดไอคอน (default) ตามที่กำหนดด้านบน ซึ่งสามารถใช้แทน Thumbnail ของเรื่องได้หากเรื่องไม่มี Thumbnail หรือไม่มีหมวดหมู่ (ปรับขนาดอัตโนมัติ, ถ้าต้องการใช้รูปภาพเคลื่อนไหวหรือรูปภาพโปร่งใส กรุณาเตรียมรูปภาพให้พอดีกับขนาดที่กำหนด)');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_DELETE','text','index','0','ลบ');
@@ -534,7 +534,6 @@ INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LN
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_DISPLAY_ROWS_COLS_COMMENT','text','index','0','กำหนดจำนวนข้อมูลในการแสดงผล สูงสุดเท่ากับ แถว * สดมภ์');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_DISPLAYNAME','text','index','0','ชื่อเรียก');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_DISPLAYNAME_COMMENT','text','index','0','ชื่อเรียกสำหรับแสดงบนเว็บไซต์ (ไม่น้อยกว่า 2 ตัวอักษร)');
-INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_DISTRICT','text','index','0','อำเภอ');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_DOCUMENT','text','index','0','โมดูล Document');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_DOCUMENT_CONFIG','text','index','0','ค่ากำหนดของเรื่อง (ค่าเริ่มต้น)');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_DOCUMENT_DATE','text','index','0','เรื่องที่เขียนในวันที่');
@@ -587,14 +586,11 @@ INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LN
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_EX','text','index','0','ตัวอย่าง');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_FACEBOOK','text','index','0','Facebook');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_FACEBOOK_APPID','text','index','0','App ID');
-INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_FACEBOOK_APPSECRET','text','index','0','App Secret');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_FACEBOOK_COMMENT','text','index','0','ระบุรหัส Login ของคุณที่ได้จาก Facebook Developers (สามารถหาได้จาก https://developers.facebook.com)');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_FACEBOOK_LOGIN','text','index','0','Login With Facebook');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_FACEBOOK_LOGIN_COMMENT','text','index','0','เข้าระบบด้วยบัญชี ผู้ใช้ Facebook ของคุณ');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_FACEBOOK_PICTURE_COMMENT','text','index','0','เลือกไฟล์รูปภาพขนาดไม่น้อยกว่า 200x200 พิกเซล ชนิด jpg เท่านั้น ใช้เป็นรูปภาพสำหรับโพสต์ไปยังเฟซบุ๊คเมื่อมีการโพสต์ไปยังหน้าวอลของเฟซบุ๊ค หรือเมื่อมีการสมัครสมาชิกผ่านเฟซบุ๊ค');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_FACEBOOK_REDIRECT_URL','text','index','0','ระบุ URL นี้ไปยัง Facebook สำหรับการ Redirect กลับมายัง URL นี้หากเข้าระบบเรียบร้อย');
-INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_FACEBOOK_WELCOME_MESSAGE','text','index','0','ข้อความต้อนรับ');
-INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_FACEBOOK_WELCOME_MESSAGE_COMMENT','text','index','0','ข้อความต้อนรับที่จะถูกโพสต์ไปยังเฟซบุ้คของผู้ที่ลงทะเบียนเป็นสมาชิกใหม่ ถ้าไม่กรอกจะไม่มีการโพสต์');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_FAX','text','index','0','แฟ็กซ์');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_FILE','text','index','0','ไฟล์');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_FILE_UPLOAD_COMMENT','text','index','0','รูปภาพอัปโหลด ขนาด {SIZE} Kb. ชนิด {TYPE} เท่านั้น');
@@ -619,6 +615,8 @@ INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LN
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_GENERAL','text','index','0','ทั่วไป');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_GO','text','index','0','Go');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_GOOGLE','text','index','0','Google');
+INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_GOOGLE_API_KEY','text','index','0','Google API Key');
+INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_GOOGLE_API_KEY_COMMENT','text','index','0','API Key สำหรับบริการต่างๆจาก Google <a href="http://gcms.in.th/index.php?module=howto&id=319" target="_blank" class=icon-help></a>');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_GOOGLE_INFO','text','index','0','Info');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_GOOGLE_INFO_COMMENT','text','index','0','ข้อความ (HTML) ที่จะแสดง ณ. ตำแหน่งที่ตั้งของร้านหรือบริษัท ในรูปกรอบข้อความชี้ไปยังที่ตั้งของร้าน');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_GOOGLE_PROFILE','text','index','0','Google page ID');
@@ -923,7 +921,6 @@ INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LN
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_SYSEDIT_TITLE','text','index','0','เพิ่ม/แก้ไข ข้อมูล');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_TAGS','text','index','0','ป้ายกำกับ');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_TAGS_COMMENT','text','index','0','คั่นแต่ละรายการด้วย ลูกน้ำ (,) 4 - 8 คำ ใช้เป็นคีย์เวิร์ดของหน้า');
-INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_TAMBON','text','index','0','ตำบล');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_TEMPLATE','text','index','0','แม่แบบ');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_TEMPLATE_CURRENT','text','index','0','แม่แบบปัจจุบัน');
 INSERT INTO `{prefix}_language` (`key`, `type`, `owner`, `js`, `th`) VALUES ('LNG_TEMPLATE_FOLDER','text','index','0','ไฟล์ของ Theme นี้ทั้งหมดเก็บอยู่ใน <span>%s</span>');

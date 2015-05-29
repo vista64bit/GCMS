@@ -15,6 +15,7 @@
 				include CONFIG;
 			}
 			// ค่าที่ส่งมา
+			$config['google_api_key'] = gcms::getVars($_POST, 'google_api_key', '');
 			$config['video_cols'] = gcms::getVars($_POST, 'config_cols', 0);
 			$config['video_rows'] = gcms::getVars($_POST, 'config_rows', 0);
 			$config['video_can_write'] = isset($_POST['config_can_write']) ? $_POST['config_can_write'] : array();

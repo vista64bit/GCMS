@@ -116,7 +116,7 @@
 			$replace[] = implode("\n", $breadcrumbs);
 			$replace[] = implode('', $tabs);
 			$replace[] = $content;
-			$content = gcms::pregReplace($patt, $replace, gcms::loadtemplate('member', 'member', 'main'));
+			$content = preg_replace($patt, $replace, gcms::loadtemplate('member', 'member', 'main'));
 			// เลือกเมนูตาม tab
 			$menu = $tab;
 		}

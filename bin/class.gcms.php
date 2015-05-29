@@ -981,7 +981,7 @@
 			global $config;
 			$urls['0'] = 'index.php?module={module}-{document}&amp;cat={catid}&amp;id={id}';
 			$urls['1'] = '{module}/{catid}/{id}/{document}.html';
-			if ($document == '') {
+			if (empty($document)) {
 				$patt[] = '/[\/-]{document}/u';
 				$replace[] = '';
 			} else {
@@ -990,14 +990,14 @@
 			}
 			$patt[] = '/{module}/u';
 			$replace[] = $encode ? rawurlencode($module) : $module;
-			if ($catid == 0) {
+			if (empty($catid)) {
 				$patt[] = '/((cat={catid}&amp;)|([\/-]{catid}))/u';
 				$replace[] = '';
 			} else {
 				$patt[] = '/{catid}/u';
 				$replace[] = (int)$catid;
 			}
-			if ((int)$id == 0) {
+			if (empty($id)) {
 				$patt[] = '/(((&amp;|\?)id={id})|([\/-]{id}))/u';
 				$replace[] = '';
 			} else {
@@ -1005,7 +1005,7 @@
 				$replace[] = (int)$id;
 			}
 			$link = preg_replace($patt, $replace, $urls[$config['module_url']]);
-			if ($query != '') {
+			if (!empty($query)) {
 				$link = preg_match('/[\?]/u', $link) ? $link.'&amp;'.$query : $link.'?'.$query;
 			}
 			return WEB_URL.'/'.$link;

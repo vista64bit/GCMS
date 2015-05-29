@@ -76,19 +76,19 @@
 			// topic
 			$content[] = '<div class=item>';
 			$content[] = '<label for=write_topic>{LNG_TITLE}</label>';
-			$content[] = '<span class="g-input icon-edit"><input type=text name=write_topic id=write_topic value="'.$index['topic'].'" maxlength=1000 title="{LNG_TITLE_COMMENT}"></span>';
+			$content[] = '<span class="g-input icon-edit"><input type=text name=write_topic id=write_topic value="'.$index['topic'].'" maxlength=255 title="{LNG_TITLE_COMMENT}"></span>';
 			$content[] = '<div class=comment id=result_write_topic>{LNG_TITLE_COMMENT}</div>';
 			$content[] = '</div>';
 			// keywords
 			$content[] = '<div class=item>';
 			$content[] = '<label for=write_keywords>{LNG_KEYWORDS}</label>';
-			$content[] = '<span class="g-input icon-tags"><textarea name=write_keywords id=write_keywords rows=3 maxlength=1000 title="{LNG_KEYWORDS_COMMENT}">'.gcms::detail2TXT($index, 'keywords').'</textarea></span>';
+			$content[] = '<span class="g-input icon-tags"><textarea name=write_keywords id=write_keywords rows=3 maxlength=255 title="{LNG_KEYWORDS_COMMENT}">'.gcms::detail2TXT($index, 'keywords').'</textarea></span>';
 			$content[] = '<div class=comment id=result_write_keywords>{LNG_KEYWORDS_COMMENT}</div>';
 			$content[] = '</div>';
 			// description
 			$content[] = '<div class=item>';
 			$content[] = '<label for=write_description>{LNG_DESCRIPTION}</label>';
-			$content[] = '<span class="g-input icon-file"><textarea name=write_description id=write_description rows=3 maxlength=1000 title="{LNG_DESCRIPTION_COMMENT}">'.gcms::detail2TXT($index, 'description').'</textarea></span>';
+			$content[] = '<span class="g-input icon-file"><textarea name=write_description id=write_description rows=3 maxlength=255 title="{LNG_DESCRIPTION_COMMENT}">'.gcms::detail2TXT($index, 'description').'</textarea></span>';
 			$content[] = '<div class=comment id=result_write_description>{LNG_DESCRIPTION_COMMENT}</div>';
 			$content[] = '</div>';
 			// detail

@@ -44,6 +44,7 @@
 	$lng['LNG_ALL_LANGUAGES_COMMENT'] = 'เลือกภาษาของรายการนี้, รายการนี้จะแสดงผลเฉพาะในภาษาที่เลือกเท่านั้น (เลือก ทุกภาษา หากต้องการให้แสดงผลในทุกภาษา)';
 	$lng['LNG_ANTISPAM'] = 'Anti Spam';
 	$lng['LNG_ANTISPAM_COMMENT'] = 'กรุณากรอกตัวอักษรที่เห็นลงในช่อง';
+	$lng['LNG_API_KEY'] = 'API Key';
 	$lng['LNG_APPLY'] = 'เปลี่ยนแปลง';
 	$lng['LNG_ARTICLE_DATE'] = 'วันที่ของเรื่อง';
 	$lng['LNG_ARTICLE_DATE_COMMENT'] = 'วันที่ของเรื่องที่เขียน';
@@ -267,6 +268,8 @@
 	$lng['LNG_GENERAL'] = 'ทั่วไป';
 	$lng['LNG_GO'] = 'Go';
 	$lng['LNG_GOOGLE'] = 'Google';
+	$lng['LNG_GOOGLE_API_KEY'] = 'Google API Key';
+	$lng['LNG_GOOGLE_API_KEY_COMMENT'] = 'API Key สำหรับบริการต่างๆจาก Google <a href="http://gcms.in.th/index.php?module=howto&id=319" target="_blank" class=icon-help></a>';
 	$lng['LNG_GOOGLE_INFO'] = 'Info';
 	$lng['LNG_GOOGLE_INFO_COMMENT'] = 'ข้อความ (HTML) ที่จะแสดง ณ. ตำแหน่งที่ตั้งของร้านหรือบริษัท ในรูปกรอบข้อความชี้ไปยังที่ตั้งของร้าน';
 	$lng['LNG_GOOGLE_PROFILE'] = 'Google page ID';

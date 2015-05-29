@@ -5,12 +5,14 @@
 	include ('../../bin/inint.php');
 	// ตรวจสอบ referer
 	if (gcms::isReferer() && preg_match('/^widget_([0-9]+)_([0-9]+)_([0-9]+)_([0-9]+)_(list|icon|thumb)$/', $_POST['id'], $match)) {
+		// วันนี้
+		$c_date = date('Y-m-d', $mmktime);
 		// อ่านโมดูล
 		$sql = "SELECT M.`config`,M.`module`,D.`relate`,Q.`id`,Q.`module_id`";
 		$sql .= " FROM `".DB_INDEX."` AS Q";
 		$sql .= " INNER JOIN `".DB_INDEX_DETAIL."` AS D ON D.`id`=Q.`id` AND D.`module_id`=Q.`module_id` AND D.`language` IN ('".LANGUAGE."','')";
-		$sql.= " INNER JOIN ".DB_MODULES." AS M ON M.`id`=D.`module_id`";
-		$sql.= " WHERE D.`id`=".(int)$match[1]." AND M.`owner`='document' LIMIT 1";
+		$sql .= " INNER JOIN ".DB_MODULES." AS M ON M.`id`=D.`module_id`";
+		$sql .= " WHERE D.`id`=".(int)$match[1]." AND M.`owner`='document' AND Q.`published`='1' AND Q.`published_date`<='$c_date' AND Q.`index` = '0' LIMIT 1";
 		$index = $cache->get($sql);
 		if (!$index) {
 			$index = $db->customQuery($sql);
@@ -27,7 +29,7 @@
 		}
 		if ($index && $index['relate'] != '') {
 			$qs = array();
-			foreach (explode(',', $index['relate'])AS $q) {
+			foreach (explode(',', $index['relate']) AS $q) {
 				$qs[] = "D.`relate` LIKE '%$q%'";
 			}
 			// query
@@ -38,7 +40,7 @@
 			$sql1 .= " FROM `".DB_INDEX."` AS Q";
 			$sql1 .= " INNER JOIN `".DB_INDEX_DETAIL."` AS D ON D.`id` = Q.`id` AND D.`module_id` = Q.`module_id` AND D.`language` IN ('th', '')";
 			$sql1 .= " LEFT JOIN `".DB_USER."` AS U ON U.`id` = Q.`member_id`";
-			$sql1 .= " WHERE Q.`module_id`=".$index['module_id']." AND Q.`published`='1' AND Q.`published_date`<='".date('Y-m-d', $mmktime)."' AND Q.`index` = '0' AND Q.`id`>".$index['id']." AND (".implode(' OR ', $qs).") ORDER BY Q.`create_date` ASC";
+			$sql1 .= " WHERE Q.`module_id`=".$index['module_id']." AND Q.`published`='1' AND Q.`published_date`<='$c_date' AND Q.`index` = '0' AND Q.`id`>".$index['id']." AND (".implode(' OR ', $qs).") ORDER BY Q.`create_date` ASC";
 			$sql1 .= ") AS Q2, (SELECT @row:=0) r";
 			$sql1 .= ") AS Q3";
 			$sql2 = "SELECT @row2:=@row2+1 AS `row2`,Q3.* FROM (";
@@ -48,7 +50,7 @@
 			$sql2 .= " FROM `".DB_INDEX."` AS Q";
 			$sql2 .= " INNER JOIN `".DB_INDEX_DETAIL."` AS D ON D.`id` = Q.`id` AND D.`module_id` = Q.`module_id` AND D.`language` IN ('th', '')";
 			$sql2 .= " LEFT JOIN `".DB_USER."` AS U ON U.`id` = Q.`member_id`";
-			$sql2 .= " WHERE Q.`module_id`=".$index['module_id']." AND Q.`published` = '1' AND Q.`published_date`<='".date('Y-m-d', $mmktime)."' AND Q.`index` = '0' AND Q.`id`<".$index['id']." AND (".implode(' OR ', $qs).") ORDER BY Q.`create_date` DESC";
+			$sql2 .= " WHERE Q.`module_id`=".$index['module_id']." AND Q.`published` = '1' AND Q.`published_date`<='$c_date' AND Q.`index` = '0' AND Q.`id`<".$index['id']." AND (".implode(' OR ', $qs).") ORDER BY Q.`create_date` DESC";
 			$sql2 .= ") AS Q2, (SELECT @row2:=0) r";
 			$sql2 .= ") AS Q3";
 			$sql = "SELECT * FROM (SELECT * FROM (($sql1) UNION ($sql2)) AS X ORDER BY X.`row` LIMIT ".$match[2] * $match[3].") AS Y ORDER BY `create_date` DESC";

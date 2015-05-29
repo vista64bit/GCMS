@@ -43,61 +43,70 @@
 					$ret['input'] = 'write_youtube';
 				} else {
 					// get video info
+					$url = 'https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id='.$youtube.'&key='.gcms::getVars($config, 'google_api_key', '');
 					if (function_exists('curl_init') && $ch = @curl_init()) {
-						curl_setopt($ch, CURLOPT_URL, "http://gdata.youtube.com/feeds/api/videos/{$youtube}?v=2");
+						curl_setopt($ch, CURLOPT_URL, $url);
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 						$feed = curl_exec($ch);
 						curl_close($ch);
 					} else {
-						$feed = file_get_contents("http://gdata.youtube.com/feeds/api/videos/{$youtube}?v=2");
+						$feed = file_get_contents($url);
 					}
 					if ($feed == '') {
 						$ret['error'] = 'VIDEO_SERVER_ERROR';
-					} elseif (preg_match('/^<errors.*<\/errors>$/', $feed)) {
-						$ret['ret_write_youtube'] = 'VIDEO_NOT_FOUND';
-						$ret['error'] = 'VIDEO_NOT_FOUND';
-						$ret['input'] = 'write_youtube';
 					} else {
-						$xml = simplexml_load_string($feed);
-						$media = $xml->children('http://search.yahoo.com/mrss/');
-						$save['topic'] = $topic == '' ? addslashes(trim((string)$media->group->title)) : $topic;
-						$save['description'] = $description == '' ? addslashes(trim((string)$media->group->description)) : $description;
-						// video thumbnail
-						$attrs = $media->group->thumbnail[3]->attributes();
-						if (function_exists('curl_init') && $ch = @curl_init()) {
-							curl_setopt($ch, CURLOPT_URL, (string)$attrs['url']);
-							curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-							$thumbnail = curl_exec($ch);
-							curl_close($ch);
+						$datas = json_decode($feed);
+						if (isset($datas->{'error'})) {
+							$ret['alert'] = $datas->{'error'}->{'message'};
 						} else {
-							$thumbnail = file_get_contents((string)$attrs['url']);
-						}
-						// ตรวจสอบโฟลเดอร์
-						gcms::testDir(DATA_PATH.'video/');
-						$f = @fopen(DATA_PATH."video/$youtube.jpg", 'w');
-						if (!$f) {
-							$ret['error'] = 'DO_NOT_UPLOAD';
-						} else {
-							fwrite($f, $thumbnail);
-							fclose($f);
-							$ret['imgIcon'] = rawurlencode(DATA_URL."video/$youtube.jpg?$mmktime");
-							// save
-							$yt = $xml->children('http://gdata.youtube.com/schemas/2007');
-							$attrs = $yt->statistics->attributes();
-							$save['views'] = (int)$attrs['viewCount'];
-							$save['youtube'] = $youtube;
-							$save['last_update'] = $mmktime;
-							if ($id == 0) {
-								$save['module_id'] = $index['module_id'];
-								$id = $db->add(DB_VIDEO, $save);
+							$items = $datas->{'items'};
+							if (sizeof($items) == 0) {
+								$ret['ret_write_youtube'] = 'VIDEO_NOT_FOUND';
+								$ret['error'] = 'VIDEO_NOT_FOUND';
+								$ret['input'] = 'write_youtube';
 							} else {
-								$db->edit(DB_VIDEO, $index['id'], $save);
+								$item = $items[0]->{'snippet'};
+								$save['topic'] = addslashes(trim($item->{'title'}));
+								$save['description'] = addslashes(trim($item->{'description'}));
+								$save['views'] = (int)$items[0]->{'statistics'}->{'viewCount'};
+								// video thumbnail
+								if (isset($item->{'thumbnails'}->{'standard'})) {
+									$url = $item->{'thumbnails'}->{'standard'}->{'url'};
+								} else {
+									$url = $item->{'thumbnails'}->{'high'}->{'url'};
+								}
+								if (function_exists('curl_init') && $ch = @curl_init()) {
+									curl_setopt($ch, CURLOPT_URL, $url);
+									curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+									$thumbnail = curl_exec($ch);
+									curl_close($ch);
+								} else {
+									$thumbnail = file_get_contents($url);
+								}
+								// ตรวจสอบโฟลเดอร์
+								gcms::testDir(DATA_PATH.'video/');
+								$f = @fopen(DATA_PATH."video/$youtube.jpg", 'w');
+								if (!$f) {
+									$ret['error'] = 'DO_NOT_UPLOAD';
+								} else {
+									fwrite($f, $thumbnail);
+									fclose($f);
+									$ret['imgIcon'] = rawurlencode(DATA_URL."video/$youtube.jpg?$mmktime");
+									$save['youtube'] = $youtube;
+									$save['last_update'] = $mmktime;
+									if ($id == 0) {
+										$save['module_id'] = $index['module_id'];
+										$id = $db->add(DB_VIDEO, $save);
+									} else {
+										$db->edit(DB_VIDEO, $index['id'], $save);
+									}
+									// คืนค่า
+									$ret['write_topic'] = rawurlencode(stripslashes($save['topic']));
+									$ret['write_description'] = rawurlencode(stripslashes(str_replace(array('\r', '\n'), array("\r", "\n"), $save['description'])));
+									$ret['write_id'] = $id;
+									$ret['error'] = 'SAVE_COMPLETE';
+								}
 							}
-							// คืนค่า
-							$ret['write_topic'] = rawurlencode(stripslashes($save['topic']));
-							$ret['write_description'] = rawurlencode(stripslashes(str_replace(array('\r', '\n'), array("\r", "\n"), $save['description'])));
-							$ret['write_id'] = $id;
-							$ret['error'] = 'SAVE_COMPLETE';
 						}
 					}
 				}

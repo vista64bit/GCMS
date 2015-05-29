@@ -3282,6 +3282,9 @@ header.list > h2 > :last-child {
 	padding: 10px 5px;
 	margin: 0;
 }
+.facebook_page {
+	overflow: hidden;
+}
 .login {
 	padding-bottom: 3px;
 }
