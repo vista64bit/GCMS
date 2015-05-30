@@ -3357,6 +3357,7 @@ ol.multi_step li.current:before {
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
 	box-shadow: none;
+	line-height: 1.5;
 }
 .search-form button:before {
 	margin: 0;
