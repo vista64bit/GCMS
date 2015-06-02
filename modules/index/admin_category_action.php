@@ -50,7 +50,7 @@
 					$categories = array();
 					$sql = "SELECT `id`,`icon` FROM `".DB_CATEGORY."` WHERE `id` IN ($id) AND `module_id`='$index[id]'";
 					foreach ($db->customQuery($sql) AS $item) {
-						foreach (gcms::str2Array($item, 'icon') AS $icon) {
+						foreach (gcms::ser2Array($item, 'icon') AS $icon) {
 							if (is_file(DATA_PATH."$index[owner]/$icon")) {
 								// ลบไอคอนของหมวด
 								unlink(DATA_PATH."$index[owner]/$icon");

@@ -11,7 +11,7 @@ body {
 a {
 	color: #000;
 }
-.mainform, .member_section {
+.bdr_content header > h3.icon-tags, .mainform, .member_section {
 	background-color: #f0eee4;
 	border: 1px dashed #BCC2B7;
 }
@@ -135,11 +135,15 @@ a {
 	line-height: 20px;
 	background-color: transparent;
 }
-.mainform legend > span, .member_section header h2 {
+.bdr_content header > h3.icon-tags, .mainform legend > span, .member_section header h2 {
 	margin-bottom: 10px;
-	font-size: 150%;
+	font-size: 140%;
 	display: block;
-	border: none;
+	border-style: none;
+}
+.bdr_content header > h3.icon-tags {
+	padding: 3px 10px;
+	border-style: dashed;
 }
 .content .breadcrumbs {
 	font-style: italic;

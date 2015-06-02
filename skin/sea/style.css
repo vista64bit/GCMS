@@ -2,7 +2,7 @@
  Name: ทะเล
  Description: Template โทนสีน้ำเงินเข้ม 2 คอลัมน์ HTML5 CSS3
  Author: Goragod.com
- */
+*/
 body {
 	background: #455E7F url(img/bg_body.gif) repeat-x;
 }
@@ -15,7 +15,7 @@ a {
 .widget.search-box form {
 	margin: 0 5px 5px 5px;
 }
-.member_section fieldset > legend, .mainform fieldset > legend, .content .member_section header > h2 {
+.bdr_content header > h3.icon-tags, .member_section fieldset > legend, .mainform fieldset > legend, .content .member_section header > h2 {
 	background-color: inherit;
 	color: inherit;
 	border-style: none none dashed none;
@@ -24,8 +24,11 @@ a {
 	border-color: rgba(0,0,0,0.2);
 	margin-bottom: 10px;
 	padding: 5px 10px;
-	font-size: 150%;
+	font-size: 130%;
 	text-shadow: 1px 1px 0 #FFF;
+}
+.content .member_section header > h2{
+	font-size: 150%;
 }
 .member_section {
 	background-color: #EEE;
@@ -131,14 +134,13 @@ a {
 #document-view .reaction {
 	border-top: 3px solid #4C80BA;
 }
-#comment-list .r {
-	margin-bottom: 10px;
-}
-#comment-list .post-detail {
+#comment-list .post-detail, #board-view .post-detail {
 	border: 1px solid #CDCDCD;
 	background-color: #F3F3F3;
+	min-height: 6em;
+	padding: 5px;
 }
-#board-view .q .post-detail:after, .r .post-detail:after {
+#comment-list .post-detail:after, #board-view .post-detail:after {
 	position: absolute;
 	background-image: url(img/msg_arrow.gif);
 	content: ' ';
@@ -147,20 +149,8 @@ a {
 	left: -11px;
 	top: 5px;
 }
-#board-view .q .post-detail, .r .post-detail {
-	border: 1px solid #CDCDCD;
-	background-color: #F3F3F3;
-	position: relative;
-	padding: 5px;
-	min-height: 80px;
-}
-#comment-list .r-body .reaction {
-	padding: 0;
-	background-color: transparent;
-}
-#comment-list .content-action {
-	top: 5px;
-	right: 5px;
+#comment-list .reaction {
+	margin-top: 0;
 }
 .bottomline {
 	background: #FFF url(img/bottom-content.png) 0 0 repeat-x;

@@ -121,11 +121,12 @@ p.usericon > img {
 	border: 1px solid #CCCCFF;
 	padding: 2px;
 }
-.mainform fieldset > legend {
+.bdr_content header > h3.icon-tags, .mainform fieldset > legend {
 	border-left: 5px solid #333;
 	background-color: #EEE;
 	padding: 5px 5px 5px 10px;
 	margin-bottom: 5px;
+	font-size: 1.2em;
 }
 .member_section {
 	background-color: #EEE;

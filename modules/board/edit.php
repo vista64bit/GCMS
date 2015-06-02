@@ -49,10 +49,16 @@
 			$breadcrumb = gcms::loadtemplate($index['module'], '', 'breadcrumb');
 			$breadcrumbs = array();
 			// หน้าหลัก
-			$breadcrumbs['HOME'] = gcms::breadcrumb('icon-home', WEB_URL.'/index.php', $install_modules[$module_list[0]]['menu_tooltip'], $install_modules[$module_list[0]]['menu_text'], $breadcrumb);
-			// breadcrumb ของ โมดูล
-			$m = $install_modules[$index['module']]['menu_text'];
-			$breadcrumbs['MODULE'] = gcms::breadcrumb('', gcms::getURL($index['module']), $install_modules[$index['module']]['menu_tooltip'], ($m == '' ? $index['module'] : $m), $breadcrumb);
+			$breadcrumbs['HOME'] = gcms::breadcrumb('icon-home', $canonical, $install_modules[$module_list[0]]['menu_tooltip'], $install_modules[$module_list[0]]['menu_text'], $breadcrumb);
+			// โมดูล
+			if (isset($install_modules[$index['module']]['menu_text'])) {
+				$m = $install_modules[$index['module']]['menu_text'];
+				$t = $install_modules[$index['module']]['menu_tooltip'];
+			} else {
+				$m = ucwords($index['module']);
+				$t = $m;
+			}
+			$breadcrumbs['MODULE'] = gcms::breadcrumb('', gcms::getURL($index['module']), $t, $m, $breadcrumb);
 			if ($rid == 0) {
 				$categories[0] = '<option value=0>{LNG_NO_CATEGORY}</option>';
 				$sql = "SELECT `category_id`,`topic` FROM `".DB_CATEGORY."` WHERE `module_id`='$index[module_id]' ORDER BY `category_id`";

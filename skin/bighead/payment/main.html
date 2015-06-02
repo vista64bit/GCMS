@@ -1,12 +1,17 @@
 <div class=bdr_content>
 	<header>
-		<h2 class=icon-payment>{LNG_PAYMENT_TITLE}</h2>
-		<nav class=breadcrumbs>
+		<h2 class="cuttext icon-payment">{LNG_PAYMENT_TITLE}</h2>
+		<nav class="breadcrumbs cuttext">
 			<ul>{BREADCRUMS}</ul>
 		</nav>
 	</header>
 	<form id=payment_frm class="payment_frm main_frm" method=post action=index.php>
 		<fieldset>
+			<div class=item>
+				<label for=payment_email>{LNG_EMAIL} :</label>
+				<span class="g-input icon-email"><input type=email name=payment_email id=payment_email value="{EMAIL}" title="{LNG_EMAIL_TITLE}"></span>
+			</div>
+			<div class=comment id=result_payment_email>{LNG_EMAIL_TITLE}</div>
 			<div class=item>
 				<label for=payment_orderid>{LNG_ORDER_NO}</label>
 				<span class="g-input icon-edit"><input type=text name=payment_orderid id=payment_orderid maxlength=20 value="{ORDERNO}" title="{LNG_PAYMENT_ORDERID_COMMENT}"></span>

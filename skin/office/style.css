@@ -265,8 +265,8 @@ body > footer a:hover {
 .widget_bdr .right {
 	margin: 10px 0 0;
 }
-.bdr_content header > h2, form fieldset legend {
-	font-size: 150%;
+.bdr_content header > h3.icon-tags, .bdr_content header > h2, form fieldset legend {
+	font-size: 140%;
 	padding-left: 5px;
 }
 .sidebar .widget_bdr {
@@ -279,7 +279,7 @@ body > footer a:hover {
 	background-image: url(img/head-bkg.gif);
 	background-repeat: repeat-x;
 }
-.content header > h2, form > fieldset > legend, .homepage header > h2 {
+.bdr_content header > h3.icon-tags, .content header > h2, form > fieldset > legend, .homepage header > h2 {
 	padding: 5px;
 	border-bottom-style: dashed;
 	border-bottom-width: 1px;

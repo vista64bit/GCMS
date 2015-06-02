@@ -52,8 +52,6 @@
 	// true ถ้าต้องการให้แสดง error
 	// false ปิดการแสดงผล error (ตอนใช้งานจริง)
 	define('DEBUG_MODE', false);
-	// ไฟล์ config
-	define('CONFIG', ROOT_PATH.'bin/config.php');
 	// display error
 	if (DEBUG_MODE) {
 		// ขณะออกแบบ แสดง error และ warning ของ PHP
@@ -64,6 +62,8 @@
 		// ขณะใช้งานจริง
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
 	}
+	// ไฟล์ config
+	define('CONFIG', ROOT_PATH.'bin/config.php');
 	// เวลาที่บอกว่า user logout
 	// ควรมากกว่า counter_refresh_time อย่างน้อย 2 เท่า
 	define('COUNTER_GAP', 120);

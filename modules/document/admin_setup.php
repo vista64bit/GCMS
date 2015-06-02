@@ -22,13 +22,6 @@
 		} else {
 			// ค่าที่ส่งมา
 			$q = array();
-			// ข้อความค้นหา
-			$search = preg_replace('/[\+\s]+/u', ' ', $db->sql_trim_str($_GET, 'search', ''));
-			if (mb_strlen($search) > 2) {
-				$question = addslashes($search);
-				$q[] = "(D.`topic` LIKE '%$question%' OR D.`detail` LIKE '%$question%')";
-				$url_query['search'] = urlencode($search);
-			}
 			// หมวดที่เลือก
 			$cat = gcms::getVars($_GET, 'cat', 0);
 			if ($cat > 0) {
@@ -36,11 +29,16 @@
 			}
 			$q[] = "P.`module_id`='$index[id]'";
 			$q[] = "P.`index`='0'";
+			$q[] = "D.`language` IN ('".LANGUAGE."','')";
 			// default query
 			$sql1 = "FROM `".DB_INDEX_DETAIL."` AS D";
 			$sql1 .= " INNER JOIN `".DB_INDEX."` AS P ON P.`id`=D.`id` AND P.`module_id`='$index[id]'";
-			if (isset($searchs) && sizeof($searchs) == 0) {
-				$sql1 .= " AND D.`language` IN ('".LANGUAGE."','')";
+			// ข้อความค้นหา
+			$search = preg_replace('/[\+\s]+/u', ' ', $db->sql_trim_str($_GET, 'search', ''));
+			if (mb_strlen($search) > 2) {
+				$question = addslashes($search);
+				$sql1 .= " INNER JOIN `".DB_INDEX_DETAIL."` AS D2 ON D2.`id`=D.`id` AND (D2.`topic` LIKE '%$question%' OR D2.`detail` LIKE '%$question%')";
+				$url_query['search'] = urlencode($search);
 			}
 			$where = " WHERE ".implode(' AND ', $q);
 			// จำนวนรายการทั้งหมด

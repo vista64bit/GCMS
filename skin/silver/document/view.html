@@ -1,13 +1,13 @@
 <div id=document-view>
 	<div class=bdr_content>
 		<header>
-			<nav class=breadcrumbs>
+			<nav class="breadcrumbs cuttext">
 				<ul>
 					{BREADCRUMS}
 					<li><a href="{URL}" title="{TOPIC}" target=_blank><span>{TOPIC}</span></a></li>
 				</ul>
 			</nav>
-			<h2 class=cuttext>{TOPIC}</h2>
+			<h2>{TOPIC}</h2>
 		</header>
 		<div class="q detail">
 			<p class=content-action>
@@ -22,8 +22,8 @@
 			</footer>
 		</div>
 	</div>
-	<section>
-		<header><h3>{LNG_RELATE}</h3></header>
+	<section class="bdr_content margin-top">
+		<header><h3 class=icon-tags>{LNG_RELATE}</h3></header>
 		<div class="document-list {MODULE}">{WIDGET_RELATE module={MODULE};id={QID};cols=2;rows=3}</div>
 	</section>
 	<div id=comment-list>{COMMENTLIST}</div>

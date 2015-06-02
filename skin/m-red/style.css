@@ -158,12 +158,12 @@ body {
 .breadcrumbs {
 	color: #CCC;
 }
-.content .mainform legend > span, .content .member_section legend > span, .content .member_section h2 {
+.bdr_content header > h3.icon-tags, .content .mainform legend > span, .content .member_section legend > span, .content .member_section h2 {
 	margin-bottom: 10px;
 	line-height: normal;
 	display: block;
 	font-weight: normal;
-	font-size: 180%;
+	font-size: 140%;
 }
 .q .reaction, .r .reaction {
 	background-color: #FDEAFB;

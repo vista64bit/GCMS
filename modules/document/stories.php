@@ -68,9 +68,9 @@
 				$replace[] = date(DATE_ISO8601, $item['create_date']);
 				$replace[] = number_format($item['visited']);
 				$replace[] = number_format($item['comments']);
-				if ($item['picture'] != '' && is_file(DATA_PATH."document/$item[picture]")) {
+				if (!empty($item['picture']) && is_file(DATA_PATH."document/$item[picture]")) {
 					$replace[] = DATA_URL."document/$item[picture]";
-				} elseif (!empty($index['icon'])) {
+				} elseif (!empty($index['icon']) && is_file(DATA_PATH."document/$index[icon]")) {
 					$replace[] = DATA_URL."document/$index[icon]";
 				} else {
 					$replace[] = WEB_URL."/$index[default_icon]";

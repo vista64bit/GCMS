@@ -1,9 +1,9 @@
 /*
- Name: Goragod.com 2013
- Description: Template Responsive สำหรับ Goragod.com (ห้าม copy)
+ Name: 2013
+ Description: Template แบบ 1 คอลัมน์
  Author: Goragod.com
  Responsive
- */
+*/
 body {
 	font-size: 14px;
 	background-image: url(img/bg.jpg);
@@ -109,44 +109,24 @@ a:hover {
 	background-color: #F9F9F9;
 	padding: 10px 10px 0;
 }
-.member_section .data tbody th {
-	text-align: left;
-}
-#document-view .post-detail {
-	position: relative;
-}
 #document-view .reaction {
 	background-color: rgba(255,255,255,0.5);
 }
-img.usericon, img[alt=usericon] {
+img.usericon, img[alt="usericon"] {
 	-moz-border-radius: 50em;
 	-webkit-border-radius: 50em;
 	border-radius: 50em;
 }
-#comment-list > header {
-	margin: 20px 0 0;
+#document-view .relate_section, #board-view .q, #board-view .q, #comment-list .r {
+	box-shadow: 0 1px 0 0 #FFF;
+	border-bottom: 1px solid #DDD;
 	padding-bottom: 10px;
-	border-bottom: 1px solid #DDD;
 }
-.r > div, .q > div {
-	line-height: 1.8em;
-}
-#comment-list {
-	margin-bottom: 10px;
-}
-#comment-list .r {
-	margin-bottom: 0;;
-}
-#comment-list .r > div {
-	border-top: 1px solid #FFF;
-	border-bottom: 1px solid #DDD;
+#document-view .relate_section, #comment-list .r {
 	padding: 10px 0;
 }
 code, blockquote {
 	background-color: rgba(255,255,255,0.5);
-}
-#comment-list .r:last-child > div {
-	box-shadow: 0 1px 0 0 #FFF;
 }
 #comment-list span.no {
 	position: absolute;
@@ -155,13 +135,6 @@ code, blockquote {
 	bottom: 0;
 	color: rgba(150,150,150,0.1);
 	font-family: serif;
-}
-#content .post-detail {
-	margin-bottom: 5px;
-}
-#document-view > .detail {
-	position: relative;
-	clear: both;
 }
 #bottommenu {
 	text-align: right;
@@ -196,36 +169,6 @@ code, blockquote {
 }
 .header div.widget_share > a:hover {
 	color: #000;
-}
-.content .widget-tags a {
-	color: inherit;
-	background-color: #FDFDFD;
-	border: 1px solid #EEE;
-	padding: 2px 10px;
-	-moz-border-radius: 1em;
-	-webkit-border-radius: 1em;
-	border-radius: 1em;
-	line-height: 2.4em;
-	margin: 0 0.5em;
-	box-shadow: 0 0 0 1px rgba(255,255,255,0.4) inset;
-	text-shadow: 1px 1px 0 rgba(0,0,0,0.1), -1px -1px 0 rgba(0,0,0,0.2);
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
-	-ms-transition: all 0.5s ease;
-	transition: all 0.5s ease;
-}
-.content .widget-tags a:hover {
-	background-color: #75AD0E;
-	color: #FFF;
-	border: 1px solid transparent;
-	box-shadow: 0 0 3px #000;
-	text-decoration: none;
-}
-@media only screen and (max-width: 960px) {
-	.topmenu.responsive > ul > li > a > span {
-		padding-left: 3.5em !important;
-	}
 }
 @media screen and (max-width: 599px) {
 	.header h1 {
@@ -288,6 +231,11 @@ code, blockquote {
 }
 .button {
 	background-color: #75AD0E;
+}
+.bdr_content header > h3, .mainform fieldset > legend {
+	font-size: 1.4em;
+	padding: 0 5px;
+	background-color: rgba(0, 0, 0, 0.02);
 }
 #GModal_modaldiv > .modaldiv form {
 	padding: 10px;

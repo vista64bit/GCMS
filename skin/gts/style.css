@@ -2,8 +2,9 @@
  Name: Go To School
  Description: แม่แบบสองคอลัมน์ ยอดนิยม สำหรับเว็บไซต์โรงเรียน
  Author: Goragod.com
+ Author URI: http://www.goragod.com
  Responsive
- */
+*/
 body {
 	background-color: #EEE;
 	color: #666;
@@ -26,7 +27,6 @@ body {
 #logo {
 	background-image: url(img/logo.jpg);
 	height: 200px;
-	margin: 10px 0;
 	color: transparent;
 }
 #login_frm fieldset {
@@ -96,8 +96,8 @@ body {
 #board-view div.body {
 	margin-bottom: 0;
 }
-fieldset > legend > span {
-	font-size: 1.6em;
+fieldset > legend > span, .bdr_content header > h3.icon-tags {
+	font-size: 1.4em;
 	padding-top: 10px;
 	overflow: hidden;
 	display: inline-block;

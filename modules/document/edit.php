@@ -27,7 +27,7 @@
 				$breadcrumb = gcms::loadtemplate($index['module'], '', 'breadcrumb');
 				$breadcrumbs = array();
 				// หน้าหลัก
-				$breadcrumbs['HOME'] = gcms::breadcrumb('icon-home', WEB_URL.'/index.php', $install_modules[$module_list[0]]['menu_tooltip'], $install_modules[$module_list[0]]['menu_text'], $breadcrumb);
+				$breadcrumbs['HOME'] = gcms::breadcrumb('icon-home', $canonical, $install_modules[$module_list[0]]['menu_tooltip'], $install_modules[$module_list[0]]['menu_text'], $breadcrumb);
 				// breadcrumb ของ โมดูล
 				$breadcrumbs['MODULE'] = gcms::breadcrumb('', gcms::getURL($index['module']), $install_modules[$index['module']]['menu_tooltip'], $install_modules[$index['module']]['menu_text'], $breadcrumb);
 				// antispam
@@ -45,8 +45,6 @@
 				$replace[] = $index['module_id'];
 				$replace[] = $index['topic'];
 				$content = preg_replace($patt, $replace, gcms::loadtemplate($index['module'], 'document', 'editreply'));
-				// ตัวแปรหลังจากแสดงผลแล้ว
-				$custom_patt['/{TYPE}/'] = $index['img_typies'];
 				// title,keywords,description
 				$title = "$lng[LNG_EDIT] $index[topic]";
 				$keywords = $title;

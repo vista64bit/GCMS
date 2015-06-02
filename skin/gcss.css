@@ -1529,7 +1529,7 @@ html[dir="rtl"] .topmenu > ul ul ul {
 	display: inline;
 	zoom: 1;
 }
-.breadcrumbs a {
+.breadcrumbs a, .breadcrumbs :before {
 	text-decoration: none;
 	color: inherit;
 }
@@ -2954,23 +2954,29 @@ a[id^='lang_']:hover, a[id^='lang_']:focus, .font_size:hover, .font_size:focus {
 	color: inherit;
 }
 header.list > h2 {
-	display: table;
-	width: 100%;
+	clear: both;
+	overflow: hidden;
 }
 header.list > h2 > * {
-	display: table-cell;
-	color: inherit;
-	text-align: left;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	-ms-text-overflow: ellipsis;
+	overflow: hidden;
+	float: left;
+	width: 60%;
 }
 header.list > h2 > :last-child {
+	float: right;
 	text-align: right;
+	width: 40%;
 }
 #board-list thead > tr {
 	color: inherit;
 	background-color: rgba(0,0,0,0.01);
 }
 #board-list .col2 {
-	max-width: 20em;
+	max-width: 15em;
 }
 #board-list a.topic,
 #board-list .col4 > a,
@@ -3928,6 +3934,9 @@ ol.multi_step li.current:before {
 	body.responsive .document-list > .row > .col4:nth-child(2n+1) {
 		margin-left: 0;
 	}
+	body.responsive #board-list .col2 {
+		max-width: 15em;
+	}
 }
 /* tablet */
 @media only screen and (min-width: 481px) and (max-width: 768px) {
@@ -4077,9 +4086,6 @@ ol.multi_step li.current:before {
 	}
 	body.responsive #board-list .col4 {
 		max-width: 5em;
-	}
-	body.responsive #board-list .col2 {
-		max-width: 15em;
 	}
 	body.responsive .textlink_image > a {
 		max-width: 48%;

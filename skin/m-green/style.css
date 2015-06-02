@@ -57,19 +57,24 @@ body {
 .topmenu li.select > a, .topmenu li:hover > a, .topmenu li.hover > a, .sidemenu li.select > a, .sidemenu li:hover > a, .sidemenu li.hover > a {
 	background-color: transparent;
 }
-.sidemenu a {
-	background-image: url(img/menu.png);
-	background-repeat: no-repeat;
-	background-position: 0 0;
-	color: #D8FF00 !important;
+.sidemenu ul > li {
+	color: #D8FF00;
 	font-weight: bold;
 }
-.sidemenu li > a > span {
-	padding: 0.42em 10px 0.42em 25px;
+.sidemenu ul > li {
+	background-color: #17A991;
+	border-left-width: 3px;
+	border-top-width: 1px;
+	border-top-color: rgba(255,255,255,0.5);
+	border-left-color: rgba(0,0,0,0.2);
+	border-style: solid none none solid;
 }
-.sidemenu a:hover {
-	background-position: 0 -32px;
-	color: #FFF !important;
+.sidemenu ul > li:hover {
+	color: #FFF;
+	border-left-color: rgba(0,0,0,0.5)
+}
+.sidemenu ul > li:hover > a {
+	background-color: rgba(0,0,0,0.2);
 }
 .topmenu > ul ul, .sidemenu > ul ul {
 	box-shadow: 0 0 3px rgba(0,0,0,0.1);
@@ -138,6 +143,9 @@ body {
 .homepage .sidebar .widget header {
 	margin-left: -10px;
 }
+.xsidebar .widget header {
+	margin-left: -10px;
+}
 .login p {
 	padding: 2px 0;
 }
@@ -158,12 +166,12 @@ body {
 .breadcrumbs {
 	color: #CCC;
 }
-.content .mainform legend > span, .content .member_section legend > span, .content .member_section h2 {
+.bdr_content header > h3.icon-tags, .content .mainform legend > span, .content .member_section legend > span, .content .member_section h2 {
 	margin-bottom: 10px;
 	line-height: normal;
 	display: block;
 	font-weight: normal;
-	font-size: 180%;
+	font-size: 140%;
 }
 .q .reaction, .r .reaction {
 	background-color: #EDF8ED;

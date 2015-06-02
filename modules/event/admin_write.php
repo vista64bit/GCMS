@@ -55,7 +55,7 @@
 			// color
 			$content[] = '<div class=item>';
 			$content[] = '<label for=write_color>{LNG_EVENT_COLOR}</label>';
-			$content[] = '<span class="g-input icon-color"><input type=text class=color name=write_color id=write_color value="'.$index['color'].'" title="{LNG_EVENT_COLOR_COMMENT}">';
+			$content[] = '<span class="g-input icon-color"><input type=text class=color name=write_color id=write_color value="'.$index['color'].'" title="{LNG_EVENT_COLOR_COMMENT}"></span>';
 			$content[] = '<div class=comment id=result_write_color>{LNG_EVENT_COLOR_COMMENT}</div>';
 			$content[] = '</div>';
 			// keywords,tags

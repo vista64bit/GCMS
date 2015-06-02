@@ -272,8 +272,10 @@ body .widget_share a:before {
 .content h2 {
 	padding-bottom: 5px;
 }
-.mainform legend span {
-	font-size: 1.3em;
+.bdr_content header > h3.icon-tags, .mainform legend {
+	font-size: 1.4em;
+	background-color: #F5F5F5;
+	padding: 2px 5px;
 }
 #headmenu > li > section {
 	margin-top: 15px;

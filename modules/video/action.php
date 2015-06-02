@@ -7,21 +7,23 @@
 	if (gcms::isReferer() && preg_match('/^youtube_([0-9]+)_([a-zA-Z0-9\-_]{11,11})$/', $_POST['id'], $match)) {
 		$mv = $db->getRec(DB_VIDEO, $match[1]);
 		// get video info
+		$url = 'https://www.googleapis.com/youtube/v3/videos?part=statistics&id='.$mv['youtube'].'&key='.gcms::getVars($config, 'google_api_key', '');
 		if (function_exists('curl_init') && $ch = @curl_init()) {
-			curl_setopt($ch, CURLOPT_URL, 'http://gdata.youtube.com/feeds/api/videos/'.$mv['youtube'].'?v=2');
+			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			$feed = curl_exec($ch);
 			curl_close($ch);
 		} else {
-			$feed = file_get_contents('http://gdata.youtube.com/feeds/api/videos/'.$mv['youtube'].'?v=2');
+			$feed = file_get_contents($url);
 		}
 		if ($feed != '') {
-			$xml = simplexml_load_string($feed);
-			$yt = $xml->children('http://gdata.youtube.com/schemas/2007');
-			$attrs = $yt->statistics->attributes();
-			$views = (int)$attrs['viewCount'];
-			if ($views != $mv['views']) {
-				$db->edit(DB_VIDEO, $mv['id'], array('views' => $views));
+			$datas = json_decode($feed);
+			$items = $datas->{'items'};
+			if (sizeof($items) == 1) {
+				$viewCount = (int)$items[0]->{'statistics'}->{'viewCount'};
+				if ($viewCount != $mv['views']) {
+					$db->edit(DB_VIDEO, $mv['id'], array('views' => $viewCount));
+				}
 			}
 		}
 		echo '<figure class=mv>';

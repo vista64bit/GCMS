@@ -104,7 +104,7 @@ p.usericon > img {
 	padding: 2px;
 	background-color: #FFF;
 }
-.mainform legend > span, .member_section legend > span {
+.bdr_content header > h3.icon-tags, .mainform legend > span, .member_section legend > span {
 	border: 1px solid #E8B5E8;
 	background-color: #F9ECF9;
 	margin-bottom: 10px;
@@ -129,6 +129,10 @@ p.usericon > img {
 #comment-list .reaction, #document-view .reaction, #board-view .reaction {
 	border: 1px solid #B7DEFF;
 	background-color: #E5F3FF;
+}
+.bdr_content header > h3.icon-tags {
+	border: 1px solid #CDC;
+	background-color: #EFE;
 }
 #comment-list .reaction {
 	text-align: right;

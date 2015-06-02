@@ -198,7 +198,7 @@ a:hover {
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
-	min-height: 60px;
+	min-height: 6em;
 	padding: 10px;
 	margin-left: 90px;
 }
@@ -238,8 +238,11 @@ a:hover {
 	filter: alpha(opacity=40);
 	opacity: .40;
 }
-#document-view .reaction {
+#document-view .q .reaction {
 	background-color: #FFFFDD;
+}
+.bdr_content header > h3.icon-tags, .mainform fieldset > legend {
+	font-size: 1.4em;
 }
 dl.info {
 	padding: 10px;

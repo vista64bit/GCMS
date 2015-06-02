@@ -26,7 +26,7 @@ a {
 .widget.search-box form {
 	margin: 0 5px 5px 5px;
 }
-.member_section fieldset > legend, .mainform fieldset > legend, .content .member_section header > h2 {
+.bdr_content header > h3.icon-tags, .member_section fieldset > legend, .mainform fieldset > legend, .content .member_section header > h2 {
 	background-color: inherit;
 	color: inherit;
 	border-style: none none dashed none;
@@ -192,9 +192,8 @@ div.body-wrapper {
 #board-view .q .post-detail, .r .post-detail {
 	border: 1px solid #CDCDCD;
 	background-color: #F3F3F3;
-	position: relative;
+	min-height: 6em;
 	padding: 5px;
-	min-height: 80px;
 }
 .bottomline {
 	background: #FFF url(img/bottom-content.png) 0 0 repeat-x;

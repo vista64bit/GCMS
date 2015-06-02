@@ -1943,40 +1943,38 @@
 		 * @return mixed คืนค่า $type[$key] หรือ null หากไม่พบ
 		 */
 		private static function filterVars($type, $key) {
-			switch ($type) {
-				case 'REQUEST':
-					if (isset($_POST[$key])) {
-						return $_POST[$key];
-					} else if (isset($_GET[$key])) {
-						return $_GET[$key];
-					}
-				case 'POST':
-					if (isset($_POST[$key])) {
-						return $_POST[$key];
-					}
-				case 'GET':
-					if (isset($_GET[$key])) {
-						return $_GET[$key];
-					}
-				case 'SESSION':
-					if (isset($_SESSION[$key])) {
-						return $_SESSION[$key];
-					}
-				case 'COOKIE':
-					if (isset($_COOKIE[$key])) {
-						return $_COOKIE[$key];
-					}
-				case 'SERVER':
-					if (isset($_SERVER[$key])) {
-						return $_SERVER[$key];
-					}
-				case 'config':
-					if (isset($config[$key])) {
-						return $config[$key];
-					}
-				default:
-					return null;
+			if ($type == 'REQUEST') {
+				if (isset($_POST[$key])) {
+					return $_POST[$key];
+				} else if (isset($_GET[$key])) {
+					return $_GET[$key];
+				}
+			} elseif ($type == 'POST') {
+				if (isset($_POST[$key])) {
+					return $_POST[$key];
+				}
+			} elseif ($type == 'GET') {
+				if (isset($_GET[$key])) {
+					return $_GET[$key];
+				}
+			} elseif ($type == 'SESSION') {
+				if (isset($_SESSION[$key])) {
+					return $_SESSION[$key];
+				}
+			} elseif ($type == 'COOKIE') {
+				if (isset($_COOKIE[$key])) {
+					return $_COOKIE[$key];
+				}
+			} elseif ($type == 'SERVER') {
+				if (isset($_SERVER[$key])) {
+					return $_SERVER[$key];
+				}
+			} elseif ($type == 'config') {
+				if (isset($config[$key])) {
+					return $config[$key];
+				}
 			}
+			return null;
 		}
 		/**
 		 * ฟังก์ชั่นสำหรับรับค่าจากการโพสต์ แทนการใช้ $_GET[key] หรือ $_POST[key]

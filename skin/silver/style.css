@@ -61,10 +61,11 @@ a:hover {
 .topmenu > ul ul {
 	color: #333;
 }
-form fieldset > legend {
+form fieldset > legend, .bdr_content header > h3.icon-tags {
 	padding: 5px;
 	background-color: #EEE;
 	font-weight: bold;
+	font-size: 1.2em;
 }
 #comment-list .r {
 	margin-bottom: 10px;

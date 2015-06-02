@@ -4,7 +4,7 @@
  Author: pipatpon laithong
  Modify By: http://www.goragod.com
  Responsive
- */
+*/
 body {
 	background-color: #EEEDED;
 }
@@ -97,11 +97,14 @@ a.scroll:hover {
 .reaction {
 	background-color: #F9F7EE;
 }
-fieldset > legend > span {
-	font-size: 1.6em;
-	padding-top: 10px;
-	overflow: hidden;
-	display: inline-block;
+.bdr_content header > h3.icon-tags, fieldset > legend > span {
+	font-size: 1.4em;
+	background-color: #f9f7ee;
+	display: block;
+	padding: 3px 5px;
+	border-left-width: 5px;
+	border-left-style: solid;
+	border-left-color: rgba(0,0,0,0.05);
 }
 #comment-list {
 	margin-top: 10px;
