@@ -98,7 +98,7 @@
 					}
 				}
 			} catch (PDOException $e) {
-				$this->debug("Error in $sql Message : ".$e->getMessage());
+				$this->debug("Error in <em>$sql</em> Message : ".$e->getMessage());
 				return false;
 			}
 		}
@@ -143,7 +143,7 @@
 				$this->time++;
 				return sizeof($result) == 0 ? false : $result[0];
 			} catch (PDOException $e) {
-				$this->debug("Error in $sql Message : ".$e->getMessage());
+				$this->debug("Error in <em>$sql</em> Message : ".$e->getMessage());
 				return false;
 			}
 		}
@@ -162,7 +162,7 @@
 				$this->time++;
 				return sizeof($result) == 0 ? false : $result[0];
 			} catch (PDOException $e) {
-				$this->debug("Error in $sql Message : ".$e->getMessage());
+				$this->debug("Error in <em>$sql</em> Message : ".$e->getMessage());
 				return false;
 			}
 		}
@@ -188,7 +188,7 @@
 				$this->time++;
 				return $this->connection->lastInsertId();
 			} catch (PDOException $e) {
-				$this->debug("Error in $sql Message : ".$e->getMessage());
+				$this->debug("Error in <em>$sql</em> Message : ".$e->getMessage());
 				return false;
 			}
 		}
@@ -230,7 +230,7 @@
 					return true;
 				}
 			} catch (PDOException $e) {
-				$this->debug("Error in $sql Message : ".$e->getMessage());
+				$this->debug("Error in <em>$sql</em> Message : ".$e->getMessage());
 				return false;
 			}
 		}
@@ -263,7 +263,7 @@
 				$this->time++;
 				return $result;
 			} catch (PDOException $e) {
-				$this->debug("Error in $sql Message : ".$e->getMessage());
+				$this->debug("Error in <em>$sql</em> Message : ".$e->getMessage());
 				return false;
 			}
 		}
@@ -280,7 +280,7 @@
 				$this->time++;
 				return $result;
 			} catch (PDOException $e) {
-				$this->debug("Error in $sql Message : ".$e->getMessage());
+				$this->debug("Error in <em>$sql</em> Message : ".$e->getMessage());
 				return array();
 			}
 		}
@@ -298,7 +298,7 @@
 				$this->time++;
 				return (int)$result[0]['Auto_increment'];
 			} catch (PDOException $e) {
-				$this->debug("Error in $sql Message : ".$e->getMessage());
+				$this->debug("Error in <em>$sql</em> Message : ".$e->getMessage());
 				return false;
 			}
 		}

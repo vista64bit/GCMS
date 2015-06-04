@@ -4,7 +4,7 @@
 		// รายการแสดงต่อหน้า
 		$list_per_page = gcms::getVars($config, 'search_list_per_page', 20);
 		// ค่าที่ส่งมา
-		$search = preg_replace('/[\+\s]+/u', ' ', $db->sql_trim_str($_REQUEST, 'q', ''));
+		$search = preg_replace('/[\+\s\r\n\t]+/u', ' ', $db->sql_trim_str($_REQUEST, 'q', ''));
 		$page = max(1, gcms::getVars($_REQUEST, 'page', 1));
 		// ค้นหาข้อความ
 		$word_count = 0;
@@ -26,8 +26,9 @@
 			foreach (explode(' ', $search) AS $item) {
 				// แยกข้อความค้นหาออกเป็นคำๆ ค้นหาข้อความที่มีความยาวมากกว่า 1 ตัวอักษร
 				if (mb_strlen($item) > 1) {
-					$searchs1[] = "D.`topic` LIKE '%$item%' OR D.`detail` LIKE '%$item%'";
-					$searchs2[] = "C.`detail` LIKE '%$item%'";
+					$s = addslashes($item);
+					$searchs1[] = "D.`topic` LIKE '%$s%' OR D.`detail` LIKE '%$s%'";
+					$searchs2[] = "C.`detail` LIKE '%$s%'";
 					$words[] = $item;
 					$word_count++;
 				}

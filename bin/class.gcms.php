@@ -611,10 +611,14 @@
 					return '';
 				} catch (phpmailerException $e) {
 					// Pretty error messages from PHPMailer
-					return strip_tags($e->errorMessage());
+					$message = $e->errorMessage();
+					gcms::writeDebug($message);
+					return strip_tags($message);
 				} catch (exception $e) {
 					// Boring error messages from anything else!
-					return strip_tags($e->getMessage());
+					$message = $e->getMessage();
+					gcms::writeDebug($message);
+					return strip_tags($message);
 				}
 			}
 		}
