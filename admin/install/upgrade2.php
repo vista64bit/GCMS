@@ -27,14 +27,6 @@
 			ob_flush();
 			flush();
 		}
-		// optimize tables
-		$db->query("OPTIMIZE TABLE `".DB_INDEX."`");
-		$db->query("OPTIMIZE TABLE `".DB_MODULES."`");
-		$db->query("OPTIMIZE TABLE `".DB_USER."`");
-		$db->query("OPTIMIZE TABLE `".DB_LANGUAGE."`");
-		echo '<li class=correct>Fix and repair <strong>database</strong> <i>complete...</i></li>';
-		ob_flush();
-		flush();
 		if (@rename(ROOT_PATH.'admin/install/', ROOT_PATH."admin/$mmktime/")) {
 			echo '<li class=correct>โฟลเดอร์ <i>admin/install/</i> ถูกเปลี่ยนชื่อเป็น <i>admin/'.$mmktime.'/</i></li>';
 		} else {

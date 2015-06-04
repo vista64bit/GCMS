@@ -12,6 +12,10 @@
 		ob_flush();
 		flush();
 		// update index_detail
+		$search = $db->customQuery("SELECT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='".DB_INDEX_DETAIL."'  AND column_key='PRI') As HasPrimaryKey");
+		if ($search[0]['HasPrimaryKey'] == 1) {
+			$db->query('ALTER TABLE `'.DB_INDEX_DETAIL.'` DROP PRIMARY KEY');
+		}
 		$db->query('ALTER TABLE `'.DB_INDEX_DETAIL.'` ADD PRIMARY KEY (`id`, `module_id`, `language`)');
 		echo '<li class=correct>Update database <strong>'.DB_INDEX_DETAIL.'</strong> <i>complete...</i></li>';
 		ob_flush();
