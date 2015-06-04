@@ -2026,4 +2026,24 @@
 			}
 			return implode('', $ret);
 		}
+		/**
+		 * ฟังก์ชั่นสำหรับการบันทึกข้อมูลสำหรับการ debug
+		 *
+		 * @global array $config ตัวแปรเก็บการตั้งค่าของ GCMS
+		 * @param mixed $datas ข้อมูลที่ต้องการใส่ลงใน ตัว debug
+		 */
+		public static function writeDebug($datas) {
+			global $config;
+			if (is_file(DATA_PATH.'debug.php')) {
+				$f = fopen(DATA_PATH.'debug.php', 'a');
+			} else {
+				$f = fopen(DATA_PATH.'debug.php', 'w');
+				fwrite($f, '<'.'?php exit() ?'.'>');
+			}
+			if (is_array($datas)) {
+				$datas = var_export($datas, true);
+			}
+			fwrite($f, "\n".mktime(date("H") + $config['hour']).'|'.preg_replace('/[\s\n\t\r]+/', ' ', $datas));
+			fclose($f);
+		}
 	}

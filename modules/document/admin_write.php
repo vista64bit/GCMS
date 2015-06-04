@@ -243,6 +243,7 @@
 			$content[] = '</form>';
 			$content[] = '</section>';
 			$content[] = '<script>';
+			$_SESSION['CKEDITOR'] = $_SESSION['login']['id'];
 			foreach ($config['languages'] AS $item) {
 				$content[] = 'CKEDITOR.replace("write_detail_'.$item.'", {';
 				$content[] = 'toolbar:"Document",';

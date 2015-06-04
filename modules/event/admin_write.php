@@ -129,6 +129,7 @@
 			$content[] = '</form>';
 			$content[] = '</section>';
 			$content[] = '<script>';
+			$_SESSION['CKEDITOR'] = $_SESSION['login']['id'];
 			$content[] = 'CKEDITOR.replace("write_detail", {';
 			$content[] = 'toolbar:"Document",';
 			$content[] = 'language:"'.LANGUAGE.'",';

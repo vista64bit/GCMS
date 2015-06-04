@@ -419,12 +419,17 @@
 		 */
 		public function sql_date2date($date, $short = true, $time = true) {
 			global $lng;
-			preg_match('/([0-9]+){0,4}-([0-9]+){0,2}-([0-9]+){0,2}(\s([0-9]+){0,2}:([0-9]+){0,2}:([0-9]+){0,2})?/', $date, $match);
-			if (empty($match[1])) {
-				return '';
+			if (preg_match('/([0-9]+){0,4}-([0-9]+){0,2}-([0-9]+){0,2}(\s([0-9]+){0,2}:([0-9]+){0,2}:([0-9]+){0,2})?/', $date, $match)) {
+				$match[1] = (int)$match[1];
+				$match[2] = (int)$match[2];
+				if ($match[1] == 0 || $match[2] == 0) {
+					return '';
+				} else {
+					$month = $short ? $lng['MONTH_SHORT'] : $lng['MONTH_LONG'];
+					return $match[3].' '.$month[$match[2] - 1].' '.((int)$match[1] + $lng['YEAR_OFFSET']).($time && isset($match[4]) ? $match[4] : '');
+				}
 			} else {
-				$month = $short ? $lng['MONTH_SHORT'] : $lng['MONTH_LONG'];
-				return $match[3].' '.$month[(int)$match[2] - 1].' '.((int)$match[1] + $lng['YEAR_OFFSET']).($time && isset($match[4]) ? $match[4] : '');
+				return '';
 			}
 		}
 		/**
@@ -473,7 +478,7 @@
 		 */
 		private function debug($text) {
 			if ($this->debug == 1) {
-				echo preg_replace(array('/\r/', '/\n/', '/\t/'), array('', ' ', ' '), $text);
+				gcms::writeDebug($text);
 			}
 		}
 		/**

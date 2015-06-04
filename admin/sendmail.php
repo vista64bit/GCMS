@@ -66,6 +66,7 @@
 			$content[] = '</form>';
 			$content[] = '</section>';
 			$content[] = '<script>';
+			$_SESSION['CKEDITOR'] = $_SESSION['login']['id'];
 			$content[] = 'CKEDITOR.replace("email_detail", {toolbar:"Email"});';
 			$content[] = '$G(window).Ready(function(){';
 			$content[] = 'new GForm("write_frm", "mailto.php").onsubmit(doFormSubmit);';

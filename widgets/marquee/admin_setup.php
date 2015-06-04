@@ -33,6 +33,7 @@
 		$content[] = '</section>';
 		$content[] = '<script>';
 		$content[] = '$G(window).Ready(function(){';
+		$_SESSION['CKEDITOR'] = $_SESSION['login']['id'];
 		$content[] = 'CKEDITOR.replace("marquee_text", {';
 		$content[] = 'toolbar:"Document",';
 		$content[] = 'language:"'.LANGUAGE.'",';

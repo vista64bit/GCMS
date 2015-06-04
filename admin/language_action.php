@@ -11,7 +11,6 @@
 		} else {
 			// action
 			$action = gcms::getVars($_POST, 'action', '');
-			$languages = array();
 			if ($action == 'deletelang') {
 				// ลบภาษาที่ id
 				$id = gcms::getVars($_POST, 'id', 0);
@@ -57,26 +56,14 @@
 				}
 				if ($action == 'changed') {
 					// เปลี่ยนแปลงสถานะการเผยแพร่ภาษา
-					$_lang = gcms::getVars($_POST, 'lang', '');
-					$languages = $config['languages'];
-					$config['languages'] = array();
-					foreach ($languages AS $item) {
-						if ($item != $_lang) {
-							$config['languages'][] = $item;
-						}
-					}
-					if ($_POST['val'] == 'icon-check') {
-						$config['languages'][] = $_lang;
-					}
-					if (sizeof($config['languages']) == 0) {
-						$ret['error'] = 'PLEASE_SELECT_ONE';
-					}
+					$datas = str_replace('check_', '', $_POST['data']);
 				} else {
-					$data = str_replace('L_', '', gcms::getVars($_POST, 'data', ''));
-					$config['languages'] = explode(',', $data);
+					// จัดลำดับภาษา
+					$datas = str_replace('L_', '', $_POST['data']);
 				}
-				if (!isset($ret['error'])) {
-					// save
+				$config['languages'] = explode(',', $datas);
+				if (sizeof($config['languages']) > 0) {
+					// save config
 					if (gcms::saveConfig(CONFIG, $config)) {
 						$ret['error'] = 'SAVE_COMPLETE';
 					} else {

@@ -31,7 +31,7 @@
 	// config ของระบบ
 	include ('../../../../bin/load.php');
 	// ตรวจสอบการ login สำหรับสมาชิกเท่านั้น
-	$config['Enabled'] = gcms::isAdmin();
+	$config['Enabled'] = gcms::isAdmin() || (gcms::isMember() && isset($_SESSION['CKEDITOR']) && $_SESSION['CKEDITOR'] == $_SESSION['login']['id']);
 	// กำหนดการอัปโหลดไฟล์โดยใช้ชื่อเดิม หรือเป็นตัวเลข (เวลา)
 	// true ใช้ชื่อเดิมของไฟล์ (rename ชื่อซ้ำ)
 	// false ใช้ชื่อไฟล์เป็นเวลา (mktime)

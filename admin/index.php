@@ -71,6 +71,7 @@
 		$login_remember = gcms::getVars($_COOKIE, PREFIX.'_login_remember', 0);
 		$message = '';
 		$message_type = '';
+		unset($_SESSION['CKEDITOR']);
 		// ค่าที่ส่งมา
 		$action = gcms::getVars($_GET, 'action', '');
 		if ($action == 'recover') {

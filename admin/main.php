@@ -39,6 +39,9 @@
 		$admin_menus['tools']['database'] = '<a href="'.WEB_URL.'/admin/index.php?module=database"><span>{LNG_DATABASE}</span></a>';
 		$admin_menus['tools']['language'] = '<a href="'.WEB_URL.'/admin/index.php?module=language"><span>{LNG_LANGUAGE}</span></a>';
 		$admin_menus['tools']['country'] = '<a href="'.WEB_URL.'/admin/index.php?module=country"><span>{LNG_COUNTRY_LIST}</span></a>';
+		if (DEBUG_MODE) {
+			$admin_menus['tools']['debug'] = '<a href="'.WEB_URL.'/admin/index.php?module=debug"><span>{LNG_DEBUG}</span></a>';
+		}
 		// ตรวจสอบโมดูลที่ติดตั้ง ตามโฟลเดอร์
 		$dir = ROOT_PATH.'modules/';
 		$f = @opendir($dir);

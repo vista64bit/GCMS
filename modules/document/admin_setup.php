@@ -12,7 +12,9 @@
 			// อ่าน config ของโมดูล
 			gcms::r2config($index['config'], $index);
 			// ตรวจสอบสถานะที่สามารถเข้าหน้านี้ได้
-			if (!gcms::canConfig($index, 'moderator')) {
+			$can_write = gcms::canConfig($index, 'can_write');
+			$moderator = gcms::canConfig($index, 'moderator');
+			if (!$moderator && !$can_write) {
 				$index = false;
 			}
 		}
@@ -26,6 +28,9 @@
 			$cat = gcms::getVars($_GET, 'cat', 0);
 			if ($cat > 0) {
 				$q[] = "P.`category_id`=$cat";
+			}
+			if ($can_write && !$moderator) {
+				$q[] = 'P.`member_id`='.$_SESSION['login']['id'];
 			}
 			$q[] = "P.`module_id`='$index[id]'";
 			$q[] = "P.`index`='0'";

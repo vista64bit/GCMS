@@ -158,7 +158,7 @@ function inintListCategory(module) {
 	$G(window).Ready(function() {
 		inintTR('tbl_category');
 		inintCheck('tbl_category');
-		callAction("btn_action", function() {return $E('sel_action').value}, 'tbl_category', WEB_URL + 'modules/' + module + '/admin_category_action.php');
+		callAction("btn_action", function() {return $E('sel_action').value;}, 'tbl_category', WEB_URL + 'modules/' + module + '/admin_category_action.php');
 		forEach($E('tbl_category').getElementsByTagName('input'), function() {
 			if (patt.test(this.id)) {
 				$G(this).addEvent('keypress', numberOnly);
@@ -293,11 +293,21 @@ function inintLanguages(id) {
 		var hs = patt.exec(this.id);
 		var q = '';
 		if (hs[1] == 'check') {
-			q = this.className == 'icon-uncheck' ? 'icon-check' : 'icon-uncheck';
-			this.className = q;
-			q = 'action=changed&lang=' + hs[2] + '&val=' + q;
+			this.className = this.className == 'icon-uncheck' ? 'icon-check' : 'icon-uncheck';
+			var chs = new Array();
+			forEach($E(id).getElementsByTagName('span'), function() {
+				var cs = patt.exec(this.id);
+				if (cs && cs[1] == 'check' && this.className == 'icon-check') {
+					chs.push(this.id);
+				}
+			});
+			if (chs.length == 0) {
+				alert(PLEASE_SELECT_ONE);
+			} else {
+				q = 'action=changed&data=' + chs.join(',');
+			}
 		} else if (hs[1] == 'delete' && confirm(CONFIRM_DELETE)) {
-			q = 'action=droplang&lang=' + hs[2];
+			q = 'action=droplang&data=' + hs[2];
 		}
 		if (q != '') {
 			send('language_action.php', q, doFormSubmit, this);
@@ -425,3 +435,36 @@ $G(window).Ready(function() {
 		}
 	});
 });
+function showDebug() {
+	var t = 0;
+	var _get = function() {
+		return 'action=get&t=' + t;
+	};
+	new GAjax().autoupdate('debug_action.php', 5, _get, function(xhr) {
+		var patt = /^([0-9]+)\|(.*)/;
+		var content = $E('debug_layer');
+		forEach(xhr.responseText.split('\n'), function() {
+			var line = patt.exec(this);
+			if (line) {
+				t = floatval(line[1]);
+				var d = mktimeToDate(t);
+				var div = document.createElement('div');
+				var time = document.createElement('time');
+				time.innerHTML = d.dateFormat('d-m-y H:i:s');
+				div.appendChild(time);
+				var p = document.createElement('p');
+				p.innerHTML = line[2];
+				div.appendChild(p);
+				content.appendChild(div);
+				content.scrollTop = content.scrollHeight;
+			}
+		});
+	});
+	$G('debug_clear').addEvent('click', function() {
+		if (confirm(CONFIRM_DELETE)) {
+			send('debug_action.php', 'action=clear', function(xhr) {
+				$E('debug_layer').innerHTML = xhr.responseText;
+			});
+		}
+	});
+}

@@ -134,7 +134,11 @@
 				if(confirm(top.CONFIRM_DELETE_FILE)) {
 					var req = new GAjax();
 					req.send('delete.php', 'fid=' + encodeURIComponent(this.title), function(xhr){
-						window.parent.frames['frmResourcesList'].Refresh();
+						if (xhr.responseText != '') {
+							alert(xhr.responseText );
+						} else {
+							window.parent.frames['frmResourcesList'].Refresh();
+						}
 					});
 				}
 			}
@@ -142,7 +146,11 @@
 				if(confirm(top.CONFIRM_DELETE_FOLDER)) {
 					var req = new GAjax();
 					req.send('delete.php', 'did=' + encodeURIComponent(this.title), function(xhr){
-						window.parent.frames['frmResourcesList'].Refresh();
+						if (xhr.responseText != '') {
+							alert(xhr.responseText );
+						} else {
+							window.parent.frames['frmResourcesList'].Refresh();
+						}
 					});
 				}
 			}

@@ -28,7 +28,7 @@
 		 *
 		 * @var int
 		 */
-		var $debug = 0;
+		var $debug = 1;
 		/**
 		 * inintial database class
 		 *
@@ -482,7 +482,7 @@
 		 */
 		private function debug($text) {
 			if ($this->debug == 1) {
-				echo preg_replace(array('/\r/', '/\n/', '/\t/'), array('', ' ', ' '), $text);
+				gcms::writeDebug($text);
 			}
 		}
 		/**

@@ -25,31 +25,38 @@
 			if ($index) {
 				// config
 				gcms::r2config($index['config'], $index);
-				// ผู้ดูแล
-				$moderator = gcms::canConfig($index, 'moderator');
-				// แอดมิน
-				$admin = gcms::canConfig($index, 'can_config');
-				if ($moderator && $action == 'delete') {
-					// ลบ (บทความ)
-					$sql = "SELECT `picture` FROM `".DB_INDEX."` WHERE `id` IN($id) AND `module_id`='$index[id]' AND `picture`<>''";
-					foreach ($db->customQuery($sql) AS $item) {
-						@unlink(DATA_PATH."document/$item[picture]");
+				// ตรวจสอบ เจ้าของ แอดมิน
+				$sql = "SELECT `id`,`picture` FROM `".DB_INDEX."` WHERE `id` IN($id) AND `module_id`='$index[id]'";
+				if (!gcms::canConfig($index, 'moderator') && !gcms::isAdmin()) {
+					$sql .=' AND `member_id`='.(int)$_SESSION['login']['id'];
+				}
+				$ids = array();
+				foreach ($db->customQuery($sql) AS $item) {
+					$ids[$item['id']] = $item['picture'];
+				}
+				if (sizeof($ids) > 0) {
+					$id = implode(',', array_keys($ids));
+					if ($action == 'delete') {
+						// ลบ (บทความ)
+						foreach ($ids AS $i => $item) {
+							@unlink(DATA_PATH."document/$item");
+						}
+						$db->query("DELETE FROM `".DB_COMMENT."` WHERE `index_id` IN ($id) AND `module_id`='$index[id]'");
+						$db->query("DELETE FROM `".DB_INDEX."` WHERE `id` IN ($id) AND `module_id`='$index[id]'");
+						$db->query("DELETE FROM `".DB_INDEX_DETAIL."` WHERE `id` IN ($id) AND `module_id`='$index[id]'");
+						// อัปเดทจำนวนเรื่อง และ ความคิดเห็น ในหมวด
+						$sql1 = "SELECT COUNT(*) FROM `".DB_INDEX."` WHERE `category_id`=C.`category_id` AND `module_id`='$index[id]' AND `index`='0'";
+						$sql2 = "SELECT `id` FROM `".DB_INDEX."` WHERE `category_id`=C.`category_id` AND `module_id`='$index[id]' AND `index`='0'";
+						$sql2 = "SELECT COUNT(*) FROM `".DB_COMMENT."` WHERE `index_id` IN ($sql2) AND `module_id`='$index[id]'";
+						$sql = "UPDATE `".DB_CATEGORY."` AS C SET C.`c1`=($sql1),C.`c2`=($sql2) WHERE C.`module_id`='$index[id]'";
+						$db->query($sql);
+					} elseif ($action == 'published') {
+						// published (บทความ)
+						$db->query("UPDATE `".DB_INDEX."` SET `published`='$value' WHERE `id` IN($id) AND `module_id`='$index[id]'");
+					} elseif ($action == 'canreply') {
+						// can_reply (บทความ)
+						$db->query("UPDATE `".DB_INDEX."` SET `can_reply`='$value' WHERE `id` IN($id) AND `module_id`='$index[id]'");
 					}
-					$db->query("DELETE FROM `".DB_COMMENT."` WHERE `index_id` IN ($id) AND `module_id`='$index[id]'");
-					$db->query("DELETE FROM `".DB_INDEX."` WHERE `id` IN ($id) AND `module_id`='$index[id]'");
-					$db->query("DELETE FROM `".DB_INDEX_DETAIL."` WHERE `id` IN ($id) AND `module_id`='$index[id]'");
-					// อัปเดทจำนวนเรื่อง และ ความคิดเห็น ในหมวด
-					$sql1 = "SELECT COUNT(*) FROM `".DB_INDEX."` WHERE `category_id`=C.`category_id` AND `module_id`='$index[id]' AND `index`='0'";
-					$sql2 = "SELECT `id` FROM `".DB_INDEX."` WHERE `category_id`=C.`category_id` AND `module_id`='$index[id]' AND `index`='0'";
-					$sql2 = "SELECT COUNT(*) FROM `".DB_COMMENT."` WHERE `index_id` IN ($sql2) AND `module_id`='$index[id]'";
-					$sql = "UPDATE `".DB_CATEGORY."` AS C SET C.`c1`=($sql1),C.`c2`=($sql2) WHERE C.`module_id`='$index[id]'";
-					$db->query($sql);
-				} elseif ($moderator && $action == 'published') {
-					// published (บทความ)
-					$db->query("UPDATE `".DB_INDEX."` SET `published`='$value' WHERE `id` IN($id) AND `module_id`='$index[id]'");
-				} elseif ($moderator && $action == 'canreply') {
-					// can_reply (บทความ)
-					$db->query("UPDATE `".DB_INDEX."` SET `can_reply`='$value' WHERE `id` IN($id) AND `module_id`='$index[id]'");
 				}
 			}
 		}

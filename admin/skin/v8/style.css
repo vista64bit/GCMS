@@ -774,6 +774,23 @@ div.install p {
 .postbox .bottom {
 	margin: 5px 0;
 }
+#debug_layer {
+	height: 600px;
+	overflow-y: auto;
+	overflow-x: auto;
+	padding: 10px;
+}
+#debug_layer > div {
+	padding: 5px 0;
+	border-bottom: 1px dashed #DDD;
+	display: inline-block;
+	width: 100%;
+}
+#debug_layer > div > time {
+	display: block;
+	background-color: #EEE;
+	padding: 3px 5px;
+}
 /* tablet, small device */
 @media only screen and (max-width: 960px) {
 	.topmenu ul > li:hover > a,
