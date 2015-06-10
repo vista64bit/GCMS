@@ -21,6 +21,9 @@
 	$mtoday = (int)date('d', $mmktime);
 	/**
 	 * GCMS Frameworks Class
+	 *
+	 * @package GCMS
+	 * @subpackage Utilities
 	 */
 	class gcms {
 		/**

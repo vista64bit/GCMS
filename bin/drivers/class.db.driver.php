@@ -1,56 +1,41 @@
 <?php
 	/**
-	 * bin/class.mysql.php
+	 * bin/drivers/class.driver.php
 	 * สงวนลิขสิทธ์ ห้ามซื้อขาย ให้นำไปใช้ได้ฟรีเท่านั้น
 	 *
+	 * @package GCMS
 	 * @copyright http://www.goragod.com
 	 * @author กรกฎ วิริยะ
-	 * @version 21-05-58
+	 * @version 09-06-58
 	 */
 	/**
-	 * MySQL Class
+	 * Database Driver Class
+	 *
+	 * @package GCMS
+	 * @subpackage Database\Drivers
+	 * @category Database
+	 * @author กรกฎ วิริยะ
 	 */
-	class sql {
+	class DB_driver {
+		var $dbdriver;
+		var $hostname;
+		var $username;
+		var $password;
+		var $dbname;
+		var $char_set = 'utf8';
+		var $time = 0;
+		var $connection = false;
+		var $port = '';
+		var $error_message = '';
 		/**
-		 * ตัวแปรเก็บจำนวน query
 		 *
-		 * @var int
+		 * @param array $params
 		 */
-		protected $time = 0;
-		/**
-		 * MySQL instance
-		 *
-		 * @var resource
-		 */
-		protected $connection = false;
-		/**
-		 * 1=develop mode (ใช้ตอนทดสอบเพื่อแสดง error), 0=production mode
-		 *
-		 * @var int
-		 */
-		var $debug = 0;
-		/**
-		 * inintial database class
-		 *
-		 * @param string $server Database server
-		 * @param string $username Database username
-		 * @param string $password Database password
-		 * @param string $dbname Database name
-		 * @param boolean $new (optional) true=new connection (default true)
-		 * @return boolean สำเร็จคืนค่า true
-		 */
-		public function __construct($server, $username, $password, $dbname, $new = true) {
-			$conn = @mysql_connect($server, $username, $password, $new);
-			if ($conn != false) {
-				$db = @mysql_select_db($dbname, $conn);
-				@mysql_query('SET NAMES UTF8', $conn);
-			}
-			if ($conn == false || $db == false) {
-				$this->debug('mysql_connect()');
-				return false;
-			} else {
-				$this->connection = $conn;
-				return true;
+		function __construct($params) {
+			if (is_array($params)) {
+				foreach ($params AS $key => $val) {
+					$this->$key = $val;
+				}
 			}
 		}
 		/**
@@ -58,7 +43,7 @@
 		 *
 		 * @return resource คืนค่า resource ของ DB
 		 */
-		public function connection() {
+		function connection() {
 			return $this->connection;
 		}
 		/**
@@ -67,14 +52,8 @@
 		 * @param string $table ชื่อตาราง
 		 * @return boolean คืนค่า true หากมีตารางนี้อยู่ ไม่พบคืนค่า false
 		 */
-		public function tableExists($table) {
-			$result = @mysql_query("SELECT 1 FROM `$table`", $this->connection);
-			$this->time++;
-			if (!$result) {
-				return false;
-			} else {
-				return true;
-			}
+		function tableExists($table) {
+			return $this->_query("SELECT 1 FROM `$table` LIMIT 1");
 		}
 		/**
 		 * ฟังก์ชั่น ตรวจสอบฟิลด์ในตาราง
@@ -83,60 +62,22 @@
 		 * @param string $field ชื่อฟิลด์
 		 * @return boolean คืนค่า true หากมีฟิลด์นี้อยู่ ไม่พบคืนค่า false
 		 */
-		public function fieldExists($table, $field) {
-			$result = @mysql_query("SHOW COLUMNS FROM `$table`", $this->connection);
-			if (!$result) {
-				$this->debug("fieldexists($table, $field)");
-			} elseif (mysql_num_rows($result) > 0) {
-				$this->time++;
+		function fieldExists($table, $field) {
+			if ($table != '' && $field != '') {
 				$field = strtolower($field);
-				while ($row = mysql_fetch_assoc($result)) {
-					if (strtolower($row['Field']) == $field) {
-						return true;
+				// query table fields
+				$result = $this->_customQuery("SHOW COLUMNS FROM `$table`");
+				if ($result === false) {
+					$this->debug("fieldExists($table, $field)", $this->error_message);
+				} else {
+					foreach ($result AS $item) {
+						if (strtolower($item['Field']) == $field) {
+							return true;
+						}
 					}
 				}
 			}
 			return false;
-		}
-		/**
-		 * ค้นหา $values ที่ $fields บนตาราง $table
-		 *
-		 * @param string $table ชื่อตาราง
-		 * @param array|string $fields ชื่อฟิลด์
-		 * @param array|string $values ข้อความค้นหาในฟิลด์ที่กำหนด ประเภทเดียวกันกับ $fields
-		 * @return array|boolean พบคืนค่ารายการที่พบเพียงรายการเดียว มีข้อผิดพลาดคืนค่า false
-		 */
-		public function basicSearch($table, $fields, $values) {
-			if (is_array($fields)) {
-				foreach ($fields AS $i => $field) {
-					if (is_array($values)) {
-						$search[] = "`$field`='$values[$i]'";
-					} else {
-						$search[] = "`$field`='$values'";
-					}
-				}
-			} else {
-				if (is_array($values)) {
-					$search[] = "`$fields` IN ('".implode("','", $values)."')";
-				} else {
-					$search[] = "`$fields`='$values'";
-				}
-			}
-			$sql = "SELECT * FROM `$table` WHERE ".implode(' OR ', $search)." LIMIT 1;";
-			$query = @mysql_query($sql, $this->connection);
-			if ($query == false) {
-				$this->debug("basicSearch($table)");
-				return false;
-			} else {
-				$this->time++;
-				if (mysql_num_rows($query) == 0) {
-					return false;
-				} else {
-					$result = mysql_fetch_array($query, MYSQL_ASSOC);
-					mysql_free_result($query);
-					return $result;
-				}
-			}
 		}
 		/**
 		 * อ่านค่า record ที่ id=$id
@@ -145,22 +86,21 @@
 		 * @param int $id id ที่ต้องการอ่าน
 		 * @return array|boolean พบคืนค่ารายการที่พบเพียงรายการเดียว ไม่พบคืนค่า false
 		 */
-		public function getRec($table, $id) {
+		function getRec($table, $id) {
 			$sql = "SELECT * FROM `$table` WHERE `id`=".(int)$id." LIMIT 1";
-			$query = @mysql_query($sql, $this->connection);
-			if ($query == false) {
-				$this->debug("getRec($table, $id)");
-				return false;
-			} else {
-				$this->time++;
-				if (mysql_num_rows($query) == 0) {
-					return false;
-				} else {
-					$result = mysql_fetch_array($query, MYSQL_ASSOC);
-					mysql_free_result($query);
-					return $result;
-				}
-			}
+			$result = $this->customQuery($sql);
+			return sizeof($result) == 1 ? $result[0] : false;
+		}
+		/**
+		 * ค้นหา $values ที่ $fields บนตาราง $table
+		 *
+		 * @param string $table ชื่อตาราง
+		 * @param array|string $fields ชื่อฟิลด์
+		 * @param array|string $values ข้อความค้นหาในฟิลด์ที่กำหนด ประเภทเดียวกันกับ $fields
+		 * @return array|boolean พบคืนค่ารายการที่พบเพียงรายการเดียว ไม่พบหรือมีข้อผิดพลาดคืนค่า false
+		 */
+		function basicSearch($table, $fields, $values) {
+
 		}
 		/**
 		 * เพิ่มข้อมูลลงบน $table
@@ -169,24 +109,8 @@
 		 * @param array $recArr ข้อมูลที่ต้องการบันทึก
 		 * @return int|boolean สำเร็จ คืนค่า id ที่เพิ่ม ผิดพลาด คืนค่า false
 		 */
-		public function add($table, $recArr) {
-			$keys = array();
-			$values = array();
-			foreach ($recArr AS $key => $value) {
-				$keys[] = $key;
-				$values[] = $value;
-			}
-			$sql = 'INSERT INTO `'.$table.'` (`'.implode('`,`', $keys);
-			$sql .= "`) VALUES ('".implode("','", $values);
-			$sql .= "');";
-			$query = @mysql_query($sql, $this->connection);
-			if ($query == false) {
-				$this->debug("add($table)");
-				return false;
-			} else {
-				$this->time++;
-				return mysql_insert_id($this->connection);
-			}
+		function add($table, $recArr) {
+
 		}
 		/**
 		 * แก้ไขข้อมูล
@@ -196,34 +120,8 @@
 		 * @param array $recArr ข้อมูลที่ต้องการบันทึก
 		 * @return boolean สำเร็จ คืนค่า true
 		 */
-		public function edit($table, $idArr, $recArr) {
-			if (is_array($idArr)) {
-				$datas = array();
-				foreach ($idArr AS $key => $value) {
-					$datas[] = "`$key`='$value'";
-				}
-				$id = implode(' AND ', $datas);
-			} else {
-				$id = (int)$idArr;
-				$id = $id == 0 ? '' : "`id`='$id'";
-			}
-			if ($id == '') {
-				return false;
-			} else {
-				$datas = array();
-				foreach ($recArr AS $key => $value) {
-					$datas[] = "`$key`='$value'";
-				}
-				$sql = "UPDATE `$table` SET ".implode(",", $datas)." WHERE $id LIMIT 1";
-				$query = @mysql_query($sql, $this->connection);
-				if ($query == false) {
-					$this->debug("edit($table, $id)");
-					return false;
-				} else {
-					$this->time++;
-					return true;
-				}
-			}
+		function edit($table, $idArr, $recArr) {
+
 		}
 		/**
 		 * ลบ เร็คคอร์ดรายการที่ $id
@@ -232,27 +130,23 @@
 		 * @param int $id id ที่ต้องการลบ
 		 * @return string  สำเร็จ คืนค่าว่าง ไม่สำเร็จคืนค่าข้อความผิดพลาด
 		 */
-		public function delete($table, $id) {
-			$sql = "DELETE FROM `$table` WHERE `id`=".(int)$id." LIMIT 1;";
-			$query = @mysql_query($sql, $this->connection);
-			$this->time++;
-			return ($query == false) ? mysql_error($this->connection) : '';
+		function delete($table, $id) {
+			$sql = "DELETE FROM `$table` WHERE `id`=".(int)$id." LIMIT 1";
+			$result = $this->query($sql);
+			return $result === false ? $this->error_message : '';
 		}
 		/**
-		 * query ข้อมูล แบบไม่ต้องการผลตอบกลับ
+		 * query ข้อมูล
 		 *
-		 * @param string $sql query string
-		 * @return boolean สำเร็จ คืนค่า true
+		 * @param string $sql
+		 * @return int|boolean สำเร็จ คืนค่าจำนวนแถวที่ทำรายการ มีข้อผิดพลาดคืนค่า false
 		 */
-		public function query($sql) {
-			$query = @mysql_query($sql, $this->connection);
-			if ($query == false) {
-				$this->debug("query($sql)");
-				return false;
-			} else {
-				$this->time++;
-				return true;
+		function query($sql) {
+			$result = $this->_query($sql);
+			if ($result === false) {
+				$this->debug($sql, $this->error_message);
 			}
+			return $result;
 		}
 		/**
 		 * query ข้อมูล ด้วย sql ที่กำหนดเอง
@@ -260,19 +154,14 @@
 		 * @param string $sql query string
 		 * @return array คืนค่าผลการทำงานเป็น record ของข้อมูลทั้งหมดที่ตรงตามเงื่อนไข ไม่พบข้อมูลคืนค่าเป็น array ว่างๆ
 		 */
-		public function customQuery($sql) {
-			$recArr = array();
-			$query = @mysql_query($sql, $this->connection);
-			if ($query == false) {
-				$this->debug("customQuery($sql)");
+		function customQuery($sql) {
+			$result = $this->_customQuery($sql);
+			if ($result === false) {
+				$this->debug($sql, $this->error_message);
+				return array();
 			} else {
-				$this->time++;
-				while ($row = mysql_fetch_array($query, MYSQL_ASSOC)) {
-					$recArr[] = $row;
-				}
-				mysql_free_result($query);
+				return $result;
 			}
-			return $recArr;
 		}
 		/**
 		 * อ่าน id ล่าสุดของตาราง
@@ -282,15 +171,8 @@
 		 */
 		function lastId($table) {
 			$sql = "SHOW TABLE STATUS LIKE '$table'";
-			$query = @mysql_query($sql, $this->connection);
-			if ($query == false) {
-				$this->debug("lastId($table)");
-				return false;
-			} else {
-				$row = @mysql_fetch_assoc($query);
-				$this->time++;
-				return (int)$row['Auto_increment'];
-			}
+			$result = $this->_customQuery($sql);
+			return sizeof($result) == 1 ? (int)$result[0]['Auto_increment'] : 0;
 		}
 		/**
 		 * ยกเลิกการล๊อคตารางทั้งหมดที่ล๊อคอยู่
@@ -333,15 +215,9 @@
 		 * @param string $value ข้อความ
 		 * @return string คืนค่าข้อความ
 		 */
-		public function sql_clean($value) {
+		function sql_clean($value) {
 			if ((function_exists("get_magic_quotes_gpc") && get_magic_quotes_gpc()) || ini_get('magic_quotes_sybase')) {
 				$value = stripslashes($value);
-			}
-			if (function_exists("mysql_real_escape_string")) {
-				$value = mysql_real_escape_string($value);
-			} else {
-				// PHP version < 4.3.0 use addslashes
-				$value = addslashes($value);
 			}
 			return $value;
 		}
@@ -351,8 +227,8 @@
 		 * @param string $value ข้อความ
 		 * @return string คืนค่าข้อความ
 		 */
-		public function sql_quote($value) {
-			return str_replace('\\\\', '&#92;', $this->sql_clean($value));
+		function sql_quote($value) {
+			return $this->sql_clean(str_replace('\\\\', '&#92;', $value));
 		}
 		/**
 		 * ลบช่องว่างหัวท้ายออกจากข้อความ และ เติม string ด้วย /
@@ -361,7 +237,7 @@
 		 * @param string $key key ของ $array เช่น $array[$key]
 		 * @return string คืนค่าข้อความ
 		 */
-		public function sql_trim($array, $key = '') {
+		function sql_trim($array, $key = '') {
 			if (is_array($array)) {
 				if (!isset($array[$key])) {
 					return '';
@@ -379,7 +255,7 @@
 		 * @param string $key key ของ $array เช่น $array[$key]
 		 * @return string คืนค่าข้อความ
 		 */
-		public function sql_trim_str($array, $key = '') {
+		function sql_trim_str($array, $key = '') {
 			if (is_array($array)) {
 				if (!isset($array[$key])) {
 					return '';
@@ -396,7 +272,7 @@
 		 * @param int $mktime วันที่ในรูป mktime
 		 * @return string คืนค่าวันที่รูป Y-m-d
 		 */
-		public function sql_mktimetodate($mktime) {
+		function sql_mktimetodate($mktime) {
 			return date("Y-m-d", $mktime);
 		}
 		/**
@@ -405,7 +281,7 @@
 		 * @param int $mktime วันที่ในรูป mktime
 		 * @return string คืนค่า วันที่และเวลาของ mysql เช่น Y-m-d H:i:s
 		 */
-		public function sql_mktimetodatetime($mktime) {
+		function sql_mktimetodatetime($mktime) {
 			return date("Y-m-d H:i:s", $mktime);
 		}
 		/**
@@ -417,7 +293,7 @@
 		 * @param boolean $time (optional) true=คืนค่าเวลาด้วยถ้ามี, false=ไม่ต้องคืนค่าเวลา (default true)
 		 * @return string คืนค่า วันที่และเวลา
 		 */
-		public function sql_date2date($date, $short = true, $time = true) {
+		function sql_date2date($date, $short = true, $time = true) {
 			global $lng;
 			if (preg_match('/([0-9]+){0,4}-([0-9]+){0,2}-([0-9]+){0,2}(\s([0-9]+){0,2}:([0-9]+){0,2}:([0-9]+){0,2})?/', $date, $match)) {
 				$match[1] = (int)$match[1];
@@ -445,7 +321,7 @@
 		/**
 		 * ฟังก์ชั่น เริ่มต้นจับเวลาการประมวลผล
 		 */
-		public function timer_start() {
+		function timer_start() {
 			$mtime = microtime();
 			$mtime = explode(' ', $mtime);
 			$this->time_start = $mtime[1] + $mtime[0];
@@ -456,7 +332,7 @@
 		 *
 		 * @return int คืนค่าเวลาที่ใช้ไป (msec)
 		 */
-		public function timer_stop() {
+		function timer_stop() {
 			$mtime = microtime();
 			$mtime = explode(' ', $mtime);
 			$time_end = $mtime[1] + $mtime[0];
@@ -468,29 +344,29 @@
 		 *
 		 * @return int
 		 */
-		public function query_count() {
+		function query_count() {
 			return $this->time;
 		}
 		/**
-		 * ฟังก์ชั่น แสดงผล error เมื่ออยู่ใน develop mode
+		 * ฟังก์ชั่น แสดงผล error
 		 *
-		 * @param string $text ข้อความที่จะแสดง (error)
+		 * @param string $sql
+		 * @param string $message
 		 */
-		private function debug($text) {
-			if ($this->debug == 1) {
-				gcms::writeDebug($text);
+		function debug($sql, $message = '') {
+			$msg = "Error in <em>$sql</em> Message : $message";
+			if (class_exists('gcms')) {
+				gcms::writeDebug($msg);
+			} else {
+				echo $msg;
 			}
+			return $message;
 		}
 		/**
 		 * ยกเลิก mysql
 		 */
-		public function close() {
-			@mysql_close($this->connection) === false ? false : true;
-		}
-		/**
-		 * ฟังก์ชั่น จบ class
-		 */
-		public function __destruct() {
+		function close() {
+			$this->_close();
 			$this->connection = null;
 		}
 	}

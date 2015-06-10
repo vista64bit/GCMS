@@ -9,6 +9,9 @@
 	 */
 	/**
 	 * FTP Class
+	 *
+	 * @package GCMS
+	 * @subpackage FTP
 	 */
 	class ftp {
 		/**

@@ -25,8 +25,6 @@
 			} else {
 				echo '<li class=incorrect><strong>FTP</strong> <em>ไม่สามารถใช้งานได้</em> แต่สามารถติดตั้งต่อไปได้</li>';
 			}
-		} else {
-			echo '<li class=incorrect><strong>FTP</strong> <em>ไม่สามารถใช้งานได้</em> แต่สามารถติดตั้งต่อไปได้</li>';
 		}
 		if (is_dir(DATA_PATH)) {
 			$datas_dir = ROOT_PATH."$mmktime/";

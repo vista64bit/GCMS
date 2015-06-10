@@ -9,6 +9,9 @@
 	 */
 	/**
 	 * Cache Class
+	 *
+	 * @package GCMS
+	 * @subpackage Cache
 	 */
 	class gcmsCache {
 		/**

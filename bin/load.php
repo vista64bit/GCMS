@@ -112,16 +112,13 @@
 	if (is_file(DATA_PATH."language/$language.php")) {
 		include DATA_PATH."language/$language.php";
 	}
-	// connect database class
-	if (is_file(ROOT_PATH.'bin/class.pdo.php') && defined('PDO::ATTR_DRIVER_NAME')) {
-		// database driver สำหรับ PDO
-		define('DATABASE_DRIVER', 'mysql');
-		include ROOT_PATH.'bin/class.pdo.php';
-	} elseif (is_file(ROOT_PATH.'bin/class.mysqli.php') && function_exists('mysqli_connect')) {
-		include ROOT_PATH.'bin/class.mysqli.php';
-	} else {
-		include ROOT_PATH.'bin/class.mysql.php';
-	}
+	/**
+	 * database driver
+	 * support mysql, mysqli, pdo
+	 */
+	define('DB_DRIVER', 'pdo');
+	// database class
+	include ROOT_PATH.'bin/class.db.php';
 	// ftp class
 	include ROOT_PATH.'bin/class.ftp.php';
 	// cache class
@@ -130,7 +127,16 @@
 	$ftp = new ftp($config['ftp_host'], $config['ftp_username'], $config['ftp_password'], $config['ftp_root'], $config['ftp_port']);
 	if (!empty($config['db_username']) || !empty($config['db_name'])) {
 		// เรียกใช้งานฐานข้อมูล
-		$db = new sql($config['db_server'], $config['db_username'], $config['db_password'], $config['db_name']);
+		if (DB_DRIVER == 'mysql') {
+			// mysql database
+			$db = sql("mysql://$config[db_username]:$config[db_password]@$config[db_server]/$config[db_name]");
+		} else if (DB_DRIVER == 'mysqli') {
+			// mysqli database
+			$db = sql("mysqli://$config[db_username]:$config[db_password]@$config[db_server]/$config[db_name]");
+		} else {
+			// PDO mysql database
+			$db = sql("pdo://$config[db_username]:$config[db_password]@$config[db_server]/$config[db_name]?dbdriver=mysql");
+		}
 		// เริ่มต้นจับเวลาการประมวลผล
 		$time = $db->timer_start();
 		// cache
